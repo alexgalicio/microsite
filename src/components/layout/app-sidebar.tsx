@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, ChevronRight, LogOut, UserCircle } from "lucide-react";
+import { ChevronDown, ChevronRight, ChevronsUpDown, LogOut, UserCircle } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -117,7 +117,7 @@ export function AppSidebar() {
                       user={user}
                     />
                   )}
-                  <ChevronDown className="ml-auto size-4" />
+                  <ChevronsUpDown className="ml-auto size-4" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
