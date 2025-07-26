@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, ChevronRight, ChevronsUpDown, LogOut, UserCircle } from "lucide-react";
+import { ChevronRight, ChevronsUpDown, LogOut, UserCircle } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
