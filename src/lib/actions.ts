@@ -1,0 +1,191 @@
+"use server";
+
+import { createServerSupabaseClient } from "@/utils/server";
+import { auth } from "@clerk/nextjs/server";
+import { clerkClient } from "@clerk/nextjs/server";
+import { randomBytes } from "crypto";
+import { handleError } from "./utils";
+
+export async function addNewMenu(title: string) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("User not signed in");
+  }
+
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from("menu")
+    .insert({ title: title })
+    .select();
+
+  if (error) {
+    if (error.code === "23505") {
+      throw new Error("A menu with this name already exists");
+    }
+    throw error;
+  }
+
+  return data;
+}
+
+export async function editMenu(id: string, title: string) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("User not signed in");
+  }
+
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from("menu")
+    .update({ title: title })
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    if (error.code === "23505") {
+      throw new Error("A menu with this name already exists");
+    }
+    throw error;
+  }
+
+  return data;
+}
+
+export async function editSubmenu(id: string, title: string) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("User not signed in");
+  }
+
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from("submenu")
+    .update({ title: title })
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    if (error.code === "23505") {
+      throw new Error("A submenu with this name already exists");
+    }
+    throw error;
+  }
+
+  return data;
+}
+
+export async function deleteMenu(id: string) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("User not signed in");
+  }
+
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase.from("menu").delete().eq("id", id);
+
+  if (error) throw error;
+
+  return data;
+}
+
+export async function deleteSubmenu(id: string) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("User not signed in");
+  }
+
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase.from("submenu").delete().eq("id", id);
+
+  if (error) throw error;
+
+  return data;
+}
+
+export async function getAllMenu() {
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase.from("menu").select("id, title");
+
+  if (error) throw error;
+
+  return data;
+}
+
+function generatePassword(length = 12) {
+  return randomBytes(length).toString("base64").slice(0, length);
+}
+
+export async function createUser(formData: {
+  menu: string;
+  submenu: string;
+  email: string;
+}) {
+  try {
+    const password = generatePassword();
+    console.log("password ", password)
+
+    // create user in clerk
+    const clerk = await clerkClient();
+    const user = await clerk.users.createUser({
+      emailAddress: [formData.email],
+      password: password,
+    });
+
+    // create profiles in supabase
+    const supabase = createServerSupabaseClient();
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .insert({
+        clerk_id: user.id, // use clerk user ID
+        email: formData.email,
+      })
+      .select()
+      .single();
+
+    if (profileError) {
+      console.error("Profile creation error:", profileError);
+      // delete the Clerk user if profile creation fails
+      await clerk.users.deleteUser(user.id);
+      throw new Error(`Failed to create profile: ${profileError.message}`);
+    }
+
+    // create submenu record in Supabase
+    const { data: submenu, error: submenuError } = await supabase
+      .from("submenu")
+      .insert({
+        title: formData.submenu,
+        menu_id: formData.menu,
+        user_id: profile.id,
+      })
+      .select()
+      .single();
+
+    if (submenuError) {
+      console.error("Submenu creation error:", submenuError);
+      // delete profile and Clerk user if submenu creation fails
+      await supabase.from("profiles").delete().eq("id", profile.id);
+      await clerk.users.deleteUser(user.id);
+      throw new Error(`Failed to create submenu: ${submenuError.message}`);
+    }
+
+    return {
+      success: true,
+      password
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    console.error("Clerk Error:", error);
+
+    // extract error message
+    if (error.errors) {
+      return { success: false, error: error.errors[0]?.message };
+    }
+    return { success: false, error: handleError(error) };
+  }
+}
