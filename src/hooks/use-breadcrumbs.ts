@@ -9,7 +9,9 @@ type BreadcrumbItem = {
 };
 
 // This allows to add custom title as well
-const routeMapping: Record<string, BreadcrumbItem[]> = {};
+const routeMapping: Record<string, BreadcrumbItem[]> = {
+  "/manage-menu": [{ title: "Manage Menu", link: "/manage-menu" }],
+};
 
 export function useBreadcrumbs() {
   const pathname = usePathname();
@@ -18,6 +20,14 @@ export function useBreadcrumbs() {
     // Check if we have a custom mapping for this exact path
     if (routeMapping[pathname]) {
       return routeMapping[pathname];
+    }
+
+    // Custom handling for submenu routes
+    if (pathname.includes("/manage-menu/") && pathname.includes("/submenu")) {
+      return [
+        { title: "Manage Menu", link: "/manage-menu" },
+        { title: "Submenu", link: pathname },
+      ];
     }
 
     // If no exact match, fall back to generating breadcrumbs from the path
