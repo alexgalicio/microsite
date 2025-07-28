@@ -29,5 +29,10 @@ export interface FooterItem {
   }[];
 }
 
+export type MenuItem = {
+  id: string;
+  title: string;
+};
+
 export type MainNavItem = NavItemWithOptionalChildren;
 export type SidebarNavItem = NavItemWithChildren;
