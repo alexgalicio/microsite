@@ -6,6 +6,7 @@ import { MenuPrimaryButtons } from "@/components/manage-menu/menu/primary-button
 import { DataTable } from "@/components/manage-menu/data-table";
 import { Menu } from "@/lib/schema";
 import { createServerSupabaseClient } from "@/utils/server";
+import { handleError } from "@/lib/utils";
 
 async function getData(): Promise<Menu[]> {
   const supabase = createServerSupabaseClient();
@@ -25,8 +26,13 @@ async function getData(): Promise<Menu[]> {
 }
 
 export default async function Page() {
-  const data = await getData();
-  console.log(data);
+  let data: Menu[] = [];
+
+  try {
+    data = await getData();
+  } catch (error) {
+    console.log(handleError(error));
+  }
 
   return (
     <PageContainer>
