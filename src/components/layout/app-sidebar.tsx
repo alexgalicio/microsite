@@ -15,7 +15,7 @@ import {
   SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { SignOutButton, useUser } from "@clerk/nextjs";
+import { useClerk, useUser } from "@clerk/nextjs";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,6 +38,7 @@ import {
 export function AppSidebar() {
   const pathname = usePathname();
   const { user } = useUser();
+  const { signOut } = useClerk();
   const router = useRouter();
 
   return (
@@ -146,7 +147,9 @@ export function AppSidebar() {
                 </DropdownMenuGroup>
                 <DropdownMenuItem>
                   <LogOut className="mr-2 h-4 w-4" />
-                  <SignOutButton redirectUrl="/sign-in" />
+                  <button onClick={() => signOut({ redirectUrl: "/sign-in" })}>
+                    Sign out
+                  </button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
