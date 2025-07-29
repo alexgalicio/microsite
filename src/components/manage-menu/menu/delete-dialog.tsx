@@ -30,12 +30,11 @@ export function MenuDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       const result = await deleteMenu(currentRow.id);
       if (result?.error) {
         toast.error(result.error);
-      } else {
+      } else if (result.data) {
         toast.success("Menu deleted successfully");
+        onOpenChange(false);
+        router.refresh();
       }
-
-      onOpenChange(false);
-      router.refresh();
     } catch (error) {
       toast.error(handleError(error));
       console.error("Menu Delete Dialog Error: ", error);
