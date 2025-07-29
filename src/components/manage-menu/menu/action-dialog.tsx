@@ -52,7 +52,7 @@ interface Props {
 
 export function MenuActionDialog({ currentRow, open, onOpenChange }: Props) {
   const isEdit = !!currentRow;
-  const [isloading, setIsloading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const form = useForm<MenuForm>({
@@ -69,7 +69,7 @@ export function MenuActionDialog({ currentRow, open, onOpenChange }: Props) {
   });
 
   async function onSubmit(values: MenuForm) {
-    setIsloading(true);
+    setIsLoading(true);
     try {
       if (isEdit && currentRow) {
         const editRes = await editMenu(currentRow.id, values.title);
@@ -95,7 +95,7 @@ export function MenuActionDialog({ currentRow, open, onOpenChange }: Props) {
       toast.error(handleError(error));
       console.error("Menu Action Dialog Error: ", error);
     } finally {
-      setIsloading(false);
+      setIsLoading(false);
     }
   }
 
@@ -139,8 +139,8 @@ export function MenuActionDialog({ currentRow, open, onOpenChange }: Props) {
           </form>
         </Form>
         <DialogFooter>
-          <Button type="submit" form="menu-form" className="w-30">
-            {isloading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save Changes"}
+          <Button type="submit" form="menu-form" className="w-30" disabled={isLoading}>
+            {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save Changes"}
           </Button>
         </DialogFooter>
       </DialogContent>
