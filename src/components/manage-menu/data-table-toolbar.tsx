@@ -12,7 +12,7 @@ interface DataTableToolbarProps<TData> {
 export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
-  const isFiltered = table.getState().columnFilters.length > 0;
+  const isFiltered = table.getState().columnFilters.length > 0 || table.getState().globalFilter;
   const router = useRouter();
   const pathname = usePathname();
   const isSubmenu = pathname.includes("/submenu");
@@ -30,17 +30,20 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
         <Input
-          placeholder="Search menu"
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+          placeholder="Search"
+          value={(table.getState().globalFilter as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
+            table.setGlobalFilter(event.target.value)
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
         {isFiltered && (
           <Button
             variant="ghost"
-            onClick={() => table.resetColumnFilters()}
+            onClick={() => {
+              table.resetColumnFilters();
+              table.setGlobalFilter("");
+            }}
             className="h-8 px-2 lg:px-3"
           >
             Reset
