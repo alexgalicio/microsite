@@ -1,37 +1,46 @@
 import PageContainer from "@/components/layout/page-container";
-import { columns } from "@/components/manage-menu/menu/menu-columns";
+import { columns } from "@/components/manage-menu/menu/columns";
 import MenuProvider from "@/components/manage-menu/menu/menu-context";
 import { MenuDialogs } from "@/components/manage-menu/menu/dialogs";
 import { MenuPrimaryButtons } from "@/components/manage-menu/menu/primary-button";
 import { DataTable } from "@/components/manage-menu/data-table";
 import { Menu } from "@/lib/schema";
 import { createServerSupabaseClient } from "@/utils/server";
-import { handleError } from "@/lib/utils";
 
-async function getData(): Promise<Menu[]> {
+async function getData(): Promise<{ data: Menu[]; error: string | null }> {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase.from("menu").select(`
-      id, 
-      title,
-      submenus:submenu(count)
-    `);
+        id, 
+        title,
+        submenus:submenu(count)
+      `);
 
-  if (error) throw error;
+  if (error) {
+    return { data: [], error: error.message };
+  }
 
-  return data?.map((menu) => ({
-    id: menu.id,
-    title: menu.title,
-    submenu_count: menu.submenus?.[0]?.count || 0,
-  }));
+  const mappedData =
+    data?.map((menu) => ({
+      id: menu.id,
+      title: menu.title,
+      submenu_count: menu.submenus?.[0]?.count || 0,
+    })) || [];
+
+  return { data: mappedData, error: null };
 }
 
 export default async function Page() {
-  let data: Menu[] = [];
+  const { data, error } = await getData();
 
-  try {
-    data = await getData();
-  } catch (error) {
-    console.log(handleError(error));
+  if (error) {
+    return (
+      <div className="p-4">
+        <h2 className="text-xl font-semibold text-red-600">
+          Error Loading Menu Table
+        </h2>
+        <p className="text-gray-600">{error}</p>
+      </div>
+    );
   }
 
   return (
