@@ -1,12 +1,12 @@
 import PageContainer from "@/components/layout/page-container";
-import CreateAccount from "@/components/microsites/create-account-button";
+import CreateAccount from "@/components/microsites/create-account";
 
 export default async function Page() {
   return (
     <PageContainer>
       <div className="flex flex-1 flex-col gap-4">
         <div className="flex items-start justify-between">
-          <h2 className="text-2xl font-bold tracking-tight">Microsite</h2>
+          <h2 className="text-2xl font-bold tracking-tight">Microsites</h2>
           <CreateAccount />
         </div>
 
