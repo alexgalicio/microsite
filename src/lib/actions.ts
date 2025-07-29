@@ -4,7 +4,6 @@ import { createServerSupabaseClient } from "@/utils/server";
 import { auth } from "@clerk/nextjs/server";
 import { clerkClient } from "@clerk/nextjs/server";
 import { randomBytes } from "crypto";
-import { handleError } from "./utils";
 
 export async function addNewMenu(title: string) {
   const { userId } = await auth();
@@ -33,7 +32,7 @@ export async function editMenu(id: string, title: string) {
   const { userId } = await auth();
 
   if (!userId) {
-     return { error: "User not signed in" };
+    return { error: "User not signed in" };
   }
 
   const supabase = createServerSupabaseClient();
@@ -45,7 +44,7 @@ export async function editMenu(id: string, title: string) {
 
   if (error) {
     if (error.code === "23505") {
-      return { error: "Submenu already exist" };
+      return { error: "Menu already exist" };
     }
     return { error: error.message };
   }
@@ -57,7 +56,7 @@ export async function editSubmenu(id: string, title: string) {
   const { userId } = await auth();
 
   if (!userId) {
-    throw new Error("User not signed in");
+    return { error: "User not signed in" };
   }
 
   const supabase = createServerSupabaseClient();
@@ -68,54 +67,74 @@ export async function editSubmenu(id: string, title: string) {
     .select();
 
   if (error) {
-    if (error.code === "23505") {
-      throw new Error("A submenu with this name already exists");
-    }
-    throw error;
+    return { error: error.message };
   }
 
-  return data;
+  return { data: data };
 }
 
 export async function deleteMenu(id: string) {
   const { userId } = await auth();
 
   if (!userId) {
-    throw new Error("User not signed in");
+    return { error: "User not signed in" };
   }
 
   const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase.from("menu").delete().eq("id", id);
+  const { data, error } = await supabase
+    .from("menu")
+    .delete()
+    .eq("id", id)
+    .select();
 
-  if (error) throw error;
+  if (error) return { error: error.message };
 
-  return data;
+  return { data: data };
 }
 
 export async function deleteSubmenu(id: string) {
   const { userId } = await auth();
 
   if (!userId) {
-    throw new Error("User not signed in");
+    return { error: "User not signed in" };
   }
 
   const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase.from("submenu").delete().eq("id", id);
+  const { data, error } = await supabase
+    .from("submenu")
+    .delete()
+    .eq("id", id)
+    .select();
 
-  if (error) throw error;
+  if (error) return { error: error.message };
 
-  return data;
+  return { data: data };
 }
 
 export async function getAllMenu() {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase.from("menu").select("id, title");
 
-  if (error) throw error;
+  if (error) throw error; //TODO: properly handle error
 
   return data;
 }
 
+export async function getMenuTitle(menuId: string) {
+  const supabase = createServerSupabaseClient();
+
+  const { data, error } = await supabase
+    .from("menu")
+    .select("title")
+    .eq("id", menuId)
+    .single();
+
+  if (error) return { error: error.message };
+
+  return {data: data.title };
+}
+
+// auto generate password for new account
 function generatePassword(length = 12) {
   return randomBytes(length).toString("base64").slice(0, length);
 }
@@ -127,13 +146,15 @@ export async function createUser(formData: {
 }) {
   try {
     const password = generatePassword();
-    console.log("password ", password);
 
     // create user in clerk
     const clerk = await clerkClient();
     const user = await clerk.users.createUser({
       emailAddress: [formData.email],
       password: password,
+      publicMetadata: {
+        role: "user", // assign user role to new account
+      },
     });
 
     // create profiles in supabase
@@ -148,10 +169,9 @@ export async function createUser(formData: {
       .single();
 
     if (profileError) {
-      console.error("Profile creation error:", profileError);
       // delete the Clerk user if profile creation fails
       await clerk.users.deleteUser(user.id);
-      throw new Error(`Failed to create profile: ${profileError.message}`);
+      return { success: false, error: profileError.message };
     }
 
     // create submenu record in Supabase
@@ -170,7 +190,7 @@ export async function createUser(formData: {
       // delete profile and Clerk user if submenu creation fails
       await supabase.from("profiles").delete().eq("id", profile.id);
       await clerk.users.deleteUser(user.id);
-      throw new Error(`Failed to create submenu: ${submenuError.message}`);
+      return { success: false, error: submenuError.message };
     }
 
     return {
@@ -180,12 +200,10 @@ export async function createUser(formData: {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    console.error("Clerk Error:", error);
-
     // extract error message
     if (error.errors) {
       return { success: false, error: error.errors[0]?.message };
     }
-    return { success: false, error: handleError(error) };
+    return { success: false, error: error.message };
   }
 }
