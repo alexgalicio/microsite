@@ -67,7 +67,6 @@ export function MenuDeleteDialog({ open, onOpenChange, currentRow }: Props) {
               </p>
             </AlertDescription>
           </Alert>
-
           <div className="space-y-2">
             <p>
               Type &quot;<span className="font-medium">{currentRow.title}</span>
