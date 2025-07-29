@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import useDialogState from "@/hooks/use-dialog-state";
 import { Submenu } from "@/lib/schema";
 
-type SubmenuDialogType =  "edit" | "delete";
+type SubmenuDialogType = "edit" | "delete";
 
 interface SubmenuContextType {
   open: SubmenuDialogType | null;
