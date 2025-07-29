@@ -5,10 +5,11 @@ import { useState } from "react";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import {  deleteSubmenu } from "@/lib/actions";
+import { deleteSubmenu } from "@/lib/actions";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { OctagonAlertIcon } from "lucide-react";
 
 interface Props {
   open: boolean;
@@ -26,10 +27,14 @@ export function SubmenuDeleteDialog({ open, onOpenChange, currentRow }: Props) {
 
     try {
       setIsLoading(true);
-      await deleteSubmenu(currentRow.id);
-      toast.success("Submenu deleted successfully");
-      onOpenChange(false);
-      router.refresh();
+      const result = await deleteSubmenu(currentRow.id);
+      if (result?.error) {
+        toast.error(result.error);
+      } else if (result.data) {
+        toast.success("Submenu deleted successfully");
+        onOpenChange(false);
+        router.refresh();
+      }
     } catch (error) {
       toast.error(handleError(error));
     } finally {
@@ -46,20 +51,24 @@ export function SubmenuDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       title={`Confirm deletion of ${currentRow.title}`}
       desc={
         <div className="space-y-4">
-          <Alert variant="destructive">
-            <AlertTitle>You cannot recover this submenu once deleted.</AlertTitle>
-            <AlertDescription>All submenu data will be lost.</AlertDescription>
+          <Alert
+            variant="destructive"
+            className="bg-destructive/10 dark:bg-destructive/20 border-destructive/50 dark:border-destructive/70"
+          >
+            <OctagonAlertIcon className="w-4 h-4" />
+            <AlertTitle>You cannot recover this menu once deleted</AlertTitle>
+            <AlertDescription>
+              <p>
+                Your menu{" "}
+                <strong className="font-medium">{currentRow.title}</strong> and
+                all its contents will be permanently deleted.
+              </p>
+            </AlertDescription>
           </Alert>
-
-          <p>
-            Your submenu {currentRow.title} and all its contents will be
-            permanently deleted.
-          </p>
-
           <div className="space-y-2">
             <p>
-              Type <span className="font-medium">{currentRow.title}</span> to
-              confirm.
+              Type &quot;<span className="font-medium">{currentRow.title}</span>
+              &quot; to confirm.
             </p>
             <Input
               value={value}
