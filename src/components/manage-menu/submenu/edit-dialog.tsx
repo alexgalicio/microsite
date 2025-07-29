@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {  Submenu } from "@/lib/schema";
+import { Submenu } from "@/lib/schema";
 import {
   Dialog,
   DialogContent,
@@ -23,13 +23,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import {  editSubmenu } from "@/lib/actions";
+import { editSubmenu } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
 
 const formSchema = z.object({
-  title: z.string().min(1, "Menu name is required"),
+  title: z
+    .string()
+    .min(1, "Submenu name is required")
+    .refine(
+      // must be 3 char long excluding spaces
+      (value) => value.replace(/\s+/g, "").length >= 3,
+      "Submenu must be at least 3 characters"
+    )
+    .trim(),
 });
 
 type SubmenuForm = z.infer<typeof formSchema>;
