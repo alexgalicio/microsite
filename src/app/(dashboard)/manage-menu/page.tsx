@@ -15,9 +15,7 @@ async function getData(): Promise<{ data: Menu[]; error: string | null }> {
         submenus:submenu(count)
       `);
 
-  if (error) {
-    return { data: [], error: error.message };
-  }
+  if (error) return { data: [], error: error.message };
 
   const mappedData =
     data?.map((menu) => ({
@@ -51,12 +49,10 @@ export default async function Page() {
             <h2 className="text-2xl font-bold tracking-tight">Menu List</h2>
             <MenuPrimaryButtons />
           </div>
-
           <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-y-0 lg:space-x-12">
             <DataTable data={data} columns={columns} />
           </div>
         </div>
-
         <MenuDialogs />
       </MenuProvider>
     </PageContainer>
