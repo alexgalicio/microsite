@@ -10,7 +10,7 @@ export async function addNewMenu(title: string) {
   const { userId } = await auth();
 
   if (!userId) {
-    throw new Error("User not signed in");
+    return { error: "User not signed in" };
   }
 
   const supabase = createServerSupabaseClient();
@@ -21,19 +21,19 @@ export async function addNewMenu(title: string) {
 
   if (error) {
     if (error.code === "23505") {
-      throw new Error("A menu with this name already exists");
+      return { error: "Menu already exist" };
     }
-    throw error;
+    return { error: error.message };
   }
 
-  return data;
+  return { data: data };
 }
 
 export async function editMenu(id: string, title: string) {
   const { userId } = await auth();
 
   if (!userId) {
-    throw new Error("User not signed in");
+     return { error: "User not signed in" };
   }
 
   const supabase = createServerSupabaseClient();
@@ -45,12 +45,12 @@ export async function editMenu(id: string, title: string) {
 
   if (error) {
     if (error.code === "23505") {
-      throw new Error("A menu with this name already exists");
+      return { error: "Submenu already exist" };
     }
-    throw error;
+    return { error: error.message };
   }
 
-  return data;
+  return { data: data };
 }
 
 export async function editSubmenu(id: string, title: string) {
@@ -127,7 +127,7 @@ export async function createUser(formData: {
 }) {
   try {
     const password = generatePassword();
-    console.log("password ", password)
+    console.log("password ", password);
 
     // create user in clerk
     const clerk = await clerkClient();
@@ -175,7 +175,7 @@ export async function createUser(formData: {
 
     return {
       success: true,
-      password
+      password,
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

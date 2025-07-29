@@ -23,7 +23,7 @@ import {
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
 import { useState } from "react";
-import {addNewMenu,  editMenu } from "@/lib/actions";
+import { addNewMenu, editMenu } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
@@ -63,11 +63,13 @@ export function MenuActionDialog({ currentRow, open, onOpenChange }: Props) {
     try {
       setIsloading(true);
       if (isEdit && currentRow) {
-        await editMenu(currentRow.id, values.title);
-        toast.success("Menu updated successfully");
+        const editRes = await editMenu(currentRow.id, values.title);
+        if (editRes.error) toast.error(editRes.error);
+        else toast.success("Menu updated successfully");
       } else {
-        await addNewMenu(values.title);
-        toast.success("Menu added successfully");
+        const addRes = await addNewMenu(values.title);
+        if (addRes.error) toast.error(addRes.error);
+        else toast.success("Menu added successfully");
       }
       router.refresh();
       form.reset();
