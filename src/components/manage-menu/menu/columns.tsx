@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { Menu } from "@/lib/schema";
-import { Checkbox } from "../../ui/checkbox";
+import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 
 export const columns: ColumnDef<Menu>[] = [
@@ -42,17 +42,21 @@ export const columns: ColumnDef<Menu>[] = [
       <DataTableColumnHeader column={column} title="No. of Submenu" />
     ),
     cell: ({ row }) => {
-      const menuId = row.original.id; 
-      const submenuCount = row.getValue("submenu_count") as number;
-
+      const menuId = row.original.id;
+      // cast submenu count to number
+      const submenuCount = row.getValue("submenu_count") as number; 
       const text = `${submenuCount} submenu${submenuCount > 1 ? "s" : ""}`;
 
-      if (submenuCount === 0) {
+      if (submenuCount === 0) { // if no submenu just plain text
         return <span>{text}</span>;
       }
 
+      // else render it as link
       return (
-        <Link href={`/manage-menu/submenu/${menuId}`} className="hover:underline active:text-primary">
+        <Link
+          href={`/manage-menu/submenu/${menuId}`}
+          className="hover:underline active:text-primary"
+        >
           {text}
         </Link>
       );
