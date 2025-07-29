@@ -12,7 +12,8 @@ interface DataTableToolbarProps<TData> {
 export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
-  const isFiltered = table.getState().columnFilters.length > 0 || table.getState().globalFilter;
+  const isFiltered =
+    table.getState().columnFilters.length > 0 || table.getState().globalFilter;
   const router = useRouter();
   const pathname = usePathname();
   const isSubmenu = pathname.includes("/submenu");
@@ -32,9 +33,7 @@ export function DataTableToolbar<TData>({
         <Input
           placeholder="Search"
           value={(table.getState().globalFilter as string) ?? ""}
-          onChange={(event) =>
-            table.setGlobalFilter(event.target.value)
-          }
+          onChange={(event) => table.setGlobalFilter(event.target.value)}
           className="h-8 w-[150px] lg:w-[250px]"
         />
         {isFiltered && (
