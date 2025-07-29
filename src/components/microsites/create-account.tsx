@@ -33,12 +33,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { MenuItem } from "@/lib/types";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 
 const formSchema = z.object({
   menu: z.string().min(1, "Menu is required"),
-  submenu: z.string().min(1, "Submenu is required"),
-  email: z.email({ message: "Invalid email" }).min(1, "Email is required"),
+  submenu: z
+    .string()
+    .min(1, "Submenu is required")
+    .refine(
+      // must be 3 char long excluding spaces
+      (value) => value.replace(/\s+/g, "").length >= 3,
+      "Submenu must be at least 3 characters"
+    )
+    .trim(),
+  email: z.email({ message: "Invalid email address" }).min(1, "Email is required"),
 });
 
 type AccountForm = z.infer<typeof formSchema>;
@@ -46,6 +54,7 @@ type AccountForm = z.infer<typeof formSchema>;
 export default function CreateAccount() {
   const [isLoading, setIsLoading] = useState(false);
   const [menus, setMenus] = useState<MenuItem[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const fetchMenus = async () => {
@@ -69,28 +78,34 @@ export default function CreateAccount() {
     },
   });
 
+  useEffect(() => {
+    if (!isOpen) {
+      form.reset();
+    }
+  }, [isOpen, form]);
+
   async function onSubmit(values: AccountForm) {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       const result = await createUser(values);
       if (result.success) {
         toast.success("Account created successfully");
         form.reset();
-        console.log(result);
+        setIsOpen(false);
+        console.log(result); // TODO: email user their details
       } else {
-        console.log("error:", result);
         toast.error(result.error);
       }
     } catch (error) {
-      console.error("Error creating user:", error);
       console.log(handleError(error));
+      console.error("Error creating user:", error);
     } finally {
       setIsLoading(false);
     }
   }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="default">
           <Plus size={18} /> <span>Create Account</span>
@@ -100,7 +115,6 @@ export default function CreateAccount() {
         <DialogHeader>
           <DialogTitle>Create Account</DialogTitle>
         </DialogHeader>
-
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="grid gap-4">
@@ -131,21 +145,19 @@ export default function CreateAccount() {
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="submenu"
                 render={({ field }) => (
                   <FormItem className="grid gap-2">
-                    <FormLabel htmlFor="submenu">submenu</FormLabel>
+                    <FormLabel htmlFor="submenu">Submenu</FormLabel>
                     <FormControl>
-                      <Input id="submenu" type="text" {...field} />
+                      <Input id="submenu" autoComplete="off" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="email"
@@ -164,15 +176,17 @@ export default function CreateAccount() {
                   </FormItem>
                 )}
               />
-
               <DialogDescription className="p-4 text-sm text-blue-800 rounded-lg bg-blue-50">
-                <span className="font-medium">Note:</span> A password will be
+                <span className="font-medium">Note:</span> Password will be
                 automatically generated and account details will be sent to the
                 provided email address.
               </DialogDescription>
-
               <Button type="submit" className="w-full" disabled={isLoading}>
-                Create Account
+                {isLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  "Create Account"
+                )}
               </Button>
             </div>
           </form>
