@@ -60,8 +60,8 @@ export function SubmenuActionDialog({ currentRow, open, onOpenChange }: Props) {
   });
 
   async function onSubmit(values: SubmenuForm) {
+    setIsloading(true);
     try {
-      setIsloading(true);
       await editSubmenu(currentRow.id, values.title);
       toast.success("Submenu updated successfully");
       router.refresh();
