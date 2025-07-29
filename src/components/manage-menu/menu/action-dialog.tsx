@@ -11,7 +11,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../../ui/dialog";
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -19,17 +19,26 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../ui/form";
-import { Input } from "../../ui/input";
-import { Button } from "../../ui/button";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { addNewMenu, editMenu } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
-  title: z.string().min(1, "Menu name is required"),
+  title: z
+    .string()
+    .min(1, "Menu is required")
+    .refine(
+      // must be 3 char long excluding spaces
+      (value) => value.replace(/\s+/g, "").length >= 3,
+      "Menu must be at least 3 characters"
+    )
+    .trim(),
   isEdit: z.boolean(),
 });
 
@@ -60,23 +69,31 @@ export function MenuActionDialog({ currentRow, open, onOpenChange }: Props) {
   });
 
   async function onSubmit(values: MenuForm) {
+    setIsloading(true);
     try {
-      setIsloading(true);
       if (isEdit && currentRow) {
         const editRes = await editMenu(currentRow.id, values.title);
-        if (editRes.error) toast.error(editRes.error);
-        else toast.success("Menu updated successfully");
+        if (editRes.error) {
+          toast.error(editRes.error);
+        } else if (editRes.data) {
+          toast.success("Menu updated successfully");
+          router.refresh();
+        }
       } else {
         const addRes = await addNewMenu(values.title);
-        if (addRes.error) toast.error(addRes.error);
-        else toast.success("Menu added successfully");
+        if (addRes.error) {
+          toast.error(addRes.error);
+        } else if (addRes.data) {
+          toast.success("Menu added successfully");
+          router.refresh();
+        }
       }
-      router.refresh();
+
       form.reset();
       onOpenChange(false);
     } catch (error) {
-      console.log("Menu error: ", error);
       toast.error(handleError(error));
+      console.error("Menu Action Dialog Error: ", error);
     } finally {
       setIsloading(false);
     }
@@ -95,7 +112,6 @@ export function MenuActionDialog({ currentRow, open, onOpenChange }: Props) {
           <DialogTitle>{isEdit ? "Edit Menu" : "Add New Menu"}</DialogTitle>
           <DialogDescription />
         </DialogHeader>
-
         <Form {...form}>
           <form
             id="menu-form"
@@ -107,10 +123,11 @@ export function MenuActionDialog({ currentRow, open, onOpenChange }: Props) {
               name="title"
               render={({ field }) => (
                 <FormItem className="grid gap-2">
-                  <FormLabel htmlFor="title">Menu Title</FormLabel>
+                  <FormLabel htmlFor="title">Menu</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter menu title"
+                      id="title"
+                      placeholder="Enter menu name"
                       autoComplete="off"
                       {...field}
                     />
@@ -121,10 +138,9 @@ export function MenuActionDialog({ currentRow, open, onOpenChange }: Props) {
             />
           </form>
         </Form>
-
         <DialogFooter>
-          <Button type="submit" form="menu-form" disabled={isloading}>
-            Save changes
+          <Button type="submit" form="menu-form" className="w-30">
+            {isloading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save Changes"}
           </Button>
         </DialogFooter>
       </DialogContent>
