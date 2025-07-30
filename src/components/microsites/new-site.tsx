@@ -12,7 +12,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Separator } from "@/components/ui/separator";
 import { createSite } from "@/lib/actions";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
@@ -31,8 +30,14 @@ import { useRouter } from "next/navigation";
 import { handleError } from "@/lib/utils";
 
 const formSchema = z.object({
-  title: z.string().min(1, { message: "Title is required" }).max(50),
-  subdomain: z.string().min(1, { message: "Subdomain is required" }).max(50),
+  title: z.string().min(1, "Title is required").max(50),
+  subdomain: z
+    .string()
+    .min(1, "Subdomain is required")
+    .max(50)
+    .regex(/^[a-zA-Z0-9-]+$/, {
+      message: "Subdomain can only contain letters, numbers, and hyphens",
+    }),
 });
 
 type FormData = z.infer<typeof formSchema>;

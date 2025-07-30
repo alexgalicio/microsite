@@ -240,7 +240,7 @@ export async function createSite(title: string, subdomain: string) {
   return { data: data };
 }
 
-export async function readSiteSubdomain(subdomain: string) {
+export async function getSiteBySubdomain(subdomain: string) {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase
     .from("sites")

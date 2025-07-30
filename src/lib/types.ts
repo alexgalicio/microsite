@@ -39,9 +39,8 @@ export interface Site {
   user_id: string; // from clerk id
   title: string;
   subdomain: string;
-  // content: string;
   created_at: string;
-  updated_at: string | null;
+  updated_at: string ;
 }
 
 export type MainNavItem = NavItemWithOptionalChildren;
