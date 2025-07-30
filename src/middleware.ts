@@ -14,9 +14,11 @@ export default clerkMiddleware(async (auth, req) => {
   console.log("path", path);
   console.log("host", hostname);
 
-  if (hostname === getLink({ method: false }).slice(0, -1)) {
-    // return NextResponse.rewrite(new URL(`${path}`, req.url));
-    return NextResponse.next()
+ if (
+    hostname === getLink({ method: false }).slice(0, -1) || 
+    hostname === `www.${getLink({ method: false }).slice(0, -1)}`
+  ) {
+    return NextResponse.next();
   }
 
   // handle custom subdomain
