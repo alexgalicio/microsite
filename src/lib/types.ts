@@ -10,6 +10,7 @@ export interface NavItem {
   description?: string;
   isActive?: boolean;
   items?: NavItem[];
+  role?: string;
 }
 
 export interface NavItemWithChildren extends NavItem {
@@ -28,11 +29,20 @@ export interface FooterItem {
     external?: boolean;
   }[];
 }
-
 export type MenuItem = {
   id: string;
   title: string;
 };
+
+export interface Site {
+  id: string;
+  user_id: string; // from clerk id
+  title: string;
+  subdomain: string;
+  // content: string;
+  created_at: string;
+  updated_at: string | null;
+}
 
 export type MainNavItem = NavItemWithOptionalChildren;
 export type SidebarNavItem = NavItemWithChildren;
