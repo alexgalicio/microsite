@@ -3,7 +3,7 @@
 import { createServerSupabaseClient } from "@/utils/server";
 import { auth } from "@clerk/nextjs/server";
 import { clerkClient } from "@clerk/nextjs/server";
-import { randomBytes } from "crypto";
+// import { randomBytes } from "crypto";
 
 export async function addNewMenu(title: string) {
   const { userId } = await auth();
@@ -131,13 +131,13 @@ export async function getMenuTitle(menuId: string) {
 
   if (error) return { error: error.message };
 
-  return {data: data.title };
+  return { data: data.title };
 }
 
 // auto generate password for new account
-function generatePassword(length = 12) {
-  return randomBytes(length).toString("base64").slice(0, length);
-}
+// function generatePassword(length = 12) {
+//   return randomBytes(length).toString("base64").slice(0, length);
+// }
 
 export async function createUser(formData: {
   menu: string;
@@ -145,7 +145,8 @@ export async function createUser(formData: {
   email: string;
 }) {
   try {
-    const password = generatePassword();
+    // const password = generatePassword();
+    const password = "m!cr0site";
 
     // create user in clerk
     const clerk = await clerkClient();
@@ -206,4 +207,74 @@ export async function createUser(formData: {
     }
     return { success: false, error: error.message };
   }
+}
+
+export async function createMicrosite(title: string, subdomain: string) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return { error: "User not signed in" };
+  }
+
+  if (subdomain.toLocaleLowerCase() === "www") {
+    return { error: "Not allowed to use www as subdomain" };
+  }
+
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from("subdomain")
+    .insert({ title: title, subdomain: subdomain.toLowerCase() })
+    .select();
+
+  if (error) {
+    if (error.code === "23505") {
+      return { error: "Menu already exist" };
+    }
+    return { error: error.message };
+  }
+
+  return { data: data };
+}
+
+export async function readSiteSubdomain(subdomain: string) {
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from("subdomain")
+    .select()
+    .eq("subdomain", subdomain);
+
+  if (error) return { error: error.message };
+
+  return { data: data };
+}
+
+export async function readSiteById(id: string) {
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from("subdomain")
+    .select()
+    .eq("id", id);
+
+  if (error) return { error: error.message };
+
+  return { data: data };
+}
+
+export async function readSite() {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return { error: "User not signed in" };
+  }
+
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from("subdomain")
+    .select()
+    .eq("clerk_id", userId);
+
+  if (error) return { error: error.message };
+
+  return { data: data };
+  
 }
