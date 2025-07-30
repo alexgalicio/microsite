@@ -271,7 +271,6 @@ export async function readSite() {
   const { data, error } = await supabase
     .from("subdomain")
     .select()
-    .eq("clerk_id", userId);
 
   if (error) return { error: error.message };
 
