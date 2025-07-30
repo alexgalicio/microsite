@@ -209,7 +209,7 @@ export async function createUser(formData: {
   }
 }
 
-export async function createMicrosite(title: string, subdomain: string) {
+export async function createSite(title: string, subdomain: string) {
   const { userId } = await auth();
 
   if (!userId) {
@@ -222,8 +222,12 @@ export async function createMicrosite(title: string, subdomain: string) {
 
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase
-    .from("subdomain")
-    .insert({ title: title, subdomain: subdomain.toLowerCase() })
+    .from("sites")
+    .insert({
+      title: title,
+      subdomain: subdomain.toLowerCase(),
+      user_id: userId,
+    })
     .select();
 
   if (error) {
@@ -239,7 +243,7 @@ export async function createMicrosite(title: string, subdomain: string) {
 export async function readSiteSubdomain(subdomain: string) {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase
-    .from("subdomain")
+    .from("sites")
     .select()
     .eq("subdomain", subdomain);
 
@@ -250,10 +254,7 @@ export async function readSiteSubdomain(subdomain: string) {
 
 export async function readSiteById(id: string) {
   const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase
-    .from("subdomain")
-    .select()
-    .eq("id", id);
+  const { data, error } = await supabase.from("sites").select().eq("id", id);
 
   if (error) return { error: error.message };
 
@@ -269,11 +270,11 @@ export async function readSite() {
 
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase
-    .from("subdomain")
+    .from("sites")
     .select()
+    .eq("user_id", userId);
 
   if (error) return { error: error.message };
 
   return { data: data };
-  
 }

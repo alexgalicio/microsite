@@ -2,16 +2,18 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { readSiteSubdomain } from "./lib/actions";
 
-// const isPublicRoute = createRouteMatcher(["/", "/sign-in(.*)"]);
+const isPublicRoute = createRouteMatcher(["/", "/sign-in(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
-  // if (!isPublicRoute(req)) await auth.protect();
+  if (!isPublicRoute(req)) await auth.protect();
+
+  console.log("MIDDLEWARE HIT")
 
   const url = req.nextUrl;
   const pathname = url.pathname;
 
   // get host name (eg. micro.com test.micro.com)
-  const hostname = req.headers.get("host");
+  const hostname = req.headers.get("host")!;
 
   let currentHost;
   if (process.env.NODE_ENV === "production") {

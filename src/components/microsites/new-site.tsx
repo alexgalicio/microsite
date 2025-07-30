@@ -13,7 +13,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { createMicrosite } from "@/lib/actions";
+import { createSite } from "@/lib/actions";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -53,7 +53,7 @@ export default function NewMicrosite() {
   async function onSubmit(values: FormData) {
     setIsLoading(true);
     try {
-      const result = await createMicrosite(values.title, values.subdomain);
+      const result = await createSite(values.title, values.subdomain);
       if (result.error) {
         toast.error(result.error);
       } else if (result.data) {
