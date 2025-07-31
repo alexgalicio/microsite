@@ -52,7 +52,7 @@ export async function editMenu(id: string, title: string) {
   return { data: data };
 }
 
-export async function editSubmenu(id: string, title: string) {
+export async function editSubmenu(id: string, title: string, menu_id: string) {
   const { userId } = await auth();
 
   if (!userId) {
@@ -62,11 +62,14 @@ export async function editSubmenu(id: string, title: string) {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase
     .from("submenu")
-    .update({ title: title })
+    .update({ title: title, menu_id: menu_id })
     .eq("id", id)
     .select();
 
   if (error) {
+    if (error.code === "23505") {
+      return { error: "Submenu already exist on the menu" };
+    }
     return { error: error.message };
   }
 
@@ -181,19 +184,24 @@ export async function createUser(formData: {
       .insert({
         title: formData.submenu,
         menu_id: formData.menu,
-        user_id: profile.id,
+        user_id: user.id,
       })
       .select()
       .single();
 
     if (submenuError) {
-      console.error("Submenu creation error:", submenuError);
       // delete profile and Clerk user if submenu creation fails
-      await supabase.from("profiles").delete().eq("id", profile.id);
+      await supabase.from("profiles").delete().eq("clerk_id", user.id);
       await clerk.users.deleteUser(user.id);
+
+      if (submenuError?.code === "23505") {
+        return { success: false, error: "Submenu already exists in this menu" };
+      }
+
       return { success: false, error: submenuError.message };
     }
 
+    console.log("ceate account hit");
     return {
       success: true,
       password,
@@ -232,7 +240,38 @@ export async function createSite(title: string, subdomain: string) {
 
   if (error) {
     if (error.code === "23505") {
-      return { error: "Menu already exist" };
+      return { error: "Site already exist" };
+    }
+    return { error: error.message };
+  }
+
+  return { data: data };
+}
+
+export async function editSite(id: string, title: string, subdomain: string) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return { error: "User not signed in" };
+  }
+
+  if (subdomain.toLocaleLowerCase() === "www") {
+    return { error: "Not allowed to use www as subdomain" };
+  }
+
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from("sites")
+    .update({
+      title: title,
+      subdomain: subdomain.toLowerCase(),
+    })
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    if (error.code === "23505") {
+      return { error: "Site already exist" };
     }
     return { error: error.message };
   }
@@ -252,16 +291,7 @@ export async function getSiteBySubdomain(subdomain: string) {
   return { data: data };
 }
 
-export async function readSiteById(id: string) {
-  const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase.from("sites").select().eq("id", id);
-
-  if (error) return { error: error.message };
-
-  return { data: data };
-}
-
-export async function readSite() {
+export async function getSiteById(id: string) {
   const { userId } = await auth();
 
   if (!userId) {
@@ -271,8 +301,23 @@ export async function readSite() {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase
     .from("sites")
-    .select()
-    .eq("user_id", userId);
+    .select("*")
+    .eq("user_id", id);
+
+  if (error) return { error: error.message };
+
+  return { data: data };
+}
+
+export async function getAllSite() {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return { error: "User not signed in" };
+  }
+
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase.from("sites").select();
 
   if (error) return { error: error.message };
 
