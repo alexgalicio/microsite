@@ -1,3 +1,5 @@
+import CreateAccount from "@/components/microsites/create-account";
+
 export default function Page() {
-  return <h1>Dashboard</h1>;
+  return <CreateAccount />;
 }
