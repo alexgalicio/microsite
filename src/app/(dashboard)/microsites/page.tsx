@@ -9,7 +9,7 @@ import { auth } from "@clerk/nextjs/server";
 
 export default async function Page() {
   const { userId } = await auth();
-  
+
   let response;
   const isAdmin = await checkRole("admin");
   if (isAdmin) {
