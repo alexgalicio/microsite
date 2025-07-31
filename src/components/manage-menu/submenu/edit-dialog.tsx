@@ -22,11 +22,20 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { editSubmenu } from "@/lib/actions";
+import { useEffect, useState } from "react";
+import { editSubmenu, getAllMenu } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
+import { MenuItem } from "@/lib/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const formSchema = z.object({
   title: z
@@ -38,6 +47,7 @@ const formSchema = z.object({
       "Submenu must be at least 3 characters"
     )
     .trim(),
+  menu: z.string().min(1, "Menu is required"),
 });
 
 type SubmenuForm = z.infer<typeof formSchema>;
@@ -49,29 +59,54 @@ interface Props {
 }
 
 export function SubmenuActionDialog({ currentRow, open, onOpenChange }: Props) {
-  const [isloading, setIsloading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [menus, setMenus] = useState<MenuItem[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchMenus = async () => {
+      try {
+        const menuData = await getAllMenu();
+        setMenus(menuData);
+      } catch (error) {
+        console.error("Error fetching menus:", error);
+      }
+    };
+
+    fetchMenus();
+  }, []);
 
   const form = useForm<SubmenuForm>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: currentRow.title,
+      menu: currentRow.menu_id,
     },
   });
 
   async function onSubmit(values: SubmenuForm) {
-    setIsloading(true);
+    setIsLoading(true);
     try {
-      await editSubmenu(currentRow.id, values.title);
-      toast.success("Submenu updated successfully");
-      router.refresh();
+      const result = await editSubmenu(
+        currentRow.id,
+        values.title,
+        values.menu
+      );
+      if (result.error) {
+        toast.error(result.error);
+      } else if (result.data) {
+        toast.success("Submenu updated successfully");
+        router.refresh();
+      }
+      
       form.reset();
       onOpenChange(false);
+      router.refresh();
     } catch (error) {
       console.log("Submenu error: ", error);
       toast.error(handleError(error));
     } finally {
-      setIsloading(false);
+      setIsLoading(false);
     }
   }
 
@@ -85,13 +120,13 @@ export function SubmenuActionDialog({ currentRow, open, onOpenChange }: Props) {
     >
       <DialogContent className="sm:max-w-lg">
         <DialogHeader className="text-left">
-          <DialogTitle>Edit Menu</DialogTitle>
+          <DialogTitle>Edit Submenu</DialogTitle>
           <DialogDescription />
         </DialogHeader>
 
         <Form {...form}>
           <form
-            id="menu-form"
+            id="submenu-form"
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4"
           >
@@ -100,10 +135,10 @@ export function SubmenuActionDialog({ currentRow, open, onOpenChange }: Props) {
               name="title"
               render={({ field }) => (
                 <FormItem className="grid gap-2">
-                  <FormLabel htmlFor="title">Menu Title</FormLabel>
+                  <FormLabel htmlFor="title">Submenu</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter menu title"
+                      placeholder="Enter submenu name"
                       autoComplete="off"
                       {...field}
                     />
@@ -112,12 +147,47 @@ export function SubmenuActionDialog({ currentRow, open, onOpenChange }: Props) {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="menu"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Change menu</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a menu item" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {menus.map((menu) => (
+                        <SelectItem key={menu.id} value={menu.id}>
+                          {menu.title}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </form>
         </Form>
-
         <DialogFooter>
-          <Button type="submit" form="menu-form" disabled={isloading}>
-            Save changes
+          <Button
+            type="submit"
+            form="submenu-form"
+            className="w-30"
+            disabled={isLoading || !form.formState.isDirty}
+          >
+            {isLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              "Save Changes"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
