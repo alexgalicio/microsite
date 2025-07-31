@@ -1,14 +1,22 @@
 import PageContainer from "@/components/layout/page-container";
-import NewMicrosite from "@/components/microsites/new-site";
-import PageItem from "@/components/microsites/site-item";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { readSite } from "@/lib/actions";
-import { Site } from "@/lib/types";
-import Link from "next/link";
+import { SiteDialogs } from "@/components/microsites/dialogs";
+import SiteProvider from "@/components/microsites/site-context";
+import { SitePrimaryButtons } from "@/components/microsites/site-primary-buttons";
+import SearchMicrosites from "@/components/microsites/toolbar";
+import { getAllSite, getSiteById } from "@/lib/actions";
+import { checkRole } from "@/utils/role";
+import { auth } from "@clerk/nextjs/server";
 
 export default async function Page() {
-  const response = await readSite();
+  const { userId } = await auth();
+  
+  let response;
+  const isAdmin = await checkRole("admin");
+  if (isAdmin) {
+    response = await getAllSite();
+  } else {
+    response = await getSiteById(userId || "");
+  }
 
   if (response.error) {
     return <div>error {response.error}</div>;
@@ -18,24 +26,16 @@ export default async function Page() {
 
   return (
     <PageContainer>
-      <div className="flex flex-1 flex-col gap-4">
-        <div className="flex items-start justify-between items-center">
-          <h2 className="text-2xl font-bold tracking-tight">Microsites</h2>
-          <NewMicrosite />
+      <SiteProvider>
+        <div className="flex flex-1 flex-col gap-4">
+          <div className="flex items-start justify-between items-center">
+            <h2 className="text-2xl font-bold tracking-tight">Microsites</h2>
+            <SitePrimaryButtons />
+          </div>
+          <SearchMicrosites sites={sites} />
         </div>
-
-        {/* search and filter */}
-
-        <div className="grid gap-4 overflow-auto pt-4 pb-16 md:grid-cols-2 lg:grid-cols-3">
-          {sites.length >= 1 ? (
-            sites.map((site) => <PageItem key={site.id} site={site} />)
-          ) : (
-            <p className="mt-4 text-center text-muted-foreground">
-              It&apos;s pretty empty in here, create a site to get started.
-            </p>
-          )}
-        </div>
-      </div>
+        <SiteDialogs />
+      </SiteProvider>
     </PageContainer>
   );
 }
