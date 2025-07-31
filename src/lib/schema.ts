@@ -1,12 +1,12 @@
 import { z } from "zod";
 
-const menuSchema = z.object({
+export const menuSchema = z.object({
   id: z.string(),
   title: z.string(),
   submenu_count: z.number(),
 });
 
-const submenuSchema = z.object({
+export const submenuSchema = z.object({
   id: z.string(),
   title: z.string(),
   menu_id: z.string(),
@@ -17,5 +17,15 @@ const submenuSchema = z.object({
   ),
 });
 
+export const siteSchema = z.object ({
+  id: z.string(),
+  user_id: z.string(),
+  title: z.string(),
+  subdomain: z.string(),
+  created_at: z.string(),
+  updated_at: z.string(),
+});
+
 export type Menu = z.infer<typeof menuSchema>;
 export type Submenu = z.infer<typeof submenuSchema>;
+export type Site = z.infer<typeof siteSchema>;
