@@ -1,8 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,32 +15,21 @@ import {
   Globe,
   Clock,
   ExternalLink,
-  Settings,
   Trash,
+  Edit,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
 import { getLink } from "@/lib/getLink";
 import { Site } from "@/lib/types";
+import { useSite } from "./site-context";
 
-function PageItem({ site }: { site: Site }) {
-  const router = useRouter();
-
-  const handleDelete = async (siteId: string) => {
-    console.log("clicked");
-    // const result = await deleteSite(siteId);
-    // if (result.success) {
-    //   toast.success("Success", { description: "Site deleted successfully" });
-    // } else {
-    //   toast.error("Error", { description: "Failed to delete site" });
-    // }
-
-    // router.refresh();
-  };
+export default function PageItem({ site }: { site: Site }) {
+  const { setOpen, setCurrentRow } = useSite();
 
   return (
     <div className="rounded-lg border p-4 hover:shadow-md">
+      
       <div className="mb-8 flex items-center justify-between">
         <Link
           href={getLink({ subdomain: "editor", pathName: site.id })}
@@ -69,20 +56,15 @@ function PageItem({ site }: { site: Site }) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[160px]">
-            <DropdownMenuItem>
-              Settings
-              <DropdownMenuShortcut>
-                <Settings size={16} />
-              </DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
             <DropdownMenuItem
-              className="flex items-center gap-2 text-destructive"
-              onClick={() => handleDelete(site.id)}
+              onClick={() => {
+                setCurrentRow(site);
+                setOpen("edit");
+              }}
             >
-              Delete
+              Edit
               <DropdownMenuShortcut>
-                <Trash size={16} />
+                <Edit size={16} />
               </DropdownMenuShortcut>
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -114,5 +96,3 @@ function PageItem({ site }: { site: Site }) {
     </div>
   );
 }
-
-export default PageItem;

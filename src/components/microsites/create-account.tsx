@@ -19,6 +19,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -33,7 +34,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { MenuItem } from "@/lib/types";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2, Plus, PlusCircleIcon } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   menu: z.string().min(1, "Menu is required"),
@@ -46,7 +49,9 @@ const formSchema = z.object({
       "Submenu must be at least 3 characters"
     )
     .trim(),
-  email: z.email({ message: "Invalid email address" }).min(1, "Email is required"),
+  email: z
+    .email({ message: "Invalid email address" })
+    .min(1, "Email is required"),
 });
 
 type AccountForm = z.infer<typeof formSchema>;
@@ -55,6 +60,7 @@ export default function CreateAccount() {
   const [isLoading, setIsLoading] = useState(false);
   const [menus, setMenus] = useState<MenuItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchMenus = async () => {
@@ -93,7 +99,9 @@ export default function CreateAccount() {
         form.reset();
         setIsOpen(false);
         console.log(result); // TODO: email user their details
+        router.refresh();
       } else {
+        console.log("error reulst:", result.error);
         toast.error(result.error);
       }
     } catch (error) {
@@ -116,81 +124,99 @@ export default function CreateAccount() {
           <DialogTitle>Create Account</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="grid gap-4">
-              <FormField
-                control={form.control}
-                name="menu"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Menu</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select a menu item" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {menus.map((menu) => (
+          <form
+            id="account-form"
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4"
+          >
+            <FormField
+              control={form.control}
+              name="menu"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Menu</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a menu item" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {menus.length > 0 ? (
+                        menus.map((menu) => (
                           <SelectItem key={menu.id} value={menu.id}>
                             {menu.title}
                           </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="submenu"
-                render={({ field }) => (
-                  <FormItem className="grid gap-2">
-                    <FormLabel htmlFor="submenu">Submenu</FormLabel>
-                    <FormControl>
-                      <Input id="submenu" autoComplete="off" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem className="grid gap-2">
-                    <FormLabel htmlFor="email">Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="email"
-                        type="email"
-                        autoComplete="email"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <DialogDescription className="p-4 text-sm text-blue-800 rounded-lg bg-blue-50">
-                <span className="font-medium">Note:</span> Password will be
-                automatically generated and account details will be sent to the
-                provided email address.
-              </DialogDescription>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  "Create Account"
-                )}
-              </Button>
-            </div>
+                        ))
+                      ) : (
+                        <Link href="/manage-menu">
+                          <Button variant="ghost" className="w-full">
+                            <PlusCircleIcon className="w-4 h-4 border rounded-full" />
+                            Create Menu
+                          </Button>
+                        </Link>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="submenu"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel htmlFor="submenu">Submenu</FormLabel>
+                  <FormControl>
+                    <Input id="submenu" autoComplete="off" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel htmlFor="email">Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="email"
+                      type="email"
+                      autoComplete="email"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </form>
         </Form>
+        <DialogDescription className="p-4 text-sm text-blue-800 rounded-lg bg-blue-50">
+          <span className="font-medium">Note:</span> Password will be
+          automatically generated and account details will be sent to the
+          provided email address.
+        </DialogDescription>
+        <DialogFooter>
+          <Button
+            type="submit"
+            form="account-form"
+            className="w-full"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              "Create Account"
+            )}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

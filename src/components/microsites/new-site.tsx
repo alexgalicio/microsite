@@ -25,7 +25,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import * as z from "zod";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { handleError } from "@/lib/utils";
 
@@ -77,7 +77,7 @@ export default function NewMicrosite() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>New Site</Button>
+        <Button><Plus size={18} /> <span>New Site</span></Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
