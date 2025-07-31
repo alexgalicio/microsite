@@ -139,7 +139,7 @@ export function MenuActionDialog({ currentRow, open, onOpenChange }: Props) {
           </form>
         </Form>
         <DialogFooter>
-          <Button type="submit" form="menu-form" className="w-30" disabled={isLoading}>
+          <Button type="submit" form="menu-form" className="w-30" disabled={isLoading || !form.formState.isDirty}>
             {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save Changes"}
           </Button>
         </DialogFooter>
