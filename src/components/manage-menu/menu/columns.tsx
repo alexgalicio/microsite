@@ -47,11 +47,7 @@ export const columns: ColumnDef<Menu>[] = [
       const submenuCount = row.getValue("submenu_count") as number; 
       const text = `${submenuCount} submenu${submenuCount > 1 ? "s" : ""}`;
 
-      if (submenuCount === 0) { // if no submenu just plain text
-        return <span>{text}</span>;
-      }
-
-      // else render it as link
+      // render as a link
       return (
         <Link
           href={`/manage-menu/submenu/${menuId}`}
