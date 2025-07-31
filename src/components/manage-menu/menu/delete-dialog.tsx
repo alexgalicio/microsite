@@ -9,7 +9,7 @@ import { deleteMenu } from "@/lib/actions";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { OctagonAlertIcon } from "lucide-react";
+import { Loader2, OctagonAlertIcon } from "lucide-react";
 
 interface Props {
   open: boolean;
@@ -79,7 +79,9 @@ export function MenuDeleteDialog({ open, onOpenChange, currentRow }: Props) {
           </div>
         </div>
       }
-      confirmText="Delete"
+      confirmText={
+        isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Delete"
+      }
       destructive
     />
   );
