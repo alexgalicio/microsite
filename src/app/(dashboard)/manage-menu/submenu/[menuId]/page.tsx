@@ -53,7 +53,7 @@ export default async function Page({
     <PageContainer>
       <SubmenuProvider>
         <div className="flex flex-1 flex-col gap-4">
-          <div className="flex items-start justify-between">
+          <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold tracking-tight">{result.data}</h2>
             <CreateAccount />
           </div>
