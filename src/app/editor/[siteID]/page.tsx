@@ -9,43 +9,30 @@ type Props = {
 };
 
 export default async function Page({ params }: Props) {
-  const { userId } = await auth();
+  const session = await auth();
 
-  // Protect the route by checking if the user is signed in
-  if (!userId) {
-    return <div>Sign in to view this page</div>;
+  const { siteId } = await params;
+
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from("sites")
+    .select("*")
+    .eq("id", siteId)
+    .single();
+
+  if (error) {
+    console.error("Error fetching site:", error);
   }
-  // const session = await auth();
 
-  // console.log("session", session);
-
-  // const { siteId } = await params;
-  // if (!siteId) {
-  //   console.log("siteId is undefined");
-  // }
-
-  // const supabase = createServerSupabaseClient();
-  // const { data, error } = await supabase
-  //   .from("sites")
-  //   .select("*")
-  //   .eq("id", siteId)
-  //   .single();
-
-  // if (error) {
-  //   console.error("Error fetching site:", error);
-  // }
-
-  // if (!data || !(session.userId === data.user_id)) {
-  //   redirect("/sign-in");
-  // }
-
-  // console.log("session", session.userId);
-  // console.log("userId", data.user_id);
+  if (!data || !(session.userId === data.user_id)) {
+    redirect("/sign-in");
+  }
 
   return (
     <div>
       <>
         <h1>Editor Page</h1>
+        <h1>Site data: {JSON.stringify(data)}</h1>
       </>
     </div>
   );
