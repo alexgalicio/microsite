@@ -229,18 +229,35 @@ export async function createSite(title: string, subdomain: string) {
   }
 
   const supabase = createServerSupabaseClient();
+
+  // find user submenu
+  const { data: submenu, error: submenuError } = await supabase
+    .from("submenu")
+    .select("id")
+    .eq("user_id", userId)
+    .single();
+
+  if (submenuError || !submenu) {
+    return { error: "Submenu not found for this user" };
+  }
+
   const { data, error } = await supabase
     .from("sites")
     .insert({
       title: title,
       subdomain: subdomain.toLowerCase(),
       user_id: userId,
+      submenu_id: submenu.id,
     })
     .select();
 
   if (error) {
     if (error.code === "23505") {
-      return { error: "Site already exist" };
+      // Check which constraint was violated
+      if (error.message.includes("user_id")) {
+        return { error: "You can only create one site per account" };
+      }
+      return { error: "Site already exists" };
     }
     return { error: error.message };
   }
@@ -317,7 +334,55 @@ export async function getAllSite() {
   }
 
   const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase.from("sites").select();
+  const { data, error } = await supabase.from("sites").select(`
+    *,
+    submenu:submenu_id (
+      id,
+      title,
+      menu:menu_id (
+        id,
+        title
+      )
+    )
+  `);
+
+  if (error) return { error: error.message };
+
+  return { data: data };
+}
+
+export async function archiveSite(id: string) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return { error: "User not signed in" };
+  }
+
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from("sites")
+    .update({ status: "archived" })
+    .eq("id", id)
+    .select();
+
+  if (error) return { error: error.message };
+
+  return { data: data };
+}
+
+export async function restoreSite(id: string) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return { error: "User not signed in" };
+  }
+
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from("sites")
+    .update({ status: "published" })
+    .eq("id", id)
+    .select();
 
   if (error) return { error: error.message };
 

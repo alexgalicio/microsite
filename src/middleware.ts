@@ -2,10 +2,10 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { getLink } from "./lib/getLink";
 
-const isPublicRoute = createRouteMatcher(["/", "/sign-in(.*)"]);
+const isProtectedRoute = createRouteMatcher(["/dashboard(.*)", "/editor(.*)", "/settings(.*)", "/microsites(.*)", "/manage-menu(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (!isPublicRoute(req)) await auth.protect();
+  if (isProtectedRoute(req)) await auth.protect();
 
   const url = req.nextUrl;
   const path = url.pathname;
@@ -14,12 +14,22 @@ export default clerkMiddleware(async (auth, req) => {
   console.log("path", path);
   console.log("host", hostname);
 
+  // Handle editor subdomain
+  if (
+    hostname === getLink({ subdomain: "editor", method: false }).slice(0, -1)
+  ) {
+    return NextResponse.rewrite(
+      new URL(`/editor${path === "/" ? "" : path}`, req.url)
+    );
+  }
+
+  // Handle www subdomain
   if (hostname === getLink({ subdomain: "www", method: false }).slice(0, -1)) {
     return NextResponse.next();
   }
 
+  // Handle root domain
   if (hostname === getLink({ method: false }).slice(0, -1)) {
-    // return NextResponse.rewrite(new URL(`${path}`, req.url));
     return NextResponse.next();
   }
 

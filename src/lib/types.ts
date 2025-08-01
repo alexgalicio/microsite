@@ -1,4 +1,5 @@
 import { LucideIcon } from "lucide-react";
+import { string } from "zod";
 
 export interface NavItem {
   title: string;
@@ -29,18 +30,30 @@ export interface FooterItem {
     external?: boolean;
   }[];
 }
+
 export type MenuItem = {
   id: string;
   title: string;
 };
 
+export type SiteStatus = "published" | "archived" | "draft";
+
 export interface Site {
   id: string;
   user_id: string; // from clerk id
   title: string;
+  description?: string;
   subdomain: string;
   created_at: string;
-  updated_at: string ;
+  updated_at: string;
+  status?: string;
+  submenu?: { // get menu id
+    title: string;
+    menu: {
+      id: string;
+      title: string;
+    };
+  };
 }
 
 export type MainNavItem = NavItemWithOptionalChildren;
