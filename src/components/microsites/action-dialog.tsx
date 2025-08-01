@@ -15,6 +15,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -30,10 +31,11 @@ import { handleError } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
-  title: z.string().min(1, "Title is required").max(50),
+  title: z.string().min(3, "Title must be at least 3 characters long").max(50),
+  description : z.string().max(200, "Description must be less than 200 characters"),
   subdomain: z
     .string()
-    .min(1, "Subdomain is required")
+    .min(3, "Subdomain must be at least 3 characters long")
     .max(50)
     .regex(/^[a-zA-Z0-9-]+$/, {
       message: "Subdomain can only contain letters, numbers, and hyphens",
@@ -60,11 +62,13 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
       ? {
           title: currentRow.title,
           subdomain: currentRow.subdomain,
+          description: currentRow.description || "",
           isEdit,
         }
       : {
           title: "",
           subdomain: "",
+          description: "",
           isEdit,
         },
   });
@@ -73,7 +77,11 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
     setIsLoading(true);
     try {
       if (isEdit && currentRow) {
-        const editRes = await editSite(currentRow.id, values.title, values.subdomain);
+        const editRes = await editSite(
+          currentRow.id,
+          values.title,
+          values.subdomain
+        );
         if (editRes.error) {
           toast.error(editRes.error);
         } else if (editRes.data) {
@@ -133,6 +141,31 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
                       {...field}
                     />
                   </FormControl>
+                  <FormDescription>
+                    This site&apos;s title (and what gets shown at the top of
+                    the browser window).
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel htmlFor="description">Description</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="description"
+                      placeholder="Enter site description"
+                      autoComplete="off"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    A brief description of this site.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -151,6 +184,7 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
                       {...field}
                     />
                   </FormControl>
+                  <FormDescription>Lowercase letters, numbers, and hyphens only. Must be at least 3 characters long.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
