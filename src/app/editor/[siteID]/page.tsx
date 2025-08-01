@@ -14,7 +14,7 @@ export default async function Page({ params }: Props) {
   
   const { siteId } = await params;
   console.log("Site ID:", siteId);
-
+  
   // const supabase = createServerSupabaseClient();
   // const { data, error } = await supabase
   //   .from("sites")
