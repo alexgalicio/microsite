@@ -10,8 +10,10 @@ type Props = {
 
 export default async function Page({ params }: Props) {
   const session = await auth();
-console.log("Session:", session);
-  // const { siteId } = await params;
+  console.log("Session:", session);
+  
+  const { siteId } = await params;
+  console.log("Site ID:", siteId);
 
   // const supabase = createServerSupabaseClient();
   // const { data, error } = await supabase
