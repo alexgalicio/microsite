@@ -19,14 +19,18 @@ export default async function Page({ params }: Props) {
   const { data, error } = await supabase
     .from("sites")
     .select("*")
-    .eq("user_id", siteId)
-    .single();
+    .eq("id", siteId)
+    .maybeSingle();
 
   if (error) {
     console.error("Error fetching site:", error);
   }
 
-  if (!data || !(session.userId === data.user_id)) {
+  if (!data) {
+    console.error("No site data found for ID:", siteId);
+  }
+
+  if (!(session.userId === data.user_id)) {
     redirect("/sign-in");
   }
 
