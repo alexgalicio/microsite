@@ -21,6 +21,7 @@ export const siteSchema = z.object ({
   id: z.string(),
   user_id: z.string(),
   title: z.string(),
+  description: z.string().optional(),
   subdomain: z.string(),
   created_at: z.string(),
   updated_at: z.string(),
