@@ -23,7 +23,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { editSubmenu, getAllMenu } from "@/lib/actions";
+import { editSubmenu } from "@/lib/actions/submenu";
+import { getAllMenu } from "@/lib/actions/menu";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
@@ -40,14 +41,15 @@ import {
 const formSchema = z.object({
   title: z
     .string()
-    .min(1, "Submenu name is required")
+    .min(3, "Submenu must be at least 3 characters")
+    .max(10, "Submenu must be less than 10 characters")
     .refine(
       // must be 3 char long excluding spaces
       (value) => value.replace(/\s+/g, "").length >= 3,
       "Submenu must be at least 3 characters"
     )
     .trim(),
-  menu: z.string().min(1, "Menu is required"),
+  menu: z.string().min(1, "Please select a menu"),
 });
 
 type SubmenuForm = z.infer<typeof formSchema>;
@@ -87,20 +89,19 @@ export function SubmenuActionDialog({ currentRow, open, onOpenChange }: Props) {
   async function onSubmit(values: SubmenuForm) {
     setIsLoading(true);
     try {
-      const result = await editSubmenu(
+      const response = await editSubmenu(
         currentRow.id,
         values.title,
         values.menu
       );
-      if (result.error) {
-        toast.error(result.error);
-      } else if (result.data) {
+      if (response.success) {
         toast.success("Submenu updated successfully");
+        onOpenChange(false);
         router.refresh();
+      } else {
+        toast.error(response.error);
       }
-      
       form.reset();
-      onOpenChange(false);
       router.refresh();
     } catch (error) {
       console.log("Submenu error: ", error);
@@ -152,7 +153,7 @@ export function SubmenuActionDialog({ currentRow, open, onOpenChange }: Props) {
               name="menu"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Change menu</FormLabel>
+                  <FormLabel>Change Menu</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
