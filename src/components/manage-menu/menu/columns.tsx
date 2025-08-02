@@ -44,7 +44,7 @@ export const columns: ColumnDef<Menu>[] = [
     cell: ({ row }) => {
       const menuId = row.original.id;
       // cast submenu count to number
-      const submenuCount = row.getValue("submenu_count") as number; 
+      const submenuCount = row.getValue("submenu_count") as number;
       const text = `${submenuCount} submenu${submenuCount > 1 ? "s" : ""}`;
 
       // render as a link
