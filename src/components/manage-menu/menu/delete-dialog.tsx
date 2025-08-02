@@ -5,11 +5,11 @@ import { useState } from "react";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { deleteMenu } from "@/lib/actions";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { Loader2, OctagonAlertIcon } from "lucide-react";
+import { deleteMenu } from "@/lib/actions/menu";
 
 interface Props {
   open: boolean;
@@ -27,13 +27,13 @@ export function MenuDeleteDialog({ open, onOpenChange, currentRow }: Props) {
 
     setIsLoading(true);
     try {
-      const result = await deleteMenu(currentRow.id);
-      if (result?.error) {
-        toast.error(result.error);
-      } else if (result.data) {
+      const response = await deleteMenu(currentRow.id);
+      if (response?.success) {
         toast.success("Menu deleted successfully");
         onOpenChange(false);
         router.refresh();
+      } else {
+        toast.error(response.error);
       }
     } catch (error) {
       toast.error(handleError(error));
@@ -62,7 +62,8 @@ export function MenuDeleteDialog({ open, onOpenChange, currentRow }: Props) {
               <p>
                 Your menu{" "}
                 <strong className="font-medium">{currentRow.title}</strong> and
-                all its contents will be permanently deleted.
+                all its contents will be permanently deleted. This action cannot
+                be undone.
               </p>
             </AlertDescription>
           </Alert>
