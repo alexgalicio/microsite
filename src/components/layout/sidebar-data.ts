@@ -8,14 +8,16 @@ export const navItems: NavItem[] = [
     url: "/dashboard",
     icon: LayoutDashboard,
     isActive: false,
-    items: [], // empty array as there are no child items
+    items: [], // array for sub items in the future
+    role: "admin",
   },
   {
     title: "Microsites",
     url: "/microsites",
     icon: Globe,
     isActive: false,
-    items: [],
+    items: [], // empty array as there are no child items
+    // no role means available to all
   },
   {
     title: "Manage Menu",
@@ -23,6 +25,7 @@ export const navItems: NavItem[] = [
     icon: Menu,
     isActive: false,
     items: [],
+    role: "admin",
   },
   {
     title: "Settings",
