@@ -23,7 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { addNewMenu, editMenu } from "@/lib/actions";
+import { createNewMenu, editMenu } from "@/lib/actions/menu";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
@@ -32,11 +32,12 @@ import { Loader2 } from "lucide-react";
 const formSchema = z.object({
   title: z
     .string()
-    .min(1, "Menu is required")
+    .min(3, "Menu must be at least 3 characters")
+    .max(10, "Menu must be less than 10 characters")
     .refine(
       // must be 3 char long excluding spaces
       (value) => value.replace(/\s+/g, "").length >= 3,
-      "Menu must be at least 3 characters"
+      "Menu must be at least 3 characters excluding spaces"
     )
     .trim(),
   isEdit: z.boolean(),
@@ -73,22 +74,21 @@ export function MenuActionDialog({ currentRow, open, onOpenChange }: Props) {
     try {
       if (isEdit && currentRow) {
         const editRes = await editMenu(currentRow.id, values.title);
-        if (editRes.error) {
-          toast.error(editRes.error);
-        } else if (editRes.data) {
+        if (editRes.success) {
           toast.success("Menu updated successfully");
           router.refresh();
+        } else {
+          toast.error(editRes.error);
         }
       } else {
-        const addRes = await addNewMenu(values.title);
-        if (addRes.error) {
-          toast.error(addRes.error);
-        } else if (addRes.data) {
+        const addRes = await createNewMenu(values.title);
+        if (addRes.success) {
           toast.success("Menu added successfully");
           router.refresh();
+        } else {
+          toast.error(addRes.error);
         }
       }
-
       form.reset();
       onOpenChange(false);
     } catch (error) {
@@ -109,7 +109,7 @@ export function MenuActionDialog({ currentRow, open, onOpenChange }: Props) {
     >
       <DialogContent className="sm:max-w-lg">
         <DialogHeader className="text-left">
-          <DialogTitle>{isEdit ? "Edit Menu" : "Add New Menu"}</DialogTitle>
+          <DialogTitle>{isEdit ? "Edit Menu" : "Create New Menu"}</DialogTitle>
           <DialogDescription />
         </DialogHeader>
         <Form {...form}>
@@ -139,8 +139,17 @@ export function MenuActionDialog({ currentRow, open, onOpenChange }: Props) {
           </form>
         </Form>
         <DialogFooter>
-          <Button type="submit" form="menu-form" className="w-30" disabled={isLoading || !form.formState.isDirty}>
-            {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save Changes"}
+          <Button
+            type="submit"
+            form="menu-form"
+            className="w-30"
+            disabled={isLoading || !form.formState.isDirty}
+          >
+            {isLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              "Save Changes"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
