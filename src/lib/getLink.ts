@@ -15,5 +15,7 @@ export function getLink({
   const formattedSubdomain = subdomain ? `${subdomain}.` : "";
   const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
 
-  return `${method ? protocol + "://" : ""}${formattedSubdomain}${rootDomain}/${pathName}`;
+  return `${
+    method ? protocol + "://" : ""
+  }${formattedSubdomain}${rootDomain}/${pathName}`;
 }
