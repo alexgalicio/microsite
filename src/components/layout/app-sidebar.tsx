@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, ChevronsUpDown, LogOut, UserCircle } from "lucide-react";
+import { ChevronsUpDown, LogOut, UserCircle } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -10,9 +10,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useClerk, useUser } from "@clerk/nextjs";
@@ -29,11 +26,7 @@ import { UserAvatarProfile } from "@/components/user-avatar-profile";
 import { usePathname, useRouter } from "next/navigation";
 import { navItems } from "./sidebar-data";
 import Link from "next/link";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { useMemo } from "react";
 
 export function AppSidebar() {
   const pathname = usePathname();
@@ -41,64 +34,44 @@ export function AppSidebar() {
   const { signOut } = useClerk();
   const router = useRouter();
 
+  // get user role
+  const userRole = user?.publicMetadata?.role as string | undefined;
+
+  // filter nav items based on user role
+  const filteredNavItems = useMemo(() => {
+    if (!userRole) return []; // no items if role is not set
+
+    return navItems.filter((item) => {
+      // if item has no roles specified, show to all
+      if (!item.role || item.role.length === 0) {
+        return true;
+      }
+
+      // check if user role is in the items allowed roles
+      return item.role.includes(userRole);
+    });
+  }, [userRole]);
+
   return (
     <Sidebar collapsible="icon">
       <SidebarContent className="overflow-x-hidden">
         <SidebarGroup>
           <SidebarGroupLabel>Overview</SidebarGroupLabel>
           <SidebarMenu>
-            {navItems.map((item) => {
-              return item?.items && item?.items?.length > 0 ? (
-                <Collapsible
-                  key={item.title}
+            {filteredNavItems.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
                   asChild
-                  defaultOpen={item.isActive}
-                  className="group/collapsible"
+                  tooltip={item.title}
+                  isActive={pathname === item.url}
                 >
-                  <SidebarMenuItem>
-                    <CollapsibleTrigger asChild>
-                      <SidebarMenuButton
-                        tooltip={item.title}
-                        isActive={pathname === item.url}
-                      >
-                        {item.icon && <item.icon className="w-4 h-4" />}
-                        <span>{item.title}</span>
-                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                      </SidebarMenuButton>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {item.items?.map((subItem) => (
-                          <SidebarMenuSubItem key={subItem.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={pathname === subItem.url}
-                            >
-                              <Link href={subItem.url}>
-                                <span>{subItem.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  </SidebarMenuItem>
-                </Collapsible>
-              ) : (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    tooltip={item.title}
-                    isActive={pathname === item.url}
-                  >
-                    <Link href={item.url}>
-                      {item.icon && <item.icon className="w-4 h-4" />}
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              );
-            })}
+                  <Link href={item.url}>
+                    {item.icon && <item.icon className="w-4 h-4" />}
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
