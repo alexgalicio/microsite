@@ -17,12 +17,14 @@ export const submenuSchema = z.object({
   ),
 });
 
-export const siteSchema = z.object ({
+export const siteSchema = z.object({
   id: z.string(),
   user_id: z.string(),
   title: z.string(),
-  description: z.string().optional(),
   subdomain: z.string(),
+  description: z.string().optional(),
+  bg_image: z.string().optional(),
+  status: z.enum(["draft", "published", "archived"]),
   created_at: z.string(),
   updated_at: z.string(),
 });
