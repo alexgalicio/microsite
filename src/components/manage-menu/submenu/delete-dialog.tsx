@@ -5,7 +5,7 @@ import { useState } from "react";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { deleteSubmenu } from "@/lib/actions";
+import { deleteSubmenu } from "@/lib/actions/submenu";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
 import { useRouter } from "next/navigation";
@@ -27,16 +27,17 @@ export function SubmenuDeleteDialog({ open, onOpenChange, currentRow }: Props) {
 
     try {
       setIsLoading(true);
-      const result = await deleteSubmenu(currentRow.id);
-      if (result?.error) {
-        toast.error(result.error);
-      } else if (result.data) {
+      const response = await deleteSubmenu(currentRow.id);
+      if (response.success) {
         toast.success("Submenu deleted successfully");
         onOpenChange(false);
         router.refresh();
+      } else {
+        toast.error(response.error);
       }
     } catch (error) {
       toast.error(handleError(error));
+      console.error("Submenu Delete Dialog Error: ", error);
     } finally {
       setIsLoading(false);
     }
