@@ -15,7 +15,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -24,22 +23,35 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { createSite, editSite } from "@/lib/actions";
+import {
+  removeBgImage,
+  createNewSite,
+  editSite,
+  uploadBgImage,
+} from "@/lib/actions/site";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
-  title: z.string().min(3, "Title must be at least 3 characters long").max(50),
-  description : z.string().max(200, "Description must be less than 200 characters"),
+  title: z
+    .string()
+    .min(3, "Title must be at least 3 characters")
+    .max(30, "Title must be less than 30 characters")
+    .trim(),
   subdomain: z
     .string()
-    .min(3, "Subdomain must be at least 3 characters long")
-    .max(50)
+    .min(3, "Subdomain must be at least 3 characters")
+    .max(50, "Subdomain must be less than 50 characters")
     .regex(/^[a-zA-Z0-9-]+$/, {
       message: "Subdomain can only contain letters, numbers, and hyphens",
     }),
+  description: z
+    .string()
+    .max(200, "Description must be less than 200 characters")
+    .trim(),
+  bg_image: z.string(),
   isEdit: z.boolean(),
 });
 
@@ -54,6 +66,7 @@ interface Props {
 export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
   const isEdit = !!currentRow;
   const [isLoading, setIsLoading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const router = useRouter();
 
   const form = useForm<SiteForm>({
@@ -63,42 +76,82 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
           title: currentRow.title,
           subdomain: currentRow.subdomain,
           description: currentRow.description || "",
+          bg_image: currentRow.bg_image || "",
           isEdit,
         }
       : {
           title: "",
           subdomain: "",
           description: "",
+          bg_image: "",
           isEdit,
         },
   });
 
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select a valid image file");
+        return;
+      }
+
+      if (file.size > 1 * 1024 * 1024) {
+        toast.error("Image size must be less than 1MB");
+        return;
+      }
+
+      setImageFile(file);
+    }
+  };
+
   async function onSubmit(values: SiteForm) {
     setIsLoading(true);
     try {
-      if (isEdit && currentRow) {
-        const editRes = await editSite(
-          currentRow.id,
-          values.title,
-          values.subdomain
-        );
-        if (editRes.error) {
-          toast.error(editRes.error);
-        } else if (editRes.data) {
-          toast.success("Site updated successfully");
-          router.refresh();
+      let imageUrl = values.bg_image;
+
+      if (imageFile) {
+        if (isEdit && currentRow?.bg_image) {
+          await removeBgImage(currentRow.bg_image).catch((error) => {
+            console.error("Failed to delete old image:", error);
+            // continue even if deletion fails to not block the update
+          });
         }
-      } else {
-        const createRes = await createSite(values.title, values.subdomain);
-        if (createRes.error) {
-          toast.error(createRes.error);
-        } else if (createRes.data) {
-          toast.success(`Site ${values.title} has been created`);
-          router.refresh();
+
+        // upload the new image
+        const uploadRes = await uploadBgImage(imageFile);
+        if (uploadRes.success) {
+          imageUrl = uploadRes.data ?? "";
+        } else {
+          imageUrl = "";
+          console.error("Upload Image Error: ", uploadRes.error);
         }
       }
 
+      const updatedValues = {
+        ...values,
+        bg_image: imageUrl,
+      };
+
+      if (isEdit && currentRow) {
+        const editRes = await editSite(currentRow.id, updatedValues);
+        if (editRes.success) {
+          toast.success("Site updated successfully");
+          router.refresh();
+        } else {
+          toast.error(editRes.error);
+        }
+      } else {
+        const createRes = await createNewSite(updatedValues);
+        if (createRes.success) {
+          toast.success(`Site ${values.title} has been created`);
+          router.refresh();
+        } else {
+          toast.error(createRes.error);
+        }
+      }
       form.reset();
+      setImageFile(null);
       onOpenChange(false);
     } catch (error) {
       toast.error(handleError(error));
@@ -113,12 +166,13 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
       open={open}
       onOpenChange={(state) => {
         form.reset();
+        setImageFile(null);
         onOpenChange(state);
       }}
     >
       <DialogContent className="sm:max-w-lg">
         <DialogHeader className="text-left">
-          <DialogTitle>{isEdit ? "Edit Site" : "Add New Site"}</DialogTitle>
+          <DialogTitle>{isEdit ? "Edit Site" : "Create New Site"}</DialogTitle>
           <DialogDescription />
         </DialogHeader>
         <Form {...form}>
@@ -141,10 +195,24 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    This site&apos;s title (and what gets shown at the top of
-                    the browser window).
-                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="subdomain"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel htmlFor="subdomain">Subdomain</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="subdomain"
+                      placeholder="Enter site subdomain"
+                      autoComplete="off"
+                      {...field}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -163,28 +231,28 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    A brief description of this site.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
-              name="subdomain"
+              name="bg_image"
               render={({ field }) => (
                 <FormItem className="grid gap-2">
-                  <FormLabel htmlFor="subdomain">Subdomain</FormLabel>
+                  <FormLabel htmlFor="bg_image">Background Image</FormLabel>
                   <FormControl>
                     <Input
-                      id="subdomain"
-                      placeholder="Enter subdomain"
-                      autoComplete="off"
-                      {...field}
+                      id="bg_image"
+                      type="file"
+                      accept="image/*"
+                      onChange={(event) => {
+                        handleImageChange(event);
+                        // Update form value with file name or empty string
+                        field.onChange(event.target.files?.[0]?.name || "");
+                      }}
                     />
                   </FormControl>
-                  <FormDescription>Lowercase letters, numbers, and hyphens only. Must be at least 3 characters long.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

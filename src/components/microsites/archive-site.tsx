@@ -7,14 +7,15 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../ui/dialog";
-import { Button } from "../ui/button";
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { AlertCircleIcon, Info, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
-import { archiveSite } from "@/lib/actions";
+import { archiveSite } from "@/lib/actions/site";
 import { useRouter } from "next/navigation";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 
 interface Props {
   open: boolean;
@@ -30,16 +31,16 @@ export function ArchiveSiteDialog({ open, onOpenChange, currentRow }: Props) {
     event.preventDefault();
     setIsLoading(true);
     try {
-      const result = await archiveSite(currentRow.id);
-      if (result.error) {
-        toast.error(result.error);
-      } else if (result.data) {
-        console.log(`Site ${currentRow.title} archived successfully.`);
+      const response = await archiveSite(currentRow.id);
+      if (response.success) {
+        console.log(`Site ${currentRow.title} archived successfully`);
         router.refresh();
+      } else {
+        toast.error(response.error);
       }
     } catch (error) {
       toast.error(handleError(error));
-      console.error("Failed to archive site:", error);
+      console.error("Archive Site Dialog Error:", error);
     } finally {
       setIsLoading(false);
       onOpenChange(false);
@@ -57,11 +58,20 @@ export function ArchiveSiteDialog({ open, onOpenChange, currentRow }: Props) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <DialogHeader>
             <DialogTitle>Archive Site</DialogTitle>
-            <DialogDescription>
-              This will archive the selected site and move its thumbnail off
-              your sites tab. You can restore it back to your sites tab at any
-              time
-            </DialogDescription>
+            <DialogDescription />
+            <Alert>
+              <Info />
+              <AlertTitle>
+                You are about to archive {currentRow.title}. This action will:
+              </AlertTitle>
+              <AlertDescription>
+                <ul className="list-inside list-disc text-sm">
+                  <li>Make the site inaccessible to the public</li>
+                  <li>Preserve all data (nothing will be deleted)</li>
+                  <li>Allow you to restore it at any time</li>
+                </ul>
+              </AlertDescription>
+            </Alert>
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>

@@ -7,13 +7,13 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../ui/dialog";
-import { Button } from "../ui/button";
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
-import { restoreSite } from "@/lib/actions";
+import { restoreSite } from "@/lib/actions/site";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -30,19 +30,19 @@ export function RestoreSiteDialog({ open, onOpenChange, currentRow }: Props) {
     event.preventDefault();
     setIsLoading(true);
     try {
-      const result = await restoreSite(currentRow.id);
-      if (result.error) {
-        toast.error(result.error);
-      } else if (result.data) {
-        console.log(`Site ${currentRow.title} restored successfully.`);
+      const response = await restoreSite(currentRow.id);
+      if (response.success) {
+        console.log(`Site ${currentRow.title} restored successfully`);
+        onOpenChange(false);
         router.refresh();
+      } else {
+        toast.error(response.error);
       }
     } catch (error) {
       toast.error(handleError(error));
-      console.error("Failed to restore site:", error);
+      console.error("Restore Site Dialog: ", error);
     } finally {
       setIsLoading(false);
-      onOpenChange(false);
     }
   }
 
@@ -56,9 +56,11 @@ export function RestoreSiteDialog({ open, onOpenChange, currentRow }: Props) {
       <DialogContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <DialogHeader>
-            <DialogTitle>Archive Site</DialogTitle>
+            <DialogTitle>Restore Site</DialogTitle>
             <DialogDescription>
-              This will restore the selected site back to your sites tab
+              You are about to restore{" "}
+              <span className="font-medium">{currentRow.title}</span>. This will
+              make the site publicly accessible again.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

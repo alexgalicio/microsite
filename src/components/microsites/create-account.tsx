@@ -25,7 +25,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { createUser, getAllMenu } from "@/lib/actions";
+import { createNewAccount } from "@/lib/actions/create-account";
+import { getAllMenu } from "@/lib/actions/menu";
 import {
   Select,
   SelectContent,
@@ -39,19 +40,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  menu: z.string().min(1, "Menu is required"),
+  menu: z.string().min(1, "Please select a menu"),
   submenu: z
     .string()
-    .min(1, "Submenu is required")
+    .min(3, "Submenu must be at least 3 characters")
+    .max(10, "Submenu must be less than 10 characters")
     .refine(
       // must be 3 char long excluding spaces
       (value) => value.replace(/\s+/g, "").length >= 3,
-      "Submenu must be at least 3 characters"
+      "Submenu must be at least 3 characters excluding spaces"
     )
     .trim(),
-  email: z
-    .email({ message: "Invalid email address" })
-    .min(1, "Email is required"),
+  email: z.email("Email is invalid").min(1, "Email is required"),
 });
 
 type AccountForm = z.infer<typeof formSchema>;
@@ -93,16 +93,16 @@ export default function CreateAccount() {
   async function onSubmit(values: AccountForm) {
     setIsLoading(true);
     try {
-      const result = await createUser(values);
-      if (result.success) {
+      const response = await createNewAccount(values);
+      if (response.success) {
         toast.success("Account created successfully");
         form.reset();
         setIsOpen(false);
-        console.log(result); // TODO: email user their details
+        console.log(response); // TODO: email user their details
         router.refresh();
       } else {
-        console.log("error reulst:", result.error);
-        toast.error(result.error);
+        toast.error(response.error);
+        console.log("Create Account Error:", response.error);
       }
     } catch (error) {
       console.log(handleError(error));

@@ -1,30 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import PageItem from "./site-item";
+import { useEffect, useState } from "react";
 import { MenuItem, Site, SiteStatus } from "@/lib/types";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { ArrowDownAZ, SlidersHorizontal, X } from "lucide-react";
+import { getAllMenu } from "@/lib/actions/menu";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
-import { getAllMenu } from "@/lib/actions";
+} from "@/components/ui/select";
 
-export default function SearchMicrosites({ sites }: { sites: Site[] }) {
-  const [search, setSearch] = useState("");
+export default function Microsites({ sites }: { sites: Site[] }) {
   const [sort, setSort] = useState("ascending");
+  const [search, setSearch] = useState("");
   const [menus, setMenus] = useState<MenuItem[]>([]);
   const [selectedMenu, setSelectedMenu] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<SiteStatus | null>(null);
   const isFiltered =
     search.length > 0 || selectedStatus !== null || selectedMenu !== null;
 
-  //fetch all menu
   useEffect(() => {
     const fetchMenus = async () => {
       try {
@@ -50,7 +49,7 @@ export default function SearchMicrosites({ sites }: { sites: Site[] }) {
         (selectedMenu ? site.submenu?.menu?.id === selectedMenu : true) &&
         (selectedStatus
           ? site.status === selectedStatus
-          : site.status !== "archived") // Hide archived sites by default
+          : site.status !== "archived") // hide archived sites by default
     );
 
   const resetFilters = () => {
@@ -63,6 +62,7 @@ export default function SearchMicrosites({ sites }: { sites: Site[] }) {
     <>
       <div className="flex items-center justify-between">
         <div className="flex flex-1 flex-col-reverse items-start gap-y-2 sm:flex-row sm:items-center sm:space-x-2">
+          {/* input search */}
           <Input
             className="h-9 w-40 lg:w-[250px]"
             placeholder="Search microsite"
@@ -112,6 +112,7 @@ export default function SearchMicrosites({ sites }: { sites: Site[] }) {
             </Select>
           </div>
 
+          {/* reset filter */}
           {isFiltered && (
             <Button
               variant="ghost"
@@ -122,10 +123,10 @@ export default function SearchMicrosites({ sites }: { sites: Site[] }) {
               <X className="ml-2 h-4 w-4" />
             </Button>
           )}
-          {/* filter by status */}
         </div>
 
         <div className="ml-auto hidden h-9 lg:flex">
+          {/* sort */}
           <Select value={sort} onValueChange={setSort}>
             <SelectTrigger className="w-16">
               <SelectValue>
