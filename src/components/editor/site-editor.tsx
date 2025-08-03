@@ -46,26 +46,44 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
 
     const supabase = createClerkSupabaseClient();
 
-    const { data: existing } = await supabase
+    const { data: existing, error: existingError } = await supabase
       .from("grapesjs")
       .select("id")
       .eq("site_id", siteId)
       .single();
 
-    // Use upsert to insert or update the record
-    const { data, error } = await supabase.from("grapesjs").upsert({
-      id: existing?.id, // Will be undefined for new records
-      site_id: siteId,
-      html: htmlContent,
-      css: cssContent,
-    });
-
-    if (error) {
-      console.error("Error saving to Supabase:", error);
-    } else {
-      console.log("Content saved/updated successfully:", data);
+    if (existingError) {
+      console.error("Error fetching existing content: ", existingError);
+      return;
     }
-  };
+
+    if (existing) {
+      // update existing record
+      const { error: updateError } = await supabase
+        .from("grapesjs")
+        .update({ html: htmlContent, css: cssContent })
+        .eq("site_id", siteId);
+
+      if (updateError) {
+        toast.error("Error updating site");
+        console.error("Error updating content:", updateError);
+      } else {
+        toast.success("Site updated successfully");
+      }
+    } else {
+      // insert new record
+      const { error: insertError } = await supabase
+        .from("grapesjs")
+        .insert([{ html: htmlContent, css: cssContent, site_id: siteId }]);
+
+      if (insertError) {
+        toast.error("Error saving site");
+        console.error("Error saving to Supabase:", insertError);
+      } else {
+        toast.success("Site saved successfully");
+      }
+    }
+  }
 
   const loadFromSupabase = async (editor: Editor) => {
     const supabase = createClerkSupabaseClient();
