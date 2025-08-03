@@ -47,30 +47,16 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
     const supabase = createClerkSupabaseClient();
     const { data, error } = await supabase
       .from("grapesjs") // Replace with your table name
-      .upsert([{ site_id: siteId, html: htmlContent, css: cssContent }])
+      .upsert([{ site_id: siteId, html: htmlContent, css: cssContent }], {
+        onConflict: "site_id",
+      });
     if (error) {
       console.error("Error saving to Supabase:", error);
     } else {
-        toast.success("saved succesffule")
+      toast.success("saved succesffule");
       console.log("Data saved successfully:", data);
     }
   };
-
-  //   const loadFromSupabase = async (editor: Editor) => {
-  //     const supabase = createClerkSupabaseClient();
-  //     const { data, error } = await supabase
-  //       .from("grapesjs") // Replace with your table name
-  //       .select("*")
-  //       .single();
-  //     if (error) {
-  //       console.error("Error loading from Supabase:", error);
-  //     } else if (data) {
-  //       // Set the HTML and CSS in the editor
-  //       editor.setComponents(data.html);
-  //       editor.setStyle(data.css);
-  //       console.log("Data loaded successfully:", data);
-  //     }
-  //   };
 
   const loadFromSupabase = async (editor: Editor) => {
     const supabase = createClerkSupabaseClient();
