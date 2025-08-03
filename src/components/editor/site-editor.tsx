@@ -48,7 +48,6 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
     const { data, error } = await supabase
       .from("grapesjs") // Replace with your table name
       .upsert([{ site_id: siteId, html: htmlContent, css: cssContent }])
-      .eq("site_id", siteId);
     if (error) {
       console.error("Error saving to Supabase:", error);
     } else {
