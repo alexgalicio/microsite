@@ -47,9 +47,7 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
     const supabase = createClerkSupabaseClient();
     const { data, error } = await supabase
       .from("grapesjs") // Replace with your table name
-      .upsert([{ site_id: siteId, html: htmlContent, css: cssContent }], {
-        onConflict: "site_id",
-      });
+      .upsert([{ id: siteId, html: htmlContent, css: cssContent }]);
     if (error) {
       console.error("Error saving to Supabase:", error);
     } else {
