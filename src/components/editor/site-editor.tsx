@@ -45,14 +45,18 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
     const cssContent = editor.getCss();
 
     const supabase = createClerkSupabaseClient();
+    // Use upsert to insert or update the record
     const { data, error } = await supabase
-      .from("grapesjs") // Replace with your table name
-      .upsert([{ id: siteId, html: htmlContent, css: cssContent }]);
+      .from("grapesjs")
+      .upsert(
+        { html: htmlContent, css: cssContent, site_id: siteId },
+        { onConflict: "site_id" }
+      );
+
     if (error) {
       console.error("Error saving to Supabase:", error);
     } else {
-      toast.success("saved succesffule");
-      console.log("Data saved successfully:", data);
+      console.log("Content saved/updated successfully:", data);
     }
   };
 
