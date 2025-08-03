@@ -46,45 +46,38 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
 
     const supabase = createClerkSupabaseClient();
 
-    // check if content already exist for the given siteId
-    const { data: existing, error: existingError } = await supabase
-      .from("grapesjs")
-      .select("id")
-      .eq("site_id", siteId)
-      .single();
-
-    if (existingError) {
-      console.error("Error fetching existing content: ", existingError);
-      return;
-    }
-
-    if (existing) {
-      // update existing record
+    try {
+      // First try to update (assuming record exists)
       const { error: updateError } = await supabase
         .from("grapesjs")
-        .update({ html: htmlContent, css: cssContent })
+        .update({
+          html: htmlContent,
+          css: cssContent,
+        })
         .eq("site_id", siteId);
 
-      if (updateError) {
-        toast.error("Error updating site");
-        console.error("Error updating content:", updateError);
-      } else {
+      if (!updateError) {
         toast.success("Site updated successfully");
+        return;
       }
-    } else {
-      // insert new record
-      const { error: insertError } = await supabase
-        .from("grapesjs")
-        .insert([{ html: htmlContent, css: cssContent, site_id: siteId }]);
+
+      // If update fails (likely because record doesn't exist), insert new
+      const { error: insertError } = await supabase.from("grapesjs").insert({
+        html: htmlContent,
+        css: cssContent,
+        site_id: siteId,
+      });
 
       if (insertError) {
-        toast.error("Error saving site");
-        console.error("Error saving to Supabase:", insertError);
-      } else {
-        toast.success("Site saved successfully");
+        throw insertError;
       }
+
+      toast.success("Site created successfully");
+    } catch (error) {
+      console.error("Save error:", error);
+      toast.error("Failed to save site");
     }
-  }
+  };
 
   const loadFromSupabase = async (editor: Editor) => {
     const supabase = createClerkSupabaseClient();
@@ -111,7 +104,7 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
       editor.setComponents(data.grapesjs[0].html);
       editor.setStyle(data.grapesjs[0].css);
       console.log("Data loaded successfully:", data);
-    } 
+    }
   };
 
   return (
