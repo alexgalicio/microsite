@@ -9,14 +9,14 @@ export async function generateMetadata({
   const { domain } = await params;
   const result = await getSiteBySubdomain(domain);
 
-  if (!result || result.error) {
+  if (!result || result.success === false) {
     return {
       title: "Microsite",
     };
   }
 
   return {
-    title: `${result.title}`,
+    title: `${result.data?.title}`,
     description: `Subdomain page for ${domain}`,
   };
 }
@@ -27,22 +27,29 @@ export default async function SubdomainPage({
   params: Promise<{ domain: string }>;
 }>) {
   const { domain } = await params;
-  const result = await getSiteBySubdomain(domain);
+  const site = await getSiteBySubdomain(domain);
 
-  if (!result || result.error) {
-    console.error("not found")
+  if (site.success === false) {
+    console.error("not found");
   }
 
+  const grapesjsData = site.data?.grapesjs || []; // Default to an empty array if undefined
+  const htmlContent = grapesjsData.length > 0 ? grapesjsData[0].html : ""; // Get HTML if available
+  const cssContent = grapesjsData.length > 0 ? grapesjsData[0].css : ""; // Get CSS if available
+
   return (
-    <div className="flex-1 flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-          Welcome to {result ? result.title : "Microsite"}
-        </h1>
-        <p className="mt-3 text-lg text-gray-600">
-          This is your custom subdomain page
-        </p>
-      </div>
+    <div className="main-component">
+      {/* Render your HTML/CSS */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: cssContent,
+        }}
+      />
+      <div
+        dangerouslySetInnerHTML={{
+          __html: htmlContent,
+        }}
+      />
     </div>
   );
 }
