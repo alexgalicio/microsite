@@ -102,15 +102,24 @@ export async function getSiteBySubdomain(subdomain: string) {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase
     .from("sites")
-    .select()
+    .select(
+      `
+      id,
+      title,
+      subdomain,
+      description,
+      grapesjs (
+            html,
+            css
+        )
+    `
+    )
     .eq("subdomain", subdomain)
     .single();
 
-  if (error) {
-    return error;
-  }
+  if (error) return { success: false, error: error.message };
 
-  return data;
+  return { success: true, data };
 }
 
 export async function getAllSite() {
@@ -139,7 +148,7 @@ export async function getAllSite() {
   return { success: true, data };
 }
 
-export async function getSiteById(id: string) {
+export async function getSiteByUserId(id: string) {
   const { userId } = await auth();
 
   if (!userId) {
@@ -230,7 +239,7 @@ export async function removeBgImage(bgImageUrl: string) {
   // extract filename from url
   const fileName = bgImageUrl.split("/").pop();
   const filePath = `backgrounds/${fileName}`;
-  console.log("filename: ", fileName)
+  console.log("filename: ", fileName);
   if (!fileName) return;
 
   const supabase = createServerSupabaseClient();

@@ -4,7 +4,7 @@ import PageItem from "@/components/microsites/site-item";
 import SearchMicrosites from "@/components/microsites/admin-microsites";
 import { SiteDialogs } from "@/components/microsites/dialogs";
 import { CreateSiteButton } from "@/components/microsites/create-site";
-import { getAllSite, getSiteById } from "@/lib/actions/site";
+import { getAllSite, getSiteByUserId } from "@/lib/actions/site";
 import { Site } from "@/lib/schema";
 import { checkRole } from "@/utils/role";
 import { auth } from "@clerk/nextjs/server";
@@ -18,7 +18,7 @@ export default async function SitesPage() {
   if (isAdmin) {
     result = await getAllSite();
   } else {
-    result = await getSiteById(userId || "");
+    result = await getSiteByUserId(userId || "");
   }
 
   if (result.error) {
