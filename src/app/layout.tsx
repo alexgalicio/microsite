@@ -28,7 +28,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden overscroll-none`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           {children}
           <Toaster richColors/>
