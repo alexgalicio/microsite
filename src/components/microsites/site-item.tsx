@@ -23,10 +23,13 @@ import { getLink } from "@/lib/getLink";
 import { Site } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useSite } from "./site-context";
+import { useUser } from "@clerk/nextjs";
+import { toast } from "sonner";
 
 export default function PageItem({ site }: { site: Site }) {
   const { setOpen, setCurrentRow } = useSite();
   const isArchived = site.status === "archived";
+  const { user } = useUser();
   const badgeColor = new Map([
     [
       "draft",
@@ -42,6 +45,18 @@ export default function PageItem({ site }: { site: Site }) {
     ],
   ]);
 
+  const isAdmin = user?.publicMetadata.role === "admin";
+  const isOwner = user?.id === site.user_id;
+
+  // if current user is admin dont allow to access editor
+  const handleEditorClick = (e: React.MouseEvent) => {
+    if (isAdmin && !isOwner) {
+      e.preventDefault();
+      toast.error("Only the site owner can access the editor");
+      return;
+    }
+  };
+
   return (
     <div className="relative rounded-lg border overflow-hidden hover:shadow-md transition-shadow">
       <div
@@ -51,7 +66,7 @@ export default function PageItem({ site }: { site: Site }) {
         }}
       />
       <div className="absolute inset-0 bg-linear-to-r from-gray-900 via-gray-900/70"></div>
-      
+
       <div className="relative z-10 p-4">
         <div className="mb-8 flex items-center justify-between">
           <Link
@@ -59,6 +74,7 @@ export default function PageItem({ site }: { site: Site }) {
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 text-white"
+            onClick={handleEditorClick}
           >
             <div className="flex items-center gap-2 group w-fit">
               <h2 className="text-xl font-semibold transition-colors group-hover:text-primary">
