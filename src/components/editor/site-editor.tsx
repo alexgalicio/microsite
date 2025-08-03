@@ -80,11 +80,12 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
       console.error("Error loading from Supabase:", error);
     }
 
-    if (data?.grapesjs) {
-      // Set the HTML and CSS in the editor
+    if (data && data.grapesjs) {
       editor.setComponents(data.grapesjs[0].html);
       editor.setStyle(data.grapesjs[0].css);
       console.log("Data loaded successfully:", data);
+    } else {
+      console.log("No content found for the given site_id");
     }
   };
 
