@@ -45,13 +45,20 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
     const cssContent = editor.getCss();
 
     const supabase = createClerkSupabaseClient();
-    // Use upsert to insert or update the record
-    const { data, error } = await supabase
+
+    const { data: existing } = await supabase
       .from("grapesjs")
-      .upsert(
-        { html: htmlContent, css: cssContent, site_id: siteId },
-        { onConflict: "site_id" }
-      );
+      .select("id")
+      .eq("site_id", siteId)
+      .single();
+
+    // Use upsert to insert or update the record
+    const { data, error } = await supabase.from("grapesjs").upsert({
+      id: existing?.id, // Will be undefined for new records
+      site_id: siteId,
+      html: htmlContent,
+      css: cssContent,
+    });
 
     if (error) {
       console.error("Error saving to Supabase:", error);
@@ -78,15 +85,13 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
 
     if (error) {
       console.error("Error loading from Supabase:", error);
-    } else if (data && data.grapesjs && data.grapesjs.length > 0) {
-      // Check if sites_content exists and is an array with at least one item
-      const { html, css } = data.grapesjs[0]; // Access the first item in the array
+    }
+
+    if (data?.grapesjs) {
       // Set the HTML and CSS in the editor
-      editor.setComponents(html);
-      editor.setStyle(css);
+      editor.setComponents(data.grapesjs[0].html);
+      editor.setStyle(data.grapesjs[0].css);
       console.log("Data loaded successfully:", data);
-    } else {
-      console.log("No content found for the given site_id");
     }
   };
 
