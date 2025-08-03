@@ -9,7 +9,7 @@ export async function generateMetadata({
   const { domain } = await params;
   const result = await getSiteBySubdomain(domain);
 
-  if (!result || result.success === false) {
+  if (!result || result.error) {
     return {
       title: "Microsite",
     };
@@ -33,13 +33,13 @@ export default async function SubdomainPage({
     console.error("not found");
   }
 
-  const grapesjsData = site.data?.grapesjs || []; // Default to an empty array if undefined
-  const htmlContent = grapesjsData.length > 0 ? grapesjsData[0].html : ""; // Get HTML if available
-  const cssContent = grapesjsData.length > 0 ? grapesjsData[0].css : ""; // Get CSS if available
+  const grapesjsData = site.data?.grapesjs || []; // default to an empty array if undefined
+  const htmlContent = grapesjsData.length > 0 ? grapesjsData[0].html : ""; // get HTML if available
+  const cssContent = grapesjsData.length > 0 ? grapesjsData[0].css : ""; // get CSS if available
 
   return (
     <div className="main-component">
-      {/* Render your HTML/CSS */}
+      {/* render HTML/CSS */}
       <style
         dangerouslySetInnerHTML={{
           __html: cssContent,
