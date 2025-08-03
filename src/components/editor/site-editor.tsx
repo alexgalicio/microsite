@@ -46,6 +46,7 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
 
     const supabase = createClerkSupabaseClient();
 
+    // check if content already exist for the given siteId
     const { data: existing, error: existingError } = await supabase
       .from("grapesjs")
       .select("id")
@@ -105,12 +106,12 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
       console.error("Error loading from Supabase:", error);
     }
 
-    if (data?.grapesjs) {
+    if (data?.grapesjs && data.grapesjs.length > 0) {
       // Set the HTML and CSS in the editor
       editor.setComponents(data.grapesjs[0].html);
       editor.setStyle(data.grapesjs[0].css);
       console.log("Data loaded successfully:", data);
-    }
+    } 
   };
 
   return (
