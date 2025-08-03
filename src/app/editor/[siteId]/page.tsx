@@ -1,3 +1,4 @@
+import DefaultEditor from "@/components/editor/site-editor";
 import { createServerSupabaseClient } from "@/utils/server";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -35,11 +36,6 @@ export default async function Page({ params }: Props) {
   }
 
   return (
-    <div>
-      <>
-        <h1>Editor Page</h1>
-        <h1>Site data: {JSON.stringify(data)}</h1>
-      </>
-    </div>
+    <DefaultEditor siteId={siteId} />
   );
 }
