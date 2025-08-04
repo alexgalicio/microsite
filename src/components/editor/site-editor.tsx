@@ -45,65 +45,34 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
     const cssContent = editor.getCss();
 
     const supabase = createClerkSupabaseClient();
+    const { data, error } = await supabase
+      .from("grapesjs")
+      .upsert([{ site_id: siteId, html: htmlContent, css: cssContent }]);
 
-    try {
-      // First try to update (assuming record exists)
-      const { error: updateError } = await supabase
-        .from("grapesjs")
-        .update({
-          html: htmlContent,
-          css: cssContent,
-        })
-        .eq("site_id", siteId);
-
-      if (!updateError) {
-        toast.success("Site updated successfully");
-        return;
-      }
-
-      // If update fails (likely because record doesn't exist), insert new
-      const { error: insertError } = await supabase.from("grapesjs").insert({
-        html: htmlContent,
-        css: cssContent,
-        site_id: siteId,
-      });
-
-      if (insertError) {
-        throw insertError;
-      }
-
-      toast.success("Site created successfully");
-    } catch (error) {
-      console.error("Save error:", error);
-      toast.error("Failed to save site");
+    if (error) {
+      console.error("Error saving to Supabase:", error);
+      toast.error("error");
+    } else {
+      toast.success("success");
+      console.log("Data saved successfully:", data);
     }
   };
 
   const loadFromSupabase = async (editor: Editor) => {
     const supabase = createClerkSupabaseClient();
     const { data, error } = await supabase
-      .from("sites")
-      .select(
-        `
-        id,
-        grapesjs (
-            html,
-            css
-        )
-    `
-      )
-      .eq("id", siteId)
+      .from("grapesjs")
+      .select("html,css")
+      .eq("site_id", siteId)
       .single();
 
     if (error) {
-      console.error("Error loading from Supabase:", error);
-    }
-
-    if (data?.grapesjs && data.grapesjs.length > 0) {
-      // Set the HTML and CSS in the editor
-      editor.setComponents(data.grapesjs[0].html);
-      editor.setStyle(data.grapesjs[0].css);
-      console.log("Data loaded successfully:", data);
+      console.error("Error saving to Supabase:", error);
+      toast.error("error");
+    } else if (data) {
+      editor.setComponents(data.html);
+      editor.setStyle(data.css);
+      console.log("retrieved");
     }
   };
 
