@@ -1,22 +1,49 @@
-import { SidebarTrigger } from "@/components/ui/sidebar";
+"use client";
+
+import React from "react";
+import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
-import { Breadcrumbs } from "@/components/breadcrumbs";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Breadcrumbs } from "../breadcrumbs";
 import { UserNav } from "./user-nav";
 
-export default function Header() {
-  return (
-    <header className="flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 border-b">
-      <div className="flex items-center gap-2 px-4">
-        <SidebarTrigger className="-ml-1" />
-        <Separator
-          orientation="vertical"
-          className="mr-2 data-[orientation=vertical]:h-4"
-        />
-        <Separator orientation="vertical" className="mr-2 h-4" />
-        <Breadcrumbs />
-      </div>
+interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
+  className?: string;
+}
 
-      <div className="flex items-center gap-2 px-4">
+export function Header({ className, ...props }: HeaderProps) {
+  const [offset, setOffset] = React.useState(0);
+
+  React.useEffect(() => {
+    const onScroll = () => {
+      setOffset(document.body.scrollTop || document.documentElement.scrollTop);
+    };
+
+    // Add scroll listener to the body
+    document.addEventListener("scroll", onScroll, { passive: true });
+
+    // Clean up the event listener on unmount
+    return () => document.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <header
+      className={cn(
+        "bg-background flex h-16 items-center gap-3 p-4 sm:gap-4",
+        "header-fixed peer/header fixed z-50 w-[inherit]",
+        offset > 10 ? "border-b" : "border-b",
+        className
+      )}
+      {...props}
+    >
+      <SidebarTrigger className="-ml-1" />
+      <Separator
+        orientation="vertical"
+        className="mr-2 data-[orientation=vertical]:h-4"
+      />
+      <Breadcrumbs />
+
+      <div className="ml-auto flex items-center space-x-4">
         {/* notif */}
         <UserNav />
       </div>
