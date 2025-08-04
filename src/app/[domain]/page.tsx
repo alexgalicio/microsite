@@ -1,4 +1,4 @@
-import { getSiteBySubdomain } from "@/lib/actions/site";
+import { getSiteBySubdomain, getSiteData } from "@/lib/actions/site";
 import { Metadata } from "next";
 
 export async function generateMetadata({
@@ -9,7 +9,7 @@ export async function generateMetadata({
   const { domain } = await params;
   const result = await getSiteBySubdomain(domain);
 
-  if (!result || result.error) {
+  if (!result || result.success === false) {
     return {
       title: "Microsite",
     };
@@ -17,7 +17,7 @@ export async function generateMetadata({
 
   return {
     title: `${result.data?.title}`,
-    description: `Subdomain page for ${domain}`,
+    description: `${result.data?.description}`,
   };
 }
 
@@ -29,27 +29,26 @@ export default async function SubdomainPage({
   const { domain } = await params;
   const site = await getSiteBySubdomain(domain);
 
-  if (site.success === false) {
-    console.error("not found");
+  const content = await getSiteData(site.data?.id);
+  const html = content.data?.html || "";
+  const css = content.data?.css || "";
+
+  if (!content || content.success === false) {
+    return <div>No content available</div>;
   }
 
-  const grapesjsData = site.data?.grapesjs || []; // default to an empty array if undefined
-  const htmlContent = grapesjsData.length > 0 ? grapesjsData[0].html : ""; // get HTML if available
-  const cssContent = grapesjsData.length > 0 ? grapesjsData[0].css : ""; // get CSS if available
-
   return (
-    <div className="main-component">
-      {/* render HTML/CSS */}
+    <>
       <style
         dangerouslySetInnerHTML={{
-          __html: cssContent,
+          __html: css,
         }}
       />
       <div
         dangerouslySetInnerHTML={{
-          __html: htmlContent,
+          __html: html,
         }}
       />
-    </div>
+    </>
   );
 }
