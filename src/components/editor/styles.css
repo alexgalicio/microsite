@@ -69,6 +69,37 @@
   border-bottom: 1px solid var(--border) !important;
 }
 
+option {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+.gjs-cm-editor #gjs-cm-title {
+  /* border-radius: 6px 6px 0 0; */
+  background: #282828 !important;
+}
+
+.cm-s-hopscotch.CodeMirror {
+  background: #222222 !important;
+}
+
+.cm-s-hopscotch .CodeMirror-gutters {
+  background-color: transparent !important;
+}
+
+.gjs-am-assets-cont {
+  background-color: var(--background) !important;
+}
+.gjs-btn-prim {
+  font-size: 14px;
+  border: 1px solid var(--border) !important;
+  background-color: var(--secondary) !important;
+}
+
+.gjs-am-highlight {
+  background-color: var(--muted) !important;
+}
+
 .gjs-sm-property .gjs-sm-btn {
   background-color: var(--secondary) !important;
   box-shadow: none !important;
