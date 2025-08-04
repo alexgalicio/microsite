@@ -5,6 +5,10 @@ import GjsEditor from "@grapesjs/react";
 import { createClient } from "@supabase/supabase-js";
 import { useSession } from "@clerk/nextjs";
 import { toast } from "sonner";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Button } from "../ui/button";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import "./styles.css";
 
 interface DefaultEditorProps {
@@ -13,14 +17,15 @@ interface DefaultEditorProps {
 
 export default function DefaultEditor({ siteId }: DefaultEditorProps) {
   const { session } = useSession();
+  const isMobile = useIsMobile();
 
   const onEditor = (editor: Editor) => {
-    // console.log("Editor loaded", { editor });
+    console.log("Editor loaded");
 
-    // Load saved data when the editor is initialized
-    loadFromSupabase(editor);
+    // load saved data when the editor is initialized
+    loadSite(editor);
 
-    // Add a save button to the editor
+    // trash button
     editor.Panels.addButton("options", {
       id: "clean-all",
       className: "fa fa-trash",
@@ -28,7 +33,18 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
       attributes: { title: "Clean All" },
     });
 
-    // Add Undo button
+    // clear all button command
+    editor.Commands.add("clean-all", {
+      run(editor) {
+        if (confirm("Are you sure to clean the canvas?")) {
+          editor.DomComponents.clear();
+          editor.Css.clear();
+          editor.select();
+        }
+      },
+    });
+
+    // undo button
     editor.Panels.addButton("options", {
       id: "undo",
       className: "fa fa-undo",
@@ -36,31 +52,44 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
       attributes: { title: "Undo" },
     });
 
-    // Add Redo button
+    // redo button
     editor.Panels.addButton("options", {
       id: "redo",
-      className: "fa fa-repeat", // or fa-redo if you prefer
+      className: "fa fa-repeat",
       command: "core:redo",
       attributes: { title: "Redo" },
     });
 
-    // Add Clean All button with custom command
-    editor.Commands.add("clean-all", {
-      run(editor) {
-        if (confirm("Are you sure to clean the canvas?")) {
-          editor.DomComponents.clear(); // clears all components on canvas
-          editor.select();
-        }
-      },
-    });
-
+    // publish button
     editor.Panels.addButton("options", {
       id: "save-db",
-      className: "fa fa-floppy-o",
-      command: () => saveToSupabase(editor),
+      className: "btn-publish",
+      label: "Publish",
+      command: () => saveSite(editor),
       attributes: { title: "Publish" },
     });
 
+    // move buttom on basic category
+    const buttonBlock = editor.BlockManager.get("button");
+    if (buttonBlock) {
+      buttonBlock.set("category", "Basic");
+    }
+
+    // custom heading block
+    editor.BlockManager.add(
+      "heading",
+      {
+        label: "Heading",
+        content:
+          '<h1 data-gjs-type="text">Insert your custom heading here</h1>',
+        category: "Basic",
+        media:
+          '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M8.3 11.5h7.4V6.9l-.2-1.6a1 1 0 00-.5-.5c-.3-.2-.7-.3-1-.3h-.6v-.4h6.8v.4h-.6c-.4 0-.7.1-1 .3a1 1 0 00-.6.6L18 6.9v10.3c0 .8 0 1.3.2 1.6 0 .2.2.3.4.5.4.2.7.3 1.1.3h.6v.4h-6.8v-.4h.5c.7 0 1.2-.2 1.5-.6.2-.3.3-.9.3-1.8v-4.9H8.3v4.9l.1 1.6.5.5c.3.2.7.3 1 .3h.7v.4H3.7v-.4h.6c.7 0 1.1-.2 1.4-.6.2-.3.3-.9.3-1.8V6.9L6 5.3a1 1 0 00-.5-.5l-1-.3h-.7v-.4h6.9v.4H10c-.4 0-.8.1-1 .3a1 1 0 00-.6.6l-.1 1.5v4.6z"></path></svg>',
+      },
+      { at: 4 }
+    );
+
+    // clickable devices
     editor.getConfig().showDevices = false;
     editor.Panels.addPanel({
       id: "devices",
@@ -103,7 +132,7 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
     );
   }
 
-  const saveToSupabase = async (editor: Editor) => {
+  const saveSite = async (editor: Editor) => {
     const htmlContent = editor.getHtml();
     const cssContent = editor.getCss();
 
@@ -116,12 +145,12 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
       console.error("Error saving to Supabase:", error);
       toast.error("error");
     } else {
-      toast.success("success");
+      toast.success("Site saved successfully");
       console.log("Data saved successfully:", data);
     }
   };
 
-  const loadFromSupabase = async (editor: Editor) => {
+  const loadSite = async (editor: Editor) => {
     const supabase = createClerkSupabaseClient();
     const { data, error } = await supabase
       .from("grapesjs")
@@ -140,6 +169,21 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
     }
   };
 
+  if (isMobile) {
+    return (
+      <div className="flex flex-col gap-4 px-4 absolute z-[101] top-0 w-screen h-screen items-center justify-center">
+        <h1 className="text-2xl text-center">
+          Whoops! The Microsite Editor is only available on larger devices.
+        </h1>
+        <Button asChild variant="link" className="group">
+          <Link href="/microsites">
+            <ArrowLeft /> Go Back
+          </Link>
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <GjsEditor
       grapesjs={grapesjs}
@@ -152,6 +196,13 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
         {
           id: "gjs-blocks-basic",
           src: "https://unpkg.com/grapesjs-blocks-basic",
+        },
+        {
+          id: "grapesjs-plugin-forms",
+          src: "https://unpkg.com/grapesjs-plugin-forms",
+          options: {
+            blocks: ["button"],
+          },
         },
       ]}
       onEditor={onEditor}

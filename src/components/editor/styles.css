@@ -1,59 +1,136 @@
+.btn-publish {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground);
+  padding: 4px 10px !important;
+  font-size: 14px !important;
+  border-radius: 4px !important;
+  margin-left: 8px;
+}
+
+.fa {
+  font-size: 16px !important;
+}
+
+.btn-publish:hover {
+  background-color: oklch(0.705 0.213 47.604 / 0.9) !important;
+}
+
 .gjs-one-bg {
-    background-color: #eee !important
+  background-color: var(--background) !important;
 }
 
 .gjs-one-color {
-    color: #463a3c
+  color: #ff0000;
 }
 
 .gjs-one-color-h:hover {
-    color: #463a3c
+  color: #463a3c;
 }
 
 .gjs-two-bg {
-    background-color: #b9a5a6
+  background-color: #b9a5a6;
 }
 
 .gjs-two-color {
-    color: #000 !important
+  color: var(--foreground) !important;
 }
 
 .gjs-two-color-h:hover {
-    color: #b9a5a6
+  color: #b9a5a6;
 }
 
 .gjs-three-bg {
-    background-color: #fff
+  background-color: var(--muted) !important;
 }
 
 .gjs-three-color {
-    color: #804f7b
+  color: #804f7b;
 }
 
 .gjs-three-color-h:hover {
-    color: #804f7b
+  color: #804f7b;
 }
 
 .gjs-four-bg {
-    background-color: #d97aa6
+  background-color: #d97aa6;
 }
 
 .gjs-four-color {
-    color: #d97aa6
+  color: var(--primary) !important;
 }
 
 .gjs-four-color-h:hover {
-    color: #d97aa6
+  color: var(--primary) !important;
 }
 
-/*override*/
+.gjs-sm-sector-title,
+.gjs-title {
+  background-color: var(--secondary) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+.gjs-sm-property .gjs-sm-btn {
+  background-color: var(--secondary) !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border) !important;
+}
+
+.gjs-category-open,
+.gjs-block-category.gjs-open,
+.gjs-sm-sector.gjs-sm-open,
+.gjs-trait-category.gjs-open {
+  border-bottom: none !important;
+}
+
+.gjs-field {
+  border: 1px solid var(--border) !important;
+  background-color: var(--background) !important;
+}
+
+.gjs-field-arrow-u {
+  border-bottom: 4px solid var(--muted-foreground) !important;
+}
+
+.gjs-field-arrow-d,
+.gjs-d-s-arrow {
+  border-top: 4px solid var(--muted-foreground) !important;
+}
+
+.gjs-sm-field.gjs-sm-composite {
+  background-color: var(--muted) !important;
+}
+
+.gjs-pn-btn.gjs-pn-active {
+  box-shadow: none !important;
+  background-color: var(--secondary) !important;
+}
+
+.gjs-layer-item {
+  border-bottom: none !important;
+}
+.gjs-layer.gjs-selected .gjs-layer-item {
+  background-color: var(--secondary) !important;
+}
+
+.gjs-block svg {
+  width: 50px !important;
+  height: 50px !important;
+  margin: 0 auto;
+  display: block;
+}
+
 .gjs-title,
 .gjs-layer-name,
 .gjs-no-app,
-.gjs-sm-title{
-    font-weight: 500 !important;
+.gjs-sm-title {
+  font-weight: 500 !important;
 }
 
+.gjs-editor-sp .sp-button-container .sp-choose {
+  color: var(--foreground) !important;
+}
 
 .gjs-color-warn {
   color: #000;
@@ -61,9 +138,8 @@
 
 .gjs-clm-tags #gjs-clm-checkbox,
 .gjs-clm-tags #gjs-clm-close {
-    color: #000 !important;
+  color: #000 !important;
 }
-
 
 .gjs-clm-tags #gjs-clm-new {
   color: #000;
@@ -72,12 +148,19 @@
   background-color: #eee;
 }
 
-.gjs-sm-sector .gjs-sm-field select, .gjs-clm-tags .gjs-sm-field select, .gjs-sm-sector .gjs-clm-field select, .gjs-clm-tags .gjs-clm-field select,
-.gjs-sm-sector .gjs-sm-field input, .gjs-clm-tags .gjs-sm-field input, .gjs-sm-sector .gjs-clm-field input, .gjs-clm-tags .gjs-clm-field input,
-.gjs-field input, .gjs-field select, .gjs-field textarea {
-  color: #fff;
-  background-color: #666;
+.gjs-sm-sector .gjs-sm-field select,
+.gjs-clm-tags .gjs-sm-field select,
+.gjs-sm-sector .gjs-clm-field select,
+.gjs-clm-tags .gjs-clm-field select,
+.gjs-sm-sector .gjs-sm-field input,
+.gjs-clm-tags .gjs-sm-field input,
+.gjs-sm-sector .gjs-clm-field input,
+.gjs-clm-tags .gjs-clm-field input,
+.gjs-field input,
+.gjs-field select,
+.gjs-field textarea {
   font-size: 13px;
+  color: var(--foreground) !important;
 }
 
 .gjs-field-color-picker {
@@ -85,9 +168,10 @@
 }
 
 .gjs-radio-item input:checked + .gjs-radio-item-label {
-  background-color: #000;
+  background-color: var(--input) !important;
 }
 
-.gjs-sm-sector .gjs-sm-stack #gjs-sm-add, .gjs-clm-tags .gjs-sm-stack #gjs-sm-add {
+.gjs-sm-sector .gjs-sm-stack #gjs-sm-add,
+.gjs-clm-tags .gjs-sm-stack #gjs-sm-add {
   color: #000;
 }
