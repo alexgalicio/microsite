@@ -33,7 +33,7 @@ export default async function SubdomainPage({
   const html = content.data?.html || "";
   const css = content.data?.css || "";
 
-  if (!content || content.success === false) {
+  if (!content) {
     return <div>No content available</div>;
   }
 
