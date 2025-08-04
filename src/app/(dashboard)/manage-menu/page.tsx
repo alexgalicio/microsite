@@ -1,4 +1,3 @@
-import PageContainer from "@/components/layout/page-container";
 import MenuProvider from "@/components/manage-menu/menu/menu-context";
 import { columns } from "@/components/manage-menu/menu/columns";
 import { MenuDialogs } from "@/components/manage-menu/menu/dialogs";
@@ -19,19 +18,17 @@ export default async function Page() {
   }
 
   return (
-    <PageContainer>
-      <MenuProvider>
-        <div className="flex flex-1 flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold tracking-tight">Menu List</h2>
-            <CreateMenuButton />
-          </div>
-          <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-y-0 lg:space-x-12">
-            <DataTable data={data} columns={columns} />
-          </div>
+    <MenuProvider>
+      <div className="flex flex-1 flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold tracking-tight">Menu List</h2>
+          <CreateMenuButton />
         </div>
-        <MenuDialogs />
-      </MenuProvider>
-    </PageContainer>
+        <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-y-0 lg:space-x-12">
+          <DataTable data={data} columns={columns} />
+        </div>
+      </div>
+      <MenuDialogs />
+    </MenuProvider>
   );
 }

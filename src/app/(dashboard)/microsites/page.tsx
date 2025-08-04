@@ -1,4 +1,3 @@
-import PageContainer from "@/components/layout/page-container";
 import SiteProvider from "@/components/microsites/site-context";
 import PageItem from "@/components/microsites/site-item";
 import SearchMicrosites from "@/components/microsites/admin-microsites";
@@ -29,34 +28,32 @@ export default async function SitesPage() {
   }
 
   return (
-    <PageContainer>
-      <SiteProvider>
-        <div className="flex flex-1 flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold tracking-tight">Microsites</h2>
-            <CreateSiteButton />
-          </div>
-
-          {isAdmin ? (
-            <SearchMicrosites sites={result.data || []} />
-          ) : (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {result.data && result.data.length > 0 ? (
-                result.data.map((site: Site) => (
-                  <PageItem key={site.id} site={site} />
-                ))
-              ) : (
-                <div className="col-span-full mt-16">
-                  <p className="text-center text-muted-foreground">
-                    Create a site to get started.
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
+    <SiteProvider>
+      <div className="flex flex-1 flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold tracking-tight">Microsites</h2>
+          <CreateSiteButton />
         </div>
-        <SiteDialogs />
-      </SiteProvider>
-    </PageContainer>
+
+        {isAdmin ? (
+          <SearchMicrosites sites={result.data || []} />
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {result.data && result.data.length > 0 ? (
+              result.data.map((site: Site) => (
+                <PageItem key={site.id} site={site} />
+              ))
+            ) : (
+              <div className="col-span-full mt-16">
+                <p className="text-center text-muted-foreground">
+                  Create a site to get started.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+      <SiteDialogs />
+    </SiteProvider>
   );
 }

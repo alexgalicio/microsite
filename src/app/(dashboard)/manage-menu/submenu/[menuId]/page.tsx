@@ -1,4 +1,3 @@
-import PageContainer from "@/components/layout/page-container";
 import SubmenuProvider from "@/components/manage-menu/submenu/submenu-context";
 import CreateAccount from "@/components/microsites/create-account";
 import { DataTable } from "@/components/manage-menu/data-table";
@@ -26,21 +25,19 @@ export default async function Page({
   }
 
   return (
-    <PageContainer>
-      <SubmenuProvider>
-        <div className="flex flex-1 flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold tracking-tight">
-              {menuTitle.data}
-            </h2>
-            <CreateAccount />
-          </div>
-          <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-y-0 lg:space-x-12">
-            <DataTable data={data} columns={columns} />
-          </div>
+    <SubmenuProvider>
+      <div className="flex flex-1 flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold tracking-tight">
+            {menuTitle.data}
+          </h2>
+          <CreateAccount />
         </div>
-        <SubmenuDialogs />
-      </SubmenuProvider>
-    </PageContainer>
+        <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-y-0 lg:space-x-12">
+          <DataTable data={data} columns={columns} />
+        </div>
+      </div>
+      <SubmenuDialogs />
+    </SubmenuProvider>
   );
 }
