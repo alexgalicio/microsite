@@ -102,19 +102,21 @@ export async function getSiteBySubdomain(subdomain: string) {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase
     .from("sites")
-    .select(
-      `
-      id,
-      title,
-      subdomain,
-      description,
-      grapesjs (
-            html,
-            css
-        )
-    `
-    )
+    .select("id, title, subdomain, description")
     .eq("subdomain", subdomain)
+    .single();
+
+  if (error) return { success: false, error: error.message };
+
+  return { success: true, data };
+}
+
+export async function getSiteData(id: string) {
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from("grapesjs")
+    .select("html, css")
+    .eq("site_id", id)
     .single();
 
   if (error) return { success: false, error: error.message };
