@@ -58,7 +58,7 @@ export default function PageItem({ site }: { site: Site }) {
   };
 
   return (
-    <div className="relative rounded-lg border overflow-hidden hover:shadow-md transition-shadow">
+    <div className="relative rounded-lg border overflow-hidden hover:shadow-md transition-all">
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
