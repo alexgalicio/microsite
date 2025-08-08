@@ -37,8 +37,8 @@ export async function createNewSite(formData: {
     subdomain: formData.subdomain.toLowerCase(),
     user_id: userId,
     submenu_id: submenu.id,
-    description: formData.description || null,
-    bg_image: formData.bg_image || null,
+    description: formData.description,
+    bg_image: formData.bg_image,
   });
 
   if (error) {
@@ -83,8 +83,8 @@ export async function editSite(
     .update({
       title: formData.title,
       subdomain: formData.subdomain.toLowerCase(),
-      description: formData.description || null,
-      bg_image: formData.bg_image || null,
+      description: formData.description,
+      bg_image: formData.bg_image,
     })
     .eq("id", id);
 
@@ -102,7 +102,7 @@ export async function getSiteBySubdomain(subdomain: string) {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase
     .from("sites")
-    .select("id, title, subdomain, description")
+    .select("id, title, subdomain, description, status")
     .eq("subdomain", subdomain)
     .single();
 
@@ -214,12 +214,12 @@ export async function uploadBgImage(file: File) {
   // create unique filename
   const fileExt = file.name.split(".").pop();
   const fileName = `${userId}-${Date.now()}.${fileExt}`;
-  const filePath = `background/${fileName}`;
+  const filePath = `backgrounds/${fileName}`;
 
   const supabase = createServerSupabaseClient();
   // upload to supabase storage
   const { error } = await supabase.storage
-    .from("site-backgrounds")
+    .from("assets")
     .upload(filePath, file, {
       cacheControl: "3600",
       upsert: false,
@@ -232,22 +232,20 @@ export async function uploadBgImage(file: File) {
   // get public URL
   const {
     data: { publicUrl },
-  } = supabase.storage.from("site-backgrounds").getPublicUrl(filePath);
+  } = supabase.storage.from("assets").getPublicUrl(filePath);
 
   return { success: true, data: publicUrl };
 }
 
-export async function removeBgImage(bgImageUrl: string) {
+export async function removeBgImage(url: string) {
   // extract filename from url
-  const fileName = bgImageUrl.split("/").pop();
+  const fileName = url.split("/").pop();
   const filePath = `backgrounds/${fileName}`;
   console.log("filename: ", fileName);
   if (!fileName) return;
 
   const supabase = createServerSupabaseClient();
-  const { error } = await supabase.storage
-    .from("site-backgrounds")
-    .remove([filePath]);
+  const { error } = await supabase.storage.from("assets").remove([filePath]);
 
   if (error) return { success: false, error: error.message };
 }
