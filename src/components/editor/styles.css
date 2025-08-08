@@ -94,6 +94,10 @@
   border-bottom: 1px solid var(--border) !important;
 }
 
+.gjs-field-checkbox input:checked+.gjs-chk-icon{
+  border-color: var(--primary) !important;
+}
+
 option {
   background-color: var(--background) !important;
   color: var(--foreground) !important;
@@ -142,7 +146,7 @@ option {
 
 .gjs-field {
   border: 1px solid var(--border) !important;
-  background-color: var(--background) !important;
+  background-color: transparent !important;
 }
 
 .gjs-field-arrow-u {
