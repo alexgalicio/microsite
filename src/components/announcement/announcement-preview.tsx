@@ -30,7 +30,7 @@ export default function AnnouncementsPreview({
 
             <div className="grid grid-cols-1 gap-3 md:col-span-2 mt-4">
               <h2 className="font-semibold tracking-tighter text-2xl md:text-3xl">
-                <Link key={announcement.id} href={`/blog/${announcement.slug}`}>
+                <Link key={announcement.id} href={`/announcement/${announcement.slug}`}>
                   {announcement.title}
                 </Link>
               </h2>
