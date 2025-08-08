@@ -62,7 +62,7 @@ export default function PageItem({ site }: { site: Site }) {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url(${site.bg_image})`,
+          backgroundImage: `url(${site.bg_image}), url('/images/placeholder.webp')`,
         }}
       />
       <div className="absolute inset-0 bg-linear-to-r from-gray-900 via-gray-900/70"></div>
