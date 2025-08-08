@@ -1,5 +1,5 @@
-import Header from "@/components/blog/header";
-import RichTextEditor from "@/components/blog/rich-text-editor";
+import Header from "@/components/announcement/header";
+import RichTextEditor from "@/components/announcement/rich-text-editor";
 import { buttonVariants } from "@/components/ui/button";
 import { cn, formatDate } from "@/lib/utils";
 import { createServerSupabaseClient } from "@/utils/server";
@@ -7,7 +7,7 @@ import { ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default async function BlogPostPage({
+export default async function Page({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -56,7 +56,7 @@ export default async function BlogPostPage({
       <section className="mt-8 md:mt-16 mb-12">
         <div className="flex justify-center mt-8">
           <Link
-            href="/blog"
+            href="/announcement"
             className={cn(buttonVariants({ variant: "ghost" }))}
           >
             <ChevronLeft className="h-4 w-4" />

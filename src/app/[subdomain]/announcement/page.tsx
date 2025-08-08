@@ -1,9 +1,9 @@
-import AnnouncementsPreview from "@/components/blog/announcement-preview";
-import Header from "@/components/blog/header";
+import AnnouncementsPreview from "@/components/announcement/announcement-preview";
+import Header from "@/components/announcement/header";
 import { getSiteBySubdomain } from "@/lib/actions/site";
 import { createServerSupabaseClient } from "@/utils/server";
 
-export default async function BlogPage({
+export default async function Page({
   params,
 }: {
   params: Promise<{ subdomain: string }>;
@@ -16,7 +16,7 @@ export default async function BlogPage({
     return <div>Site not found</div>;
   }
 
-  // Fetch blogs for that site
+  // Fetch announcement for that site
   const { data, error} = await supabase
     .from("announcements")
     .select("*")
@@ -24,7 +24,7 @@ export default async function BlogPage({
     .order("created_at", { ascending: false });
 
   if (error) {
-    return <div>Failed to fetch blogs</div>;
+    return <div>Failed to fetch announcement</div>;
   }
 
   return (
