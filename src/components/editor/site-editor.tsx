@@ -6,10 +6,11 @@ import { createClient } from "@supabase/supabase-js";
 import { useSession } from "@clerk/nextjs";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Button } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ChevronLeft } from "lucide-react";
 import "./styles.css";
+import { cn } from "@/lib/utils";
 
 interface DefaultEditorProps {
   siteId: string;
@@ -179,7 +180,7 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
       .from("grapesjs")
       .select("html,css")
       .eq("site_id", siteId)
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.error("Error saving to Supabase (load site):", error);
@@ -189,6 +190,8 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
       editor.setStyle(data.css);
       editor.UndoManager.clear();
       console.log("retrieved");
+    } else {
+      toast.success("Welcome to Microsite Editor!");
     }
   };
 
@@ -198,11 +201,10 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
         <h1 className="text-2xl text-center">
           Whoops! The Microsite Editor is only available on larger devices.
         </h1>
-        <Button asChild variant="link" className="group">
-          <Link href="/microsites">
-            <ArrowLeft /> Go Back
-          </Link>
-        </Button>
+        <Link href="/microsites" className={cn(buttonVariants({ variant: "ghost" }))}>
+          <ChevronLeft className="h-4 w-4" />
+          Go Back
+        </Link>
       </div>
     );
   }
