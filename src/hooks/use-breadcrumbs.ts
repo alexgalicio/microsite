@@ -22,11 +22,16 @@ export function useBreadcrumbs() {
       return routeMapping[pathname];
     }
 
-    // Custom handling for submenu routes
+    // Custom handling of routes
     if (pathname.includes("/manage-menu/") && pathname.includes("/submenu")) {
       return [
         { title: "Manage Menu", link: "/manage-menu" },
         { title: "Submenu", link: pathname },
+      ];
+    } else if (pathname.includes("/announcements/") && pathname.includes("-")) {
+      return [
+        { title: "Announcements", link: "/announcements" },
+        { title: "Edit", link: pathname },
       ];
     }
 
