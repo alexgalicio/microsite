@@ -11,6 +11,7 @@ import Link from "next/link";
 import { ArrowLeft, ChevronLeft } from "lucide-react";
 import "./styles.css";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 interface DefaultEditorProps {
   siteId: string;
@@ -19,6 +20,7 @@ interface DefaultEditorProps {
 export default function DefaultEditor({ siteId }: DefaultEditorProps) {
   const { session } = useSession();
   const isMobile = useIsMobile();
+  const router = useRouter();
 
   const onEditor = (editor: Editor) => {
     console.log("Editor loaded");
@@ -113,11 +115,19 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
       { at: 4 }
     );
 
-    // clickable devices
+    // back button and clickable devices
     editor.getConfig().showDevices = false;
     editor.Panels.addPanel({
       id: "devices",
       buttons: [
+        {
+          id: "back-button",
+          className: "fa fa-arrow-left",
+          command: () => {
+            router.back();
+          },
+          attributes: { title: "Back" },
+        },
         {
           id: "set-device-desktop",
           command: function (e: Editor) {
@@ -201,7 +211,10 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
         <h1 className="text-2xl text-center">
           Whoops! The Microsite Editor is only available on larger devices.
         </h1>
-        <Link href="/microsites" className={cn(buttonVariants({ variant: "ghost" }))}>
+        <Link
+          href="/microsites"
+          className={cn(buttonVariants({ variant: "ghost" }))}
+        >
           <ChevronLeft className="h-4 w-4" />
           Go Back
         </Link>
