@@ -25,10 +25,10 @@ export async function createNewArticle(formData: {
     .single();
 
   if (siteError || !siteData) {
-    return { success: false, error: "No site found for user" };
+    return { success: false, error: "Please create a site before adding announcements" };
   }
 
-  // create the blog
+  // create the announcement
   const { data, error } = await supabase.from("announcements").insert({
     title: formData.title,
     content: formData.content,
