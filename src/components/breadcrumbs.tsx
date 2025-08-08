@@ -9,7 +9,6 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { useBreadcrumbs } from "@/hooks/use-breadcrumbs";
-import { Slash } from "lucide-react";
 import { Fragment } from "react";
 
 export function Breadcrumbs() {
@@ -28,7 +27,7 @@ export function Breadcrumbs() {
             )}
             {index < items.length - 1 && (
               <BreadcrumbSeparator className="hidden md:block">
-                <Slash size={12} />
+                <span className="p-1">/</span>
               </BreadcrumbSeparator>
             )}
             {index === items.length - 1 && (
