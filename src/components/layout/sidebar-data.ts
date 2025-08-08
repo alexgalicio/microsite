@@ -1,5 +1,5 @@
 import { NavItem } from "@/lib/types";
-import { Globe, LayoutDashboard, Menu, Settings } from "lucide-react";
+import { Globe, LayoutDashboard, Megaphone, Menu, Settings } from "lucide-react";
 
 //sidebar nav items
 export const navItems: NavItem[] = [
@@ -9,7 +9,6 @@ export const navItems: NavItem[] = [
     icon: LayoutDashboard,
     isActive: false,
     items: [], // array for sub items in the future
-    role: "admin",
   },
   {
     title: "Microsites",
@@ -26,6 +25,14 @@ export const navItems: NavItem[] = [
     isActive: false,
     items: [],
     role: "admin",
+  },
+  {
+    title: "Announcements",
+    url: "/announcements",
+    icon: Megaphone,
+    isActive: false,
+    items: [],
+    role: "user",
   },
   {
     title: "Settings",
