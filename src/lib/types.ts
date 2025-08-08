@@ -57,5 +57,17 @@ export interface Site {
   };
 }
 
+export interface Announcements {
+  id: string;
+  title: string;
+  author: string;
+  content: string;
+  cover?: string;
+  slug: string,
+  user_id: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export type MainNavItem = NavItemWithOptionalChildren;
 export type SidebarNavItem = NavItemWithChildren;
