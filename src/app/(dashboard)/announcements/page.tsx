@@ -1,4 +1,4 @@
-import AnnouncementsList from "@/components/blog/announcements-list";
+import AnnouncementsList from "@/components/announcement/announcements-list";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getAnnouncementsByUserId } from "@/lib/actions/announcement";

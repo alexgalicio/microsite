@@ -1,4 +1,4 @@
-import AnnouncementViewPage from "@/components/blog/announcement-view-page";
+import AnnouncementViewPage from "@/components/announcement/announcement-view-page";
 
 export default async function PostPage(props: {
   params: Promise<{ id: string }>;
