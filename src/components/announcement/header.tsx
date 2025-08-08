@@ -1,0 +1,21 @@
+import Link from "next/link";
+import { buttonVariants } from "../ui/button";
+import { ChevronLeft } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+export default function Header() {
+  return (
+    <section className="flex items-center justify-between mt-8 md:mt-16 mb-12">
+      <Link href="/blog">
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-tight">
+          Announcements.
+        </h1>
+      </Link>
+
+      <Link href="/" className={cn(buttonVariants({ variant: "ghost" }))}>
+        <ChevronLeft className="h-4 w-4" />
+        <span className="hidden lg:inline">Home</span>
+      </Link>
+    </section>
+  );
+}

@@ -1,0 +1,67 @@
+import { Announcements } from "@/lib/types";
+import { formatDate } from "@/lib/utils";
+import DOMPurify from "isomorphic-dompurify";
+import Image from "next/image";
+import Link from "next/link";
+import { AspectRatio } from "../ui/aspect-ratio";
+
+interface AnnouncementsProps {
+  announcements: Announcements[];
+}
+
+export default function AnnouncementsList({
+  announcements,
+}: AnnouncementsProps) {
+  return (
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {announcements.length ? (
+        announcements.map((announcement) => (
+          <div
+            className="bg-muted overflow-hidden rounded-lg hover:shadow-md transition-all"
+            key={announcement.id}
+          >
+            <Link
+              key={announcement.id}
+              href={`/announcements/${announcement.id}`}
+            >
+              <AspectRatio ratio={16 / 9} className="w-full">
+                <Image
+                  src={announcement.cover || "/images/placeholder.webp"}
+                  alt={announcement.title}
+                  fill
+                  sizes="auto"
+                  className="h-full min-h-full min-w-full object-cover object-center"
+                />
+              </AspectRatio>
+
+              <div className="flex flex-col gap-2 p-4">
+                <h2 className="text-xl font-semibold line-clamp-2">
+                  {announcement.title}
+                </h2>
+                <p className="line-clamp-3 ">
+                  {DOMPurify.sanitize(announcement.content, {
+                    ALLOWED_TAGS: [],
+                  })}
+                </p>
+
+                <div className="flex text-sm opacity-40 gap-2">
+                  <p>{announcement.author}</p>
+                  <span>•</span>
+                  <time dateTime={announcement.created_at}>
+                    {formatDate(announcement.created_at)}
+                  </time>
+                </div>
+              </div>
+            </Link>
+          </div>
+        ))
+      ) : (
+        <div className="col-span-full mt-16">
+          <p className="text-center text-muted-foreground">
+            No announcements yet.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
