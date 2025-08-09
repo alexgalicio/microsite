@@ -56,7 +56,7 @@ export default async function Page({
       <section className="mt-8 md:mt-16 mb-12">
         <div className="flex justify-center mt-8">
           <Link
-            href="/announcement"
+            href="/announcements"
             className={cn(buttonVariants({ variant: "ghost" }))}
           >
             <ChevronLeft className="h-4 w-4" />
