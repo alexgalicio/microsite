@@ -38,9 +38,9 @@ export default async function Page({
     return <div>Failed to fetch announcements</div>;
   }
 
-  console.log('params', params, 'search', searchParams)
   console.log('from', from, 'to', to)
   console.log('page', page, 'pagesise', pageSize)
+  console.log('count', count)
 
   return (
     <div className="max-w-6xl mx-auto px-5 mb-10">
