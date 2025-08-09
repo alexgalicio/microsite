@@ -93,11 +93,17 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
     if (file) {
       if (!file.type.startsWith("image/")) {
         toast.error("Please select a valid image file");
+        event.target.value = "";
+        setImageFile(null);
+        form.setValue("bg_image", "");
         return;
       }
 
-      if (file.size > 1 * 1024 * 1024) {
-        toast.error("Image size must be less than 1MB");
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error("Image size must be less than 2MB");
+        event.target.value = "";
+        setImageFile(null);
+        form.setValue("bg_image", "");
         return;
       }
 
@@ -248,8 +254,7 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
                       accept="image/*"
                       onChange={(event) => {
                         handleImageChange(event);
-                        // Update form value with file name or empty string
-                        field.onChange(event.target.files?.[0]?.name || "");
+                        field.onChange("");
                       }}
                     />
                   </FormControl>
@@ -264,7 +269,7 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
             type="submit"
             form="site-form"
             className="w-30"
-            disabled={isLoading || !form.formState.isDirty}
+            disabled={isLoading}
           >
             {isLoading ? (
               <Loader2 className="w-4 h-4 animate-spin" />

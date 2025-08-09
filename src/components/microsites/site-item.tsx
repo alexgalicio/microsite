@@ -25,6 +25,8 @@ import { cn } from "@/lib/utils";
 import { useSite } from "./site-context";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
+import { AspectRatio } from "../ui/aspect-ratio";
+import Image from "next/image";
 
 export default function PageItem({ site }: { site: Site }) {
   const { setOpen, setCurrentRow } = useSite();
@@ -59,11 +61,13 @@ export default function PageItem({ site }: { site: Site }) {
 
   return (
     <div className="relative rounded-lg border overflow-hidden hover:shadow-md transition-all">
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url(${site.bg_image}), url('/images/placeholder.webp')`,
-        }}
+      <Image
+        src={site.bg_image || "/images/placeholder.webp"}
+        alt={site.title}
+        fill
+        priority
+        sizes="auto"
+        className="object-cover object-center"
       />
       <div className="absolute inset-0 bg-linear-to-r from-gray-900 via-gray-900/70"></div>
 
