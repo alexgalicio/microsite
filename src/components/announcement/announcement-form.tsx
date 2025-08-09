@@ -9,7 +9,6 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import RichTextEditor from "./rich-text-editor";
 import {
   Form,
   FormControl,
@@ -27,17 +26,26 @@ import {
 import { handleError } from "@/lib/utils";
 import { Announcements } from "@/lib/types";
 import DeleteAnnouncementDialog from "./delete-dialog";
+import RichTextEditor from "./rich-text-editor";
 
 const formSchema = z.object({
   title: z
     .string()
     .min(3, "Title must be at least 3 characters")
     .max(100, "Title must be less than 100 characters")
+    .refine(
+      (value) => value.replace(/\s+/g, "").length >= 3,
+      "Title must be at least 3 characters excluding spaces"
+    )
     .trim(),
   author: z
     .string()
     .min(3, "Author name must be at least 3 characters")
-    .max(100, "Author must be less than 100 characters")
+    .max(50, "Author name must be less than 50 characters")
+    .refine(
+      (value) => value.replace(/\s+/g, "").length >= 3,
+      "Author name must be at least 3 characters excluding spaces"
+    )
     .trim(),
   content: z.string().min(1, "Content is required"),
   cover: z.string(),

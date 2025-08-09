@@ -1,7 +1,7 @@
+import AnnouncementForm from "./announcement-form";
 import { notFound } from "next/navigation";
 import { getAnnouncementById } from "@/lib/actions/announcement";
 import { Announcements } from "@/lib/types";
-import AnnouncementForm from "./announcement-form";
 
 export default async function AnnouncementViewPage({ id }: { id: string }) {
   let announcement = null;

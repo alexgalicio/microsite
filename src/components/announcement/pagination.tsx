@@ -1,7 +1,6 @@
 "use client";
 
 import { type ReactNode, useCallback, useTransition } from "react";
-
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
@@ -13,14 +12,14 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "../ui/pagination";
+} from "@/components/ui/pagination";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from "@/components/ui/select";
 
 export interface PaginationWithLinksProps {
   pageSizeSelectOptions?: {

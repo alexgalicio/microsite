@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { buttonVariants } from "../ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -11,7 +11,6 @@ export default function Header() {
           Announcements.
         </h1>
       </Link>
-
       <Link href="/" className={cn(buttonVariants({ variant: "ghost" }))}>
         <ChevronLeft className="h-4 w-4" />
         <span className="hidden lg:inline">Home</span>

@@ -1,9 +1,9 @@
 import { Announcements } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import DOMPurify from "isomorphic-dompurify";
 import Image from "next/image";
 import Link from "next/link";
-import { AspectRatio } from "../ui/aspect-ratio";
 
 interface AnnouncementsProps {
   announcements: Announcements[];
@@ -33,7 +33,6 @@ export default function AnnouncementsList({
                   className="h-full min-h-full min-w-full object-cover object-center"
                 />
               </AspectRatio>
-
               <div className="flex flex-col gap-2 p-4">
                 <h2 className="text-xl font-semibold tracking-tight line-clamp-2">
                   {announcement.title}
@@ -43,7 +42,6 @@ export default function AnnouncementsList({
                     ALLOWED_TAGS: [],
                   })}
                 </p>
-
                 <div className="flex text-sm text-muted-foreground gap-2">
                   <p>{announcement.author}</p>
                   <span>•</span>
