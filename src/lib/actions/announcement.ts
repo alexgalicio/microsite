@@ -2,7 +2,6 @@
 
 import { createServerSupabaseClient } from "@/utils/server";
 import { auth } from "@clerk/nextjs/server";
-import { count } from "console";
 
 export async function createNewArticle(formData: {
   title: string;
