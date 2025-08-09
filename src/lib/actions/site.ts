@@ -114,7 +114,7 @@ export async function getSiteBySubdomain(subdomain: string) {
 export async function getSiteData(id: string) {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase
-    .from("grapesjs")
+    .from("site-content")
     .select("html, css")
     .eq("site_id", id)
     .single();

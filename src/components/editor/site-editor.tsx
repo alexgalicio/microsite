@@ -10,17 +10,15 @@ import { buttonVariants } from "../ui/button";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import "./styles.css";
 
 interface DefaultEditorProps {
   siteId: string;
 }
 
-export default function DefaultEditor({ siteId }: DefaultEditorProps) {
+export default function SiteEditor({ siteId }: DefaultEditorProps) {
   const { session } = useSession();
   const isMobile = useIsMobile();
-  const router = useRouter();
 
   const onEditor = (editor: Editor) => {
     console.log("Editor loaded");
@@ -121,14 +119,6 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
       id: "devices",
       buttons: [
         {
-          id: "back-button",
-          className: "fa fa-arrow-left",
-          command: () => {
-            router.back();
-          },
-          attributes: { title: "Back" },
-        },
-        {
           id: "set-device-desktop",
           command: function (e: Editor) {
             return e.setDevice("Desktop");
@@ -172,7 +162,7 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
 
     const supabase = createClerkSupabaseClient();
     const { data, error } = await supabase
-      .from("grapesjs")
+      .from("site-content")
       .upsert([{ site_id: siteId, html: htmlContent, css: cssContent }]);
 
     if (error) {
@@ -187,7 +177,7 @@ export default function DefaultEditor({ siteId }: DefaultEditorProps) {
   const loadSite = async (editor: Editor) => {
     const supabase = createClerkSupabaseClient();
     const { data, error } = await supabase
-      .from("grapesjs")
+      .from("site-content")
       .select("html,css")
       .eq("site_id", siteId)
       .maybeSingle();
