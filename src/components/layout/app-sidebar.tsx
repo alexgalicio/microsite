@@ -118,11 +118,13 @@ export function AppSidebar() {
                     Profile
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={async () => {
+                    await signOut({ redirectUrl: "/sign-in" });
+                  }}
+                >
                   <LogOut className="mr-2 h-4 w-4" />
-                  <button onClick={() => signOut({ redirectUrl: "/sign-in" })}>
-                    Sign out
-                  </button>
+                  <span>Sign out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

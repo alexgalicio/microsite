@@ -47,10 +47,12 @@ export function UserNav() {
               Profile
             </DropdownMenuItem>
           </DropdownMenuGroup>
-          <DropdownMenuItem>
-            <button onClick={() => signOut({ redirectUrl: "/sign-in" })}>
-              Sign out
-            </button>
+          <DropdownMenuItem
+            onClick={async () => {
+              await signOut({ redirectUrl: "/sign-in" });
+            }}
+          >
+            Sign out
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
