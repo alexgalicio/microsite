@@ -17,9 +17,6 @@ export default clerkMiddleware(async (auth, req) => {
   const path = url.pathname;
   const hostname = req.headers.get("host")!;
 
-  console.log("path", path);
-  console.log("host", hostname);
-
   // Handle editor subdomain
   if (
     hostname === getLink({ subdomain: "editor", method: false }).slice(0, -1)
