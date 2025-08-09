@@ -188,76 +188,87 @@ export function PaginationWithLinks({
   };
 
   return (
-    <div className="flex flex-col md:flex-row items-center gap-3 w-full">
-      {pageSizeSelectOptions && (
-        <div className="flex flex-col gap-4 flex-1">
-          <SelectRowsPerPage
-            options={pageSizeSelectOptions.pageSizeOptions}
-            setPageSize={navToPageSize}
-            pageSize={pageSize}
-          />
+    <div className="flex items-center justify-end overflow-clip p-2">
+      <div className="flex items-center sm:space-x-6 lg:space-x-8">
+        {pageSizeSelectOptions && (
+          <div className="flex flex-col gap-4 flex-1">
+            <SelectRowsPerPage
+              options={pageSizeSelectOptions.pageSizeOptions}
+              setPageSize={navToPageSize}
+              pageSize={pageSize}
+            />
+          </div>
+        )}
+        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+          Page {page} of {totalPageCount}
         </div>
-      )}
-      <Pagination className={cn({ "md:justify-end": pageSizeSelectOptions })}>
-        <PaginationContent className="max-sm:gap-0">
-          {isPending && navigationMode === "router" && (
-            <PaginationItem>
-              <Loader2 className="h-4 w-4 animate-spin" />
-            </PaginationItem>
-          )}
-          <PaginationItem>
-            {navigationMode === "router" ? (
-              <PaginationPrevious
-                onClick={() => navigateToPage(Math.max(page - 1, 1))}
-                aria-disabled={page === 1 || isPending}
-                tabIndex={page === 1 || isPending ? -1 : undefined}
-                className={cn(
-                  page === 1 || isPending
-                    ? "pointer-events-none opacity-50"
-                    : "cursor-pointer"
+        <div className="flex items-center space-x-2">
+          <Pagination
+            className={cn({ "md:justify-end": pageSizeSelectOptions })}
+          >
+            <PaginationContent className="max-sm:gap-0">
+              {isPending && navigationMode === "router" && (
+                <PaginationItem>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                </PaginationItem>
+              )}
+              <PaginationItem>
+                {navigationMode === "router" ? (
+                  <PaginationPrevious
+                    onClick={() => navigateToPage(Math.max(page - 1, 1))}
+                    aria-disabled={page === 1 || isPending}
+                    tabIndex={page === 1 || isPending ? -1 : undefined}
+                    className={cn(
+                      page === 1 || isPending
+                        ? "pointer-events-none opacity-50"
+                        : "cursor-pointer"
+                    )}
+                  />
+                ) : (
+                  <PaginationPrevious
+                    href={buildLink(Math.max(page - 1, 1))}
+                    aria-disabled={page === 1}
+                    tabIndex={page === 1 ? -1 : undefined}
+                    className={
+                      page === 1 ? "pointer-events-none opacity-50" : undefined
+                    }
+                  />
                 )}
-              />
-            ) : (
-              <PaginationPrevious
-                href={buildLink(Math.max(page - 1, 1))}
-                aria-disabled={page === 1}
-                tabIndex={page === 1 ? -1 : undefined}
-                className={
-                  page === 1 ? "pointer-events-none opacity-50" : undefined
-                }
-              />
-            )}
-          </PaginationItem>
-          {renderPageNumbers()}
-          <PaginationItem>
-            {navigationMode === "router" ? (
-              <PaginationNext
-                onClick={() =>
-                  navigateToPage(Math.min(page + 1, totalPageCount))
-                }
-                aria-disabled={page === totalPageCount || isPending}
-                tabIndex={page === totalPageCount || isPending ? -1 : undefined}
-                className={cn(
-                  page === totalPageCount || isPending
-                    ? "pointer-events-none opacity-50"
-                    : "cursor-pointer"
+              </PaginationItem>
+              {renderPageNumbers()}
+              <PaginationItem>
+                {navigationMode === "router" ? (
+                  <PaginationNext
+                    onClick={() =>
+                      navigateToPage(Math.min(page + 1, totalPageCount))
+                    }
+                    aria-disabled={page === totalPageCount || isPending}
+                    tabIndex={
+                      page === totalPageCount || isPending ? -1 : undefined
+                    }
+                    className={cn(
+                      page === totalPageCount || isPending
+                        ? "pointer-events-none opacity-50"
+                        : "cursor-pointer"
+                    )}
+                  />
+                ) : (
+                  <PaginationNext
+                    href={buildLink(Math.min(page + 1, totalPageCount))}
+                    aria-disabled={page === totalPageCount}
+                    tabIndex={page === totalPageCount ? -1 : undefined}
+                    className={
+                      page === totalPageCount
+                        ? "pointer-events-none opacity-50"
+                        : undefined
+                    }
+                  />
                 )}
-              />
-            ) : (
-              <PaginationNext
-                href={buildLink(Math.min(page + 1, totalPageCount))}
-                aria-disabled={page === totalPageCount}
-                tabIndex={page === totalPageCount ? -1 : undefined}
-                className={
-                  page === totalPageCount
-                    ? "pointer-events-none opacity-50"
-                    : undefined
-                }
-              />
-            )}
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      </div>
     </div>
   );
 }
@@ -272,19 +283,18 @@ function SelectRowsPerPage({
   pageSize: number;
 }) {
   return (
-    <div className="flex items-center gap-4">
-      <span className="whitespace-nowrap text-sm">Rows per page</span>
-
+    <div className="flex items-center space-x-2">
+      <p className="hidden text-sm font-medium sm:block">Rows per page</p>
       <Select
         value={String(pageSize)}
         onValueChange={(value) => setPageSize(Number(value))}
       >
-        <SelectTrigger>
+        <SelectTrigger className="h-8 w-[70px]">
           <SelectValue placeholder="Select page size">
             {String(pageSize)}
           </SelectValue>
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent side="top">
           {options.map((option) => (
             <SelectItem key={option} value={String(option)}>
               {option}

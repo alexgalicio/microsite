@@ -1,10 +1,10 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { TextStyleKit } from "@tiptap/extension-text-style";
 import MenuBar from "./menu-bar";
 import TextAlign from "@tiptap/extension-text-align";
+import { useEditor, EditorContent } from "@tiptap/react";
+import { TextStyleKit } from "@tiptap/extension-text-style";
 
 export default function RichTextEditor({
   content,

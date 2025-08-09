@@ -106,7 +106,7 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
         <Heading3 className="h-4 w-4" />
       </Toggle>
 
-      {/* Text Alignment Toggles */}
+      {/* Align Left */}
       <Toggle
         size="sm"
         pressed={editor.isActive("textAlign", "left")}
@@ -117,6 +117,7 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
         <AlignLeft className="h-4 w-4" />
       </Toggle>
 
+      {/* Align Center */}
       <Toggle
         size="sm"
         pressed={editor.isActive("textAlign", "center")}
@@ -127,6 +128,7 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
         <AlignCenter className="h-4 w-4" />
       </Toggle>
 
+      {/* Align Right */}
       <Toggle
         size="sm"
         pressed={editor.isActive("textAlign", "right")}
@@ -137,6 +139,7 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
         <AlignRight className="h-4 w-4" />
       </Toggle>
 
+      {/* Align Justify */}
       <Toggle
         size="sm"
         pressed={editor.isActive("textAlign", "justify")}

@@ -19,8 +19,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {
-  createNewArticle,
-  editArticle,
+  createNewAnnouncement,
+  editAnnouncement,
   removeCoverImage,
   uploadCoverImage,
 } from "@/lib/actions/announcement";
@@ -100,7 +100,7 @@ export default function AnnouncementForm({
       };
 
       if (isEditing) {
-        const editRes = await editArticle(initialData.id, updatedValues);
+        const editRes = await editAnnouncement(initialData.id, updatedValues);
         if (editRes.success) {
           toast.success("Announcement updated successfully");
           router.push("/announcements");
@@ -108,9 +108,9 @@ export default function AnnouncementForm({
           toast.error(editRes.error);
         }
       } else {
-        const response = await createNewArticle(updatedValues);
+        const response = await createNewAnnouncement(updatedValues);
         if (response.success) {
-          toast.success("Announcement successfully published");
+          toast.success("Announcement published successfully");
           router.push("/announcements");
         } else {
           toast.error(response.error);
@@ -118,7 +118,7 @@ export default function AnnouncementForm({
       }
     } catch (error) {
       toast.error(handleError(error));
-      console.error("Create Announcement Error: ", error);
+      console.error("Announcement Form Error: ", error);
     } finally {
       setIsLoading(false);
     }
@@ -129,11 +129,17 @@ export default function AnnouncementForm({
     if (file) {
       if (!file.type.startsWith("image/")) {
         toast.error("Please select a valid image file");
+        event.target.value = "";
+        setImageFile(null);
+        form.setValue("cover", "");
         return;
       }
 
-      if (file.size > 1 * 1024 * 1024) {
-        toast.error("Image size must be less than 1MB");
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error("Image size must be less than 2MB");
+        event.target.value = "";
+        setImageFile(null);
+        form.setValue("cover", "");
         return;
       }
 
@@ -201,8 +207,7 @@ export default function AnnouncementForm({
                     accept="image/*"
                     onChange={(event) => {
                       handleImageChange(event);
-                      // update form value with file name or empty string
-                      field.onChange(event.target.files?.[0]?.name || "");
+                      field.onChange("");
                     }}
                   />
                 </FormControl>
@@ -228,11 +233,7 @@ export default function AnnouncementForm({
           )}
         />
         <div className="flex items-center gap-2">
-          <Button
-            type="submit"
-            className="w-20"
-            disabled={isLoading || !form.formState.isDirty}
-          >
+          <Button type="submit" className="w-20" disabled={isLoading}>
             {isLoading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : isEditing ? (
@@ -243,9 +244,7 @@ export default function AnnouncementForm({
           </Button>
 
           {isEditing && initialData && (
-            <DeleteAnnouncementDialog
-              id={initialData.id}
-            />
+            <DeleteAnnouncementDialog id={initialData.id} />
           )}
         </div>
       </form>

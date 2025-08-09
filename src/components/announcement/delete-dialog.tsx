@@ -16,13 +16,7 @@ import { Button } from "@/components/ui/button";
 import { handleError } from "@/lib/utils";
 import { deleteAnnouncement } from "@/lib/actions/announcement";
 
-interface DeleteAnnouncementDialogProps {
-  id: string;
-}
-
-export default function DeleteAnnouncementDialog({
-  id,
-}: DeleteAnnouncementDialogProps) {
+export default function DeleteAnnouncementDialog({ id }: { id: string }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();

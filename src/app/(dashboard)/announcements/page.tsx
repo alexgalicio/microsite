@@ -37,6 +37,8 @@ export default async function Page({
     );
   }
 
+  const announcements = response.data || [];
+
   return (
     <div className="flex flex-1 flex-col gap-4">
       <div className="flex items-center justify-between">
@@ -47,18 +49,20 @@ export default async function Page({
           </Button>
         </Link>
       </div>
-      <AnnouncementsList announcements={response.data || []} />
-      <div className="mt-4">
-        <PaginationWithLinks
-          page={page}
-          pageSize={pageSize}
-          totalCount={response.count || 0}
-          navigationMode="router"
-          pageSizeSelectOptions={{
-            pageSizeOptions: [10, 20, 30, 40, 50],
-          }}
-        />
-      </div>
+      <AnnouncementsList announcements={announcements} />
+      {announcements.length > 0 && (
+        <div className="mt-4">
+          <PaginationWithLinks
+            page={page}
+            pageSize={pageSize}
+            totalCount={response.count || 0}
+            navigationMode="router"
+            pageSizeSelectOptions={{
+              pageSizeOptions: [10, 20, 30, 40, 50],
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }

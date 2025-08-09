@@ -3,13 +3,7 @@ import { getAnnouncementById } from "@/lib/actions/announcement";
 import { Announcements } from "@/lib/types";
 import AnnouncementForm from "./announcement-form";
 
-type TPAnnouncementViewPageProps = {
-  id: string;
-};
-
-export default async function AnnouncementViewPage({
-  id,
-}: TPAnnouncementViewPageProps) {
+export default async function AnnouncementViewPage({ id }: { id: string }) {
   let announcement = null;
   let pageTitle = "Create New Announcement";
 
