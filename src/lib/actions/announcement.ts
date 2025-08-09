@@ -2,6 +2,7 @@
 
 import { createServerSupabaseClient } from "@/utils/server";
 import { auth } from "@clerk/nextjs/server";
+import { count } from "console";
 
 export async function createNewArticle(formData: {
   title: string;
@@ -25,7 +26,10 @@ export async function createNewArticle(formData: {
     .single();
 
   if (siteError || !siteData) {
-    return { success: false, error: "Please create a site before adding announcements" };
+    return {
+      success: false,
+      error: "Please create a site before adding announcements",
+    };
   }
 
   // create the announcement
@@ -98,7 +102,11 @@ export async function deleteAnnouncement(id: string) {
   return { success: true, data };
 }
 
-export async function getAnnouncementsByUserId(id: string) {
+export async function getAnnouncementsByUserId(
+  id: string,
+  from: number,
+  to: number
+) {
   const { userId } = await auth();
 
   if (!userId) {
@@ -106,17 +114,38 @@ export async function getAnnouncementsByUserId(id: string) {
   }
 
   const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase
+  const { data, error, count } = await supabase
     .from("announcements")
-    .select("*")
+    .select("*", { count: "exact" })
     .eq("user_id", id)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .range(from, to);
 
   if (error) {
     return { success: false, error: error.message };
   }
 
-  return { success: true, data };
+  return { success: true, data, count};
+}
+
+export async function getAnnouncementsBySiteId(
+  id: string,
+  from: number,
+  to: number
+) {
+  const supabase = createServerSupabaseClient();
+  const { data, error, count } = await supabase
+    .from("announcements")
+    .select("*", { count: "exact" })
+    .eq("site_id", id)
+    .order("created_at", { ascending: false })
+    .range(from, to);
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, data, count};
 }
 
 export async function getAnnouncementById(id: string) {
