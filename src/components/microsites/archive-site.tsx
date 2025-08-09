@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { AlertCircleIcon, Info, Loader2 } from "lucide-react";
+import { Info, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
 import { archiveSite } from "@/lib/actions/site";
