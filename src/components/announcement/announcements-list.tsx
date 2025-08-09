@@ -35,16 +35,16 @@ export default function AnnouncementsList({
               </AspectRatio>
 
               <div className="flex flex-col gap-2 p-4">
-                <h2 className="text-xl font-semibold line-clamp-2">
+                <h2 className="text-xl font-semibold tracking-tight line-clamp-2">
                   {announcement.title}
                 </h2>
-                <p className="line-clamp-3 ">
+                <p className="line-clamp-3 text-muted-foreground">
                   {DOMPurify.sanitize(announcement.content, {
                     ALLOWED_TAGS: [],
                   })}
                 </p>
 
-                <div className="flex text-sm opacity-40 gap-2">
+                <div className="flex text-sm text-muted-foreground gap-2">
                   <p>{announcement.author}</p>
                   <span>•</span>
                   <time dateTime={announcement.created_at}>
