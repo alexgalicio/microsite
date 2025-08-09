@@ -1,11 +1,11 @@
 import Header from "@/components/announcement/header";
 import RichTextEditor from "@/components/announcement/rich-text-editor";
+import Image from "next/image";
+import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn, formatDate } from "@/lib/utils";
 import { createServerSupabaseClient } from "@/utils/server";
 import { ChevronLeft } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
 
 export default async function Page({
   params,
@@ -27,7 +27,6 @@ export default async function Page({
   return (
     <div className="mx-auto px-5 max-w-6xl">
       <Header />
-
       <div className="max-w-3xl mx-auto">
         <div className="mb-10 mt-8 lg:mt-20">
           <h1 className="text-4xl font-bold">{data[0].title}</h1>
@@ -52,7 +51,6 @@ export default async function Page({
           </div>
         </div>
       </div>
-
       <section className="mt-8 md:mt-16 mb-12">
         <div className="flex justify-center mt-8">
           <Link

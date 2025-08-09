@@ -6,8 +6,8 @@ export default async function SubdomainPage({
   params: Promise<{ subdomain: string }>;
 }>) {
   const { subdomain } = await params;
-  const site = await getSiteBySubdomain(subdomain);
 
+  const site = await getSiteBySubdomain(subdomain);
   if (site.data?.status === "archived" || site.data?.status === "draft") {
     return (
       <div className="flex items-center justify-center w-screen h-screen">
@@ -21,7 +21,12 @@ export default async function SubdomainPage({
   const css = content.data?.css || "";
 
   if (!content || !content.success) {
-    return <div>No content available</div>;
+    return (
+      <div className="p-4">
+        <h2>Error Loading Page</h2>
+        <p>{content.error}</p>
+      </div>
+    );
   }
 
   return (

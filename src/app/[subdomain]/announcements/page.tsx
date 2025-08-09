@@ -16,7 +16,6 @@ export default async function Page({
   }
 
   const announcements = await getAnnouncementsBySiteId(response.data?.id);
-
   if (!announcements.success) {
     return (
       <div className="p-4">
