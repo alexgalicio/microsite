@@ -6,12 +6,12 @@ import { createClient } from "@supabase/supabase-js";
 import { useSession } from "@clerk/nextjs";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Button, buttonVariants } from "../ui/button";
+import { buttonVariants } from "../ui/button";
 import Link from "next/link";
-import { ArrowLeft, ChevronLeft } from "lucide-react";
-import "./styles.css";
+import { ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import "./styles.css";
 
 interface DefaultEditorProps {
   siteId: string;

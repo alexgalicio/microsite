@@ -5,15 +5,28 @@ import { getAnnouncementsByUserId } from "@/lib/actions/announcement";
 import { auth } from "@clerk/nextjs/server";
 import { Plus } from "lucide-react";
 import { redirect } from "next/navigation";
+import { PaginationWithLinks } from "@/components/announcement/pagination";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const { userId } = await auth();
 
   if (!userId) {
     redirect("/sign-in");
   }
 
-  const response = await getAnnouncementsByUserId(userId);
+  const params = await searchParams;
+
+  const page = parseInt((params?.page as string) || "1");
+  const pageSize = parseInt((params?.pageSize as string) || "8");
+
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
+  const response = await getAnnouncementsByUserId(userId, from, to);
 
   if (!response.success) {
     return (
@@ -35,6 +48,17 @@ export default async function Page() {
         </Link>
       </div>
       <AnnouncementsList announcements={response.data || []} />
+      <div className="mt-4">
+        <PaginationWithLinks
+          page={page}
+          pageSize={pageSize}
+          totalCount={response.count || 0}
+          navigationMode="router"
+          pageSizeSelectOptions={{
+            pageSizeOptions: [10, 20, 30, 40, 50],
+          }}
+        />
+      </div>
     </div>
   );
 }
