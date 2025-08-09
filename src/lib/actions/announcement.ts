@@ -3,7 +3,7 @@
 import { createServerSupabaseClient } from "@/utils/server";
 import { auth } from "@clerk/nextjs/server";
 
-export async function createNewArticle(formData: {
+export async function createNewAnnouncement(formData: {
   title: string;
   content: string;
   author: string;
@@ -48,7 +48,7 @@ export async function createNewArticle(formData: {
   return { success: true, data };
 }
 
-export async function editArticle(
+export async function editAnnouncement(
   id: string,
   formData: {
     title: string;
@@ -124,27 +124,22 @@ export async function getAnnouncementsByUserId(
     return { success: false, error: error.message };
   }
 
-  return { success: true, data, count};
+  return { success: true, data, count };
 }
 
-export async function getAnnouncementsBySiteId(
-  id: string,
-  from: number,
-  to: number
-) {
+export async function getAnnouncementsBySiteId(id: string) {
   const supabase = createServerSupabaseClient();
-  const { data, error, count } = await supabase
+  const { data, error } = await supabase
     .from("announcements")
-    .select("*", { count: "exact" })
+    .select("*")
     .eq("site_id", id)
-    .order("created_at", { ascending: false })
-    .range(from, to);
+    .order("created_at", { ascending: false });
 
   if (error) {
     return { success: false, error: error.message };
   }
 
-  return { success: true, data, count};
+  return { success: true, data };
 }
 
 export async function getAnnouncementById(id: string) {
@@ -177,8 +172,8 @@ export async function uploadCoverImage(file: File) {
 
   // create unique filename
   const fileExt = file.name.split(".").pop();
-  const fileName = `${userId}-${Date.now()}.${fileExt}`;
-  const filePath = `covers/${fileName}`;
+  const fileName = `${Date.now()}.${fileExt}`;
+  const filePath = `covers/${userId}/${fileName}`;
 
   const supabase = createServerSupabaseClient();
   // upload to supabase storage
@@ -202,10 +197,15 @@ export async function uploadCoverImage(file: File) {
 }
 
 export async function removeCoverImage(url: string) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return { success: false, error: "User not signed in" };
+  }
+
   // extract filename from url
   const fileName = url.split("/").pop();
-  const filePath = `covers/${fileName}`;
-  console.log("filename: ", fileName);
+  const filePath = `covers/${userId}/${fileName}`;
   if (!fileName) return;
 
   const supabase = createServerSupabaseClient();
