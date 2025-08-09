@@ -34,7 +34,6 @@ export default async function SitesPage() {
           <h2 className="text-2xl font-bold tracking-tight">Microsites</h2>
           <CreateSiteButton />
         </div>
-
         {isAdmin ? (
           <SearchMicrosites sites={result.data || []} />
         ) : (
