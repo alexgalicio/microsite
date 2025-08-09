@@ -213,8 +213,8 @@ export async function uploadBgImage(file: File) {
 
   // create unique filename
   const fileExt = file.name.split(".").pop();
-  const fileName = `${userId}-${Date.now()}.${fileExt}`;
-  const filePath = `backgrounds/${fileName}`;
+  const fileName = `${Date.now()}.${fileExt}`;
+  const filePath = `backgrounds/${userId}/${fileName}`;
 
   const supabase = createServerSupabaseClient();
   // upload to supabase storage
@@ -238,9 +238,15 @@ export async function uploadBgImage(file: File) {
 }
 
 export async function removeBgImage(url: string) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return { success: false, error: "User not signed in" };
+  }
+
   // extract filename from url
   const fileName = url.split("/").pop();
-  const filePath = `backgrounds/${fileName}`;
+  const filePath = `backgrounds/${userId}/${fileName}`;
   console.log("filename: ", fileName);
   if (!fileName) return;
 
