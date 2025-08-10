@@ -283,7 +283,6 @@ body {
   text-align: center;
 }
 .card {
-  background: #1d1d1d;
   display: inline-block;
   margin: 10px;
   width: 300px;
