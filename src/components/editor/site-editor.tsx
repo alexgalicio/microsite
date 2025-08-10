@@ -112,7 +112,8 @@ export default function SiteEditor({ siteId }: { siteId: string }) {
           id: "back-button",
           className: "fa fa-chevron-left",
           command: () => {
-            window.open("/microsites");
+            const url = `https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/microsites`;
+            window.location.href = url;
           },
           attributes: { title: "Go Back" },
         },
