@@ -1,3 +1,4 @@
+import PrivateSite from "@/components/microsites/private-site";
 import { getSiteBySubdomain, getSiteData } from "@/lib/actions/site";
 
 export default async function SubdomainPage({
@@ -8,17 +9,22 @@ export default async function SubdomainPage({
   const { subdomain } = await params;
 
   const site = await getSiteBySubdomain(subdomain);
-  if (site.data?.status === "archived" || site.data?.status === "draft") {
-    return (
-      <div className="flex items-center justify-center w-screen h-screen">
-        <h1 className="text-xl font-medium">The requested site is private.</h1>
-      </div>
-    );
+  if (
+    !site ||
+    !site.data ||
+    site.data.status === "archived" ||
+    site.data.status === "draft"
+  ) {
+    return <PrivateSite />;
   }
 
   const content = await getSiteData(site.data?.id);
   const html = content.data?.html || "";
   const css = content.data?.css || "";
+
+  if (!content || !content.data) {
+    return <PrivateSite />;
+  }
 
   if (!content || !content.success) {
     return (
