@@ -10,6 +10,7 @@ import {
   Heading2,
   Heading3,
   Italic,
+  Link2,
   List,
   ListOrdered,
   Quote,
@@ -17,11 +18,39 @@ import {
   StrikethroughIcon,
   Type,
   Undo,
+  Unlink,
 } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
 import { Editor } from "@tiptap/react";
+import { useCallback } from "react";
 
 export default function MenuBar({ editor }: { editor: Editor | null }) {
+  const setLink = useCallback(() => {
+    if (!editor) return;
+
+    const previousUrl = editor.getAttributes("link").href;
+    const url = window.prompt("URL", previousUrl);
+
+    // cancelled
+    if (url === null) {
+      return;
+    }
+
+    // empty
+    if (url === "") {
+      editor.chain().focus().extendMarkRange("link").unsetLink().run();
+      return;
+    }
+
+    // update link
+    editor
+      .chain()
+      .focus()
+      .extendMarkRange("link")
+      .setLink({ href: url.startsWith("http") ? url : `http://${url}` })
+      .run();
+  }, [editor]);
+
   if (!editor) {
     return null;
   }
@@ -71,6 +100,24 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
         onPressedChange={() => editor.chain().focus().toggleCode().run()}
       >
         <Code2 className="h-4 w-4" />
+      </Toggle>
+
+      {/* Link */}
+      <Toggle
+        size="sm"
+        pressed={editor.isActive("link")}
+        onPressedChange={setLink}
+      >
+        <Link2 className="h-4 w-4" />
+      </Toggle>
+
+      {/* Unlink */}
+      <Toggle
+        size="sm"
+        onPressedChange={() => editor.chain().focus().unsetLink().run()}
+        disabled={!editor.isActive("link")}
+      >
+        <Unlink className="h-4 w-4" />
       </Toggle>
 
       {/* Heading 1 */}

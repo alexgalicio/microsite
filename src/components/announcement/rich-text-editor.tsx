@@ -5,6 +5,7 @@ import MenuBar from "./menu-bar";
 import TextAlign from "@tiptap/extension-text-align";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { TextStyleKit } from "@tiptap/extension-text-style";
+import Link from "@tiptap/extension-link";
 
 export default function RichTextEditor({
   content,
@@ -34,6 +35,17 @@ export default function RichTextEditor({
       TextStyleKit,
       TextAlign.configure({
         types: ["heading", "paragraph"],
+      }),
+      Link.configure({
+        openOnClick: false,
+        autolink: true,
+        defaultProtocol: "https",
+        protocols: ["http", "https", "ftp", "mailto"],
+        HTMLAttributes: {
+          class: "text-blue-500 cursor-pointer hover:underline",
+          target: "_blank",
+          rel: "noopener noreferrer",
+        },
       }),
     ],
     shouldRerenderOnTransaction: true,
