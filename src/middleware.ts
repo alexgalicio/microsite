@@ -38,7 +38,6 @@ export default clerkMiddleware(async (auth, req) => {
 
   // handle custom subdomain
   const subdomain = hostname.split(".")[0];
-  console.log("sub", subdomain);
   return NextResponse.rewrite(new URL(`/${subdomain}${path}`, req.url));
 });
 
