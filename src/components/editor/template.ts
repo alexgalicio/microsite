@@ -425,7 +425,7 @@ export const templateHTML = `
           <div class="logo-container">
             <div class="logo">
               <div class="logo-icon">
-                <img src="/images/cict.png" alt="Logo" />
+                <img src="/cict.png" alt="Logo" />
               </div>
               <a href="#" class="logo-text">MICROSITE</a>
             </div>
@@ -458,7 +458,7 @@ export const templateHTML = `
       <div class="container-width">
         <div class="about-container">
           <div class="about-image">
-            <img src="/images/cict.png" alt="About" />
+            <img src="/cict.png" alt="About" />
           </div>
           <div class="about-content">
             <div class="about-pre">WHO ARE WE</div>
@@ -498,22 +498,22 @@ export const templateHTML = `
         </div>
         <div class="cards">
           <div class="card">
-            <img src="/images/cict.png" alt="photo-showcase" />
+            <img src="/cict.png" alt="photo-showcase" />
           </div>
           <div class="card">
-            <img src="/images/cict.png" alt="photo-showcase" />
+            <img src="/cict.png" alt="photo-showcase" />
           </div>
           <div class="card">
-            <img src="/images/cict.png" alt="photo-showcase" />
+            <img src="/cict.png" alt="photo-showcase" />
           </div>
           <div class="card">
-            <img src="/images/cict.png" alt="photo-showcase" />
+            <img src="/cict.png" alt="photo-showcase" />
           </div>
           <div class="card">
-            <img src="/images/cict.png" alt="photo-showcase" />
+            <img src="/cict.png" alt="photo-showcase" />
           </div>
           <div class="card">
-            <img src="/images/cict.png" alt="photo-showcase" />
+            <img src="/cict.png" alt="photo-showcase" />
           </div>
         </div>
       </div>
@@ -524,35 +524,35 @@ export const templateHTML = `
         <h1 class="bdg-title">The team</h1>
         <div class="badges">
           <div class="badge">
-            <img src="/images/cict.png" class="badge-avatar" alt="profile" />
+            <img src="/cict.png" class="badge-avatar" alt="profile" />
             <div class="badge-body">
               <div class="badge-name">Alex Galicio</div>
               <div class="badge-role">Developer</div>
             </div>
           </div>
           <div class="badge">
-            <img src="/images/cict.png" class="badge-avatar" alt="profile" />
+            <img src="/cict.png" class="badge-avatar" alt="profile" />
             <div class="badge-body">
               <div class="badge-name">Eddhan Tan</div>
               <div class="badge-role">Developer</div>
             </div>
           </div>
           <div class="badge">
-            <img src="/images/cict.png" class="badge-avatar" alt="profile" />
+            <img src="/cict.png" class="badge-avatar" alt="profile" />
             <div class="badge-body">
               <div class="badge-name">Ynez Sanchez</div>
               <div class="badge-role">Member</div>
             </div>
           </div>
           <div class="badge">
-            <img src="/images/cict.png" class="badge-avatar" alt="profile" />
+            <img src="/cict.png" class="badge-avatar" alt="profile" />
             <div class="badge-body">
               <div class="badge-name">Joshua Alcaraz</div>
               <div class="badge-role">Member</div>
             </div>
           </div>
           <div class="badge">
-            <img src="/images/cict.png" class="badge-avatar" alt="profile" />
+            <img src="/cict.png" class="badge-avatar" alt="profile" />
             <div class="badge-body">
               <div class="badge-name">Reyan Concepcion</div>
               <div class="badge-role">Member</div>
@@ -572,7 +572,7 @@ export const templateHTML = `
             nunc in lectus dignissim porttitor.
           </div>
           <div class="badge">
-            <img src="/images/cict.png" class="badge-avatar" alt="profile" />
+            <img src="/cict.png" class="badge-avatar" alt="profile" />
             <div class="badge-body">
               <div class="badge-name">John Doe</div>
               <div>President</div>
