@@ -25,7 +25,6 @@ import { cn } from "@/lib/utils";
 import { useSite } from "./site-context";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
-import { AspectRatio } from "../ui/aspect-ratio";
 import Image from "next/image";
 
 export default function PageItem({ site }: { site: Site }) {
