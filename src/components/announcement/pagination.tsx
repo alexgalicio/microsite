@@ -112,7 +112,7 @@ export function PaginationWithLinks({
         router.push(url);
       }
     },
-    [pageSearchParam, searchParams, pathname, navigationMode, router]
+    [pageSizeSelectOptions?.pageSizeSearchParam, searchParams, pageSearchParam, pathname, navigationMode, router]
   );
 
   const renderPageNumbers = () => {
