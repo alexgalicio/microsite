@@ -3,9 +3,9 @@
 import StarterKit from "@tiptap/starter-kit";
 import MenuBar from "./menu-bar";
 import TextAlign from "@tiptap/extension-text-align";
+import Link from "@tiptap/extension-link";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { TextStyleKit } from "@tiptap/extension-text-style";
-import Link from "@tiptap/extension-link";
 
 export default function RichTextEditor({
   content,
