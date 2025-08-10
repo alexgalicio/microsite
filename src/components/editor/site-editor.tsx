@@ -2,21 +2,18 @@
 
 import grapesjs, { Editor } from "grapesjs";
 import GjsEditor from "@grapesjs/react";
+import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
 import { useSession } from "@clerk/nextjs";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { buttonVariants } from "../ui/button";
-import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import "./styles.css";
+import { templateCSS, templateHTML } from "./template";
 
-interface DefaultEditorProps {
-  siteId: string;
-}
-
-export default function SiteEditor({ siteId }: DefaultEditorProps) {
+export default function SiteEditor({ siteId }: { siteId: string }) {
   const { session } = useSession();
   const isMobile = useIsMobile();
 
@@ -67,28 +64,20 @@ export default function SiteEditor({ siteId }: DefaultEditorProps) {
       className: "btn-publish",
       label: "Publish",
       command: () => {
-        // Change button to loading state
+        // change button to loading state
         const button = editor.Panels.getButton("options", "save-db");
         if (button) {
-          // button.set("label", "Publishing...");
           button.set({
             label: "",
             className: "btn-publish publishing",
             attributes: { disabled: "disabled" },
           });
-          // Call the save function
-          saveSite(editor)
-            .then(() => {
-              // Reset button to original state after save is complete
-              button.set("label", "Publish");
-              button.set("className", "btn-publish");
-            })
-            .catch((error) => {
-              console.error("Error saving site:", error);
-              // Optionally handle error and reset button
-              button.set("label", "Publish");
-              button.set("className", "btn-publish");
-            });
+          // call the save function
+          saveSite(editor).then(() => {
+            // reset button to original state after save is complete
+            button.set("label", "Publish");
+            button.set("className", "btn-publish");
+          });
         }
       },
       attributes: { title: "Publish" },
@@ -105,7 +94,8 @@ export default function SiteEditor({ siteId }: DefaultEditorProps) {
       "heading",
       {
         label: "Heading",
-        content: "<h1>Insert your heading here</h1>",
+        content:
+          "<h1>Heading</h1><style>h1 { font-size: 32px; font-weight: 700;}</style>",
         category: "Basic",
         media:
           '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M8.3 11.5h7.4V6.9l-.2-1.6a1 1 0 00-.5-.5c-.3-.2-.7-.3-1-.3h-.6v-.4h6.8v.4h-.6c-.4 0-.7.1-1 .3a1 1 0 00-.6.6L18 6.9v10.3c0 .8 0 1.3.2 1.6 0 .2.2.3.4.5.4.2.7.3 1.1.3h.6v.4h-6.8v-.4h.5c.7 0 1.2-.2 1.5-.6.2-.3.3-.9.3-1.8v-4.9H8.3v4.9l.1 1.6.5.5c.3.2.7.3 1 .3h.7v.4H3.7v-.4h.6c.7 0 1.1-.2 1.4-.6.2-.3.3-.9.3-1.8V6.9L6 5.3a1 1 0 00-.5-.5l-1-.3h-.7v-.4h6.9v.4H10c-.4 0-.8.1-1 .3a1 1 0 00-.6.6l-.1 1.5v4.6z"></path></svg>',
@@ -118,6 +108,14 @@ export default function SiteEditor({ siteId }: DefaultEditorProps) {
     editor.Panels.addPanel({
       id: "devices",
       buttons: [
+        {
+          id: "back-button",
+          className: "fa fa-chevron-left",
+          command: () => {
+            window.open("/microsites");
+          },
+          attributes: { title: "Go Back" },
+        },
         {
           id: "set-device-desktop",
           command: function (e: Editor) {
@@ -191,7 +189,8 @@ export default function SiteEditor({ siteId }: DefaultEditorProps) {
       editor.UndoManager.clear();
       console.log("retrieved");
     } else {
-      toast.success("Welcome to Microsite Editor!");
+      editor.setComponents(templateHTML);
+      editor.setStyle(templateCSS);
     }
   };
 
@@ -199,11 +198,11 @@ export default function SiteEditor({ siteId }: DefaultEditorProps) {
     return (
       <div className="flex flex-col gap-4 px-4 absolute z-[101] top-0 w-screen h-screen items-center justify-center">
         <h1 className="text-2xl text-center">
-          Whoops! The Microsite Editor is only available on larger devices.
+          Whoops! The editor is only available on larger devices.
         </h1>
         <Link
           href="/microsites"
-          className={cn(buttonVariants({ variant: "ghost" }))}
+          className={cn(buttonVariants({ variant: "ghost" }), "text-primary")}
         >
           <ChevronLeft className="h-4 w-4" />
           Go Back
