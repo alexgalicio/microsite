@@ -1,3 +1,5 @@
+"use client";
+
 import { Announcements } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
@@ -29,6 +31,7 @@ export default function AnnouncementsList({
                   src={announcement.cover || "/images/placeholder.webp"}
                   alt={announcement.title}
                   fill
+                  priority
                   sizes="auto"
                   className="h-full min-h-full min-w-full object-cover object-center"
                 />
