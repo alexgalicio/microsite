@@ -202,8 +202,8 @@ export default function SiteEditor({ siteId }: { siteId: string }) {
           Whoops! The editor is only available on larger devices.
         </h1>
         <Link
-          href="/microsites"
-          className={cn(buttonVariants({ variant: "ghost" }), "text-primary")}
+          href={`https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/microsites`}
+          className={cn(buttonVariants({ variant: "ghost" }), "text-primary!")}
         >
           <ChevronLeft className="h-4 w-4" />
           Go Back
