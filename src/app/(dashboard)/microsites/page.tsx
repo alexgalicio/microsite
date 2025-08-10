@@ -32,7 +32,7 @@ export default async function SitesPage() {
       <div className="flex flex-1 flex-col gap-4">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold tracking-tight">Microsites</h2>
-          <CreateSiteButton />
+          {!isAdmin && <CreateSiteButton />}
         </div>
         {isAdmin ? (
           <SearchMicrosites sites={result.data || []} />
