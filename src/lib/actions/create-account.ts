@@ -3,6 +3,17 @@
 import { createServerSupabaseClient } from "@/utils/server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 
+const generatePassword = (length: number): string => {
+  const charset =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+  let password = "";
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    password += charset[randomIndex];
+  }
+  return password;
+};
+
 export async function createNewAccount(formData: {
   menu: string;
   submenu: string;
@@ -15,7 +26,7 @@ export async function createNewAccount(formData: {
       return { success: false, error: "User not signed in" };
     }
 
-    const password = "m!cr0site"; // generate password
+    const password = generatePassword(12);
 
     // create user in clerk
     const clerk = await clerkClient();
@@ -56,6 +67,30 @@ export async function createNewAccount(formData: {
         return { success: false, error: "Submenu already exists in this menu" };
       }
       return { success: false, error: submenuError.message };
+    }
+
+    // Send welcome email with password
+    try {
+      const { error } = await supabase.functions.invoke(
+        "send-account-details-email",
+        {
+          body: {
+            email: formData.email,
+            password: password,
+            submenu: formData.submenu,
+          },
+        }
+      );
+
+      if (error) {
+        console.error("Failed to send welcome email:", error);
+        console.log('errr', error)
+        // Don't fail the account creation if email fails
+      }
+    } catch (emailError) {
+      console.error("Failed to send welcome email:", emailError);
+      console.log('error', emailError)
+      // Don't fail the account creation if email fails
     }
 
     return {
