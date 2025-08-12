@@ -33,13 +33,9 @@ const formSchema = z.object({
   title: z
     .string()
     .min(3, "Menu must be at least 3 characters")
-    .max(10, "Menu must be less than 10 characters")
-    .refine(
-      // must be 3 char long excluding spaces
-      (value) => value.replace(/\s+/g, "").length >= 3,
-      "Menu must be at least 3 characters excluding spaces"
-    )
-    .trim(),
+    .max(50, "Menu must be less than 50 characters")
+    .transform((str) => str.replace(/\s+/g, " ").trim())
+    .refine((value) => value.replace(/\s+/g, "").length >= 3),
   isEdit: z.boolean(),
 });
 

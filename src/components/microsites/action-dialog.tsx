@@ -39,18 +39,21 @@ const formSchema = z.object({
     .string()
     .min(3, "Title must be at least 3 characters")
     .max(30, "Title must be less than 30 characters")
-    .trim(),
+    .transform((str) => str.replace(/\s+/g, " ").trim())
+    .refine((value) => value.replace(/\s+/g, "").length >= 3),
   subdomain: z
     .string()
     .min(3, "Subdomain must be at least 3 characters")
     .max(50, "Subdomain must be less than 50 characters")
     .regex(/^[a-zA-Z0-9-]+$/, {
       message: "Subdomain can only contain letters, numbers, and hyphens",
-    }),
+    })
+    .transform((str) => str.replace(/\s+/g, " ").trim())
+    .refine((value) => value.replace(/\s+/g, "").length >= 3),
   description: z
     .string()
     .max(200, "Description must be less than 200 characters")
-    .trim(),
+    .transform((str) => str.replace(/\s+/g, " ").trim()),
   bg_image: z.string(),
   isEdit: z.boolean(),
 });

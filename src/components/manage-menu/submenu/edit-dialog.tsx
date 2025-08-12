@@ -42,13 +42,9 @@ const formSchema = z.object({
   title: z
     .string()
     .min(3, "Submenu must be at least 3 characters")
-    .max(10, "Submenu must be less than 10 characters")
-    .refine(
-      // must be 3 char long excluding spaces
-      (value) => value.replace(/\s+/g, "").length >= 3,
-      "Submenu must be at least 3 characters"
-    )
-    .trim(),
+    .max(50, "Submenu must be less than 50 characters")
+    .transform((str) => str.replace(/\s+/g, " ").trim())
+    .refine((value) => value.replace(/\s+/g, "").length >= 3),
   menu: z.string().min(1, "Please select a menu"),
 });
 

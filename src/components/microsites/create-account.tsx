@@ -44,14 +44,10 @@ const formSchema = z.object({
   submenu: z
     .string()
     .min(3, "Submenu must be at least 3 characters")
-    .max(10, "Submenu must be less than 10 characters")
-    .refine(
-      // must be 3 char long excluding spaces
-      (value) => value.replace(/\s+/g, "").length >= 3,
-      "Submenu must be at least 3 characters excluding spaces"
-    )
-    .trim(),
-  email: z.email("Email is invalid").min(1, "Email is required"),
+    .max(50, "Submenu must be less than 50 characters")
+    .transform((str) => str.replace(/\s+/g, " ").trim())
+    .refine((value) => value.replace(/\s+/g, "").length >= 3),
+  email: z.string().email(),
 });
 
 type AccountForm = z.infer<typeof formSchema>;
