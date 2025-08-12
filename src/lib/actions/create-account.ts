@@ -69,7 +69,7 @@ export async function createNewAccount(formData: {
       return { success: false, error: submenuError.message };
     }
 
-    // Send welcome email with password
+    // send account details on email
     try {
       const { error } = await supabase.functions.invoke(
         "send-account-details-email",
@@ -85,12 +85,12 @@ export async function createNewAccount(formData: {
       if (error) {
         console.error("Failed to send welcome email:", error);
         console.log('errr', error)
-        // Don't fail the account creation if email fails
+        // don't fail the account creation if email fails
       }
     } catch (emailError) {
       console.error("Failed to send welcome email:", emailError);
       console.log('error', emailError)
-      // Don't fail the account creation if email fails
+      // don't fail the account creation if email fails
     }
 
     return {
