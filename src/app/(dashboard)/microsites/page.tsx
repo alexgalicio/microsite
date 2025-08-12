@@ -7,6 +7,7 @@ import { getAllSite, getSiteByUserId } from "@/lib/actions/site";
 import { Site } from "@/lib/schema";
 import { checkRole } from "@/utils/role";
 import { auth } from "@clerk/nextjs/server";
+import CreateAccount from "@/components/microsites/create-account";
 
 export default async function SitesPage() {
   const { userId } = await auth();
@@ -32,7 +33,7 @@ export default async function SitesPage() {
       <div className="flex flex-1 flex-col gap-4">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold tracking-tight">Microsites</h2>
-          {!isAdmin && <CreateSiteButton />}
+          {isAdmin ? <CreateAccount /> : <CreateSiteButton />}
         </div>
         {isAdmin ? (
           <SearchMicrosites sites={result.data || []} />
