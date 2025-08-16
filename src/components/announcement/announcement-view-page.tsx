@@ -1,7 +1,7 @@
 import AnnouncementForm from "./announcement-form";
-import { notFound } from "next/navigation";
 import { getAnnouncementById } from "@/lib/actions/announcement";
 import { Announcements } from "@/lib/types";
+import { redirect } from "next/navigation";
 
 export default async function AnnouncementViewPage({ id }: { id: string }) {
   let announcement = null;
@@ -11,7 +11,7 @@ export default async function AnnouncementViewPage({ id }: { id: string }) {
     const response = await getAnnouncementById(id);
     announcement = response.data as Announcements;
     if (!announcement) {
-      notFound();
+      redirect("/announcements");
     }
     pageTitle = `Edit Announcement`;
   }
