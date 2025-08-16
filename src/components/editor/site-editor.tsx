@@ -161,7 +161,7 @@ export default function SiteEditor({ siteId }: { siteId: string }) {
 
     const supabase = createClerkSupabaseClient();
     const { data, error } = await supabase
-      .from("site-content")
+      .from("site_content")
       .upsert([{ site_id: siteId, html: htmlContent, css: cssContent }]);
 
     if (error) {
@@ -176,7 +176,7 @@ export default function SiteEditor({ siteId }: { siteId: string }) {
   const loadSite = async (editor: Editor) => {
     const supabase = createClerkSupabaseClient();
     const { data, error } = await supabase
-      .from("site-content")
+      .from("site_content")
       .select("html,css")
       .eq("site_id", siteId)
       .maybeSingle();
