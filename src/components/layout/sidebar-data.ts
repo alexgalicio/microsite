@@ -1,5 +1,12 @@
 import { NavItem } from "@/lib/types";
-import { Globe, LayoutDashboard, Megaphone, Menu, Settings } from "lucide-react";
+import {
+  Calendar,
+  Globe,
+  LayoutDashboard,
+  Megaphone,
+  Menu,
+  Settings,
+} from "lucide-react";
 
 //sidebar nav items
 export const navItems: NavItem[] = [
@@ -22,6 +29,14 @@ export const navItems: NavItem[] = [
     title: "Manage Menu",
     url: "/manage-menu",
     icon: Menu,
+    isActive: false,
+    items: [],
+    role: "admin",
+  },
+  {
+    title: "Calendar",
+    url: "/calendar",
+    icon: Calendar,
     isActive: false,
     items: [],
     role: "admin",
