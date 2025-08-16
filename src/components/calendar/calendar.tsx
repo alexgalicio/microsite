@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -84,6 +85,7 @@ export default function Calendar() {
     return () => {
       supabase.removeChannel(channel);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   const handleDateSelect = (selected: DateSelectArg) => {

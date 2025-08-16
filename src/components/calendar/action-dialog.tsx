@@ -108,6 +108,7 @@ export function CalendarActionDialog({
     if (open) {
       form.reset(getDefaultValues());
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, selectedDate, selectedEvent]);
 
   async function onSubmit(values: EventForm) {
