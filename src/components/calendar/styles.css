@@ -1,0 +1,30 @@
+.fc-button::first-letter {
+  text-transform: uppercase !important;
+}
+
+.fc-button-primary {
+  background-color: white !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+.fc-button-active {
+  background-color: var(--accent) !important;
+}
+
+.fc-button:focus {
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+.fc-button:hover {
+    background-color: var(--muted) !important;
+}
+
+.fc-toolbar-title {
+    font-size: 1.5em !important;
+}
+
+.fc-event-time {
+  overflow: visible !important;
+}

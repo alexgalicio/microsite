@@ -63,10 +63,19 @@ export interface Announcements {
   author: string;
   content: string;
   cover?: string;
-  slug: string,
+  slug: string;
   user_id: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface CalendarEvent {
+  id: string;
+  title: string;
+  start: string;
+  end: string;
+  all_day: boolean;
+  color?: string;
 }
 
 export type MainNavItem = NavItemWithOptionalChildren;
