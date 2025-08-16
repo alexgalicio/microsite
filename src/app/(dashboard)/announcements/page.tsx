@@ -38,6 +38,7 @@ export default async function Page({
   }
 
   const announcements = response.data || [];
+  const totalCount = response.count || 0;
 
   return (
     <div className="flex flex-1 flex-col gap-4">
@@ -50,12 +51,12 @@ export default async function Page({
         </Link>
       </div>
       <AnnouncementsList announcements={announcements} />
-      {announcements.length > 0 && (
+      {totalCount > pageSize && (
         <div className="mt-4">
           <PaginationWithLinks
             page={page}
             pageSize={pageSize}
-            totalCount={response.count || 0}
+            totalCount={totalCount}
             navigationMode="router"
             pageSizeSelectOptions={{
               pageSizeOptions: [10, 20, 30, 40, 50],
