@@ -271,7 +271,7 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
           <Button
             type="submit"
             form="site-form"
-            className="w-30"
+            className="w-full sm:w-30"
             disabled={isLoading}
           >
             {isLoading ? (

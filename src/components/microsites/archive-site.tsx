@@ -59,7 +59,7 @@ export function ArchiveSiteDialog({ open, onOpenChange, currentRow }: Props) {
           <DialogHeader>
             <DialogTitle>Archive Site</DialogTitle>
             <DialogDescription />
-            <Alert>
+            <Alert className="text-left">
               <Info />
               <AlertTitle>
                 You are about to archive {currentRow.title}. This action will:
@@ -79,7 +79,7 @@ export function ArchiveSiteDialog({ open, onOpenChange, currentRow }: Props) {
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit" className="w-20" disabled={isLoading}>
+            <Button type="submit" className="w-full sm:w-20" disabled={isLoading}>
               {isLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (

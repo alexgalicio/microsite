@@ -138,7 +138,7 @@ export function MenuActionDialog({ currentRow, open, onOpenChange }: Props) {
           <Button
             type="submit"
             form="menu-form"
-            className="w-30"
+            className="w-full sm:w-30"
             disabled={isLoading || !form.formState.isDirty}
           >
             {isLoading ? (
