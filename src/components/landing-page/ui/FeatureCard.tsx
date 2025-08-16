@@ -1,22 +1,21 @@
-import { ReactNode } from "react"
+import { ReactNode } from "react";
 
 type FeatureCardProps = {
-    title: string,
-    description: string
-    icon: ReactNode;
-}
+  title: string;
+  description: string;
+  icon: ReactNode;
+};
 
-function FeatureCard({title, description, icon} : FeatureCardProps) {
+function FeatureCard({ title, description, icon }: FeatureCardProps) {
   return (
-    <div className="flex flex-col items-center space-y-4 text-center">
-      <div>{icon}</div>
+    <div className="flex flex-col items-center text-center p-6 bg-white rounded-2xl shadow-md transition-shadow duration-300 space-y-4">
+      <div className="text-amber-500">{icon}</div>
       <div>
-        <p className="font-bold text-lg">{title}</p>
-        <p>{description}</p>
+        <p className="font-semibold text-lg mb-1">{title}</p>
+        <p className="text-sm text-gray-700">{description}</p>
       </div>
-        
     </div>
-  )
+  );
 }
 
-export default FeatureCard
+export default FeatureCard;
