@@ -30,6 +30,7 @@ import Image from "next/image";
 export default function PageItem({ site }: { site: Site }) {
   const { setOpen, setCurrentRow } = useSite();
   const isArchived = site.status === "archived";
+  const isDraft = site.status === "draft";
   const { user } = useUser();
   const badgeColor = new Map([
     [
@@ -123,6 +124,7 @@ export default function PageItem({ site }: { site: Site }) {
                 </DropdownMenuItem>
               ) : (
                 <DropdownMenuItem
+                  disabled={isDraft}
                   onClick={() => {
                     setCurrentRow(site);
                     setOpen("archive");
