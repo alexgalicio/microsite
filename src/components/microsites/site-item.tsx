@@ -87,7 +87,7 @@ export default function PageItem({ site }: { site: Site }) {
               <ExternalLink className="w-4 h-4 opacity-0 transition-opacity group-hover:opacity-60" />
             </div>
           </Link>
-          <DropdownMenu>
+          <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
