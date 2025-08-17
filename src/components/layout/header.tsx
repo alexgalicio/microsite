@@ -6,6 +6,8 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Breadcrumbs } from "../breadcrumbs";
 import { UserNav } from "./user-nav";
+import { useUser } from "@clerk/nextjs";
+import NotificationPopover from "../mail/notification-popover";
 
 interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   className?: string;
@@ -14,15 +16,18 @@ interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
 export function Header({ className, ...props }: HeaderProps) {
   const [offset, setOffset] = React.useState(0);
 
+  const { user } = useUser();
+  const isAdmin = user?.publicMetadata.role === "admin";
+
   React.useEffect(() => {
     const onScroll = () => {
       setOffset(document.body.scrollTop || document.documentElement.scrollTop);
     };
 
-    // Add scroll listener to the body
+    // add scroll listener to the body
     document.addEventListener("scroll", onScroll, { passive: true });
 
-    // Clean up the event listener on unmount
+    // clean up the event listener on unmount
     return () => document.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -43,8 +48,8 @@ export function Header({ className, ...props }: HeaderProps) {
       />
       <Breadcrumbs />
 
-      <div className="ml-auto flex items-center space-x-4">
-        {/* notif */}
+      <div className="ml-auto flex items-center gap-4">
+        {isAdmin && <NotificationPopover />}
         <UserNav />
       </div>
     </header>
