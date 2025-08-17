@@ -78,5 +78,14 @@ export interface CalendarEvent {
   color?: string;
 }
 
+export interface Mail {
+  id: string
+  name: string
+  email: string
+  message: string
+  created_at: string
+  is_read: boolean
+}
+
 export type MainNavItem = NavItemWithOptionalChildren;
 export type SidebarNavItem = NavItemWithChildren;
