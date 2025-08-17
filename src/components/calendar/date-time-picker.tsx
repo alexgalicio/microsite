@@ -64,7 +64,7 @@ export function DateTimePicker({ field }: DateTimePickerProps) {
   };
 
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen} modal={true}>
+    <Popover open={isOpen} onOpenChange={setIsOpen} modal>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
