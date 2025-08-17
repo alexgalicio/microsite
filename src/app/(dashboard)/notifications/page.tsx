@@ -1,5 +1,5 @@
 import { Mail } from "@/components/mail/mail";
-import { getAllNotifications } from "@/lib/actions/contact-form";
+import { getAllNotifications } from "@/lib/actions/notification";
 
 export default async function Page() {
   const { data, error } = await getAllNotifications();
