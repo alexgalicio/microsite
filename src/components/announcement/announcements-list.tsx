@@ -3,6 +3,8 @@
 import { Announcements } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Megaphone } from "lucide-react";
 import DOMPurify from "isomorphic-dompurify";
 import Image from "next/image";
 import Link from "next/link";
@@ -57,10 +59,12 @@ export default function AnnouncementsList({
           </div>
         ))
       ) : (
-        <div className="col-span-full mt-16">
-          <p className="text-center text-muted-foreground">
-            No announcements yet.
-          </p>
+        <div className="col-span-full">
+          <EmptyState
+            title="No Annoucements Yet"
+            description="Share news, updates, or important information with your audience."
+            icon={<Megaphone className="w-6 h-6 text-muted-foreground" />}
+          />
         </div>
       )}
     </div>
