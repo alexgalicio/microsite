@@ -1,13 +1,15 @@
 import SiteProvider from "@/components/microsites/site-context";
 import PageItem from "@/components/microsites/site-item";
 import SearchMicrosites from "@/components/microsites/admin-microsites";
+import CreateAccount from "@/components/microsites/create-account";
 import { SiteDialogs } from "@/components/microsites/dialogs";
 import { CreateSiteButton } from "@/components/microsites/create-site";
 import { getAllSite, getSiteByUserId } from "@/lib/actions/site";
 import { Site } from "@/lib/schema";
 import { checkRole } from "@/utils/role";
 import { auth } from "@clerk/nextjs/server";
-import CreateAccount from "@/components/microsites/create-account";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Globe } from "lucide-react";
 
 export default async function SitesPage() {
   const { userId } = await auth();
@@ -44,10 +46,12 @@ export default async function SitesPage() {
                 <PageItem key={site.id} site={site} />
               ))
             ) : (
-              <div className="col-span-full mt-16">
-                <p className="text-center text-muted-foreground">
-                  Create a site to get started.
-                </p>
+              <div className="col-span-full">
+                <EmptyState
+                  title="No Microsite Found"
+                  description="Get started by creating a new site."
+                  icon={<Globe className="w-6 h-6 text-muted-foreground" />}
+                />
               </div>
             )}
           </div>
