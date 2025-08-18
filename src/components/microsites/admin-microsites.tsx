@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { MenuItem, Site, SiteStatus } from "@/lib/types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ArrowDownAZ, SlidersHorizontal, X } from "lucide-react";
+import { ArrowDownAZ, Globe, SlidersHorizontal, X } from "lucide-react";
 import { getAllMenu } from "@/lib/actions/menu";
 import {
   Select,
@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { EmptyState } from "@/components/ui/empty-state";
 
 export default function Microsites({ sites }: { sites: Site[] }) {
   const [sort, setSort] = useState("ascending");
@@ -155,8 +156,12 @@ export default function Microsites({ sites }: { sites: Site[] }) {
         {filteredSites.length ? (
           filteredSites.map((site) => <PageItem key={site.id} site={site} />)
         ) : (
-          <div className="col-span-full mt-16">
-            <p className="text-center text-muted-foreground">No sites found.</p>
+          <div className="col-span-full">
+            <EmptyState
+              title="No Microsites Found"
+              description="Microsites will appear here once users start creating them."
+              icon={<Globe className="w-6 h-6 text-muted-foreground" />}
+            />
           </div>
         )}
       </div>
