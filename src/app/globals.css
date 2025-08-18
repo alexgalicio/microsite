@@ -127,6 +127,8 @@
 
   body {
     @apply bg-background text-foreground;
+    /* temporary bug fix */
+    pointer-events: auto !important; 
   }
   
   button:not(:disabled),
