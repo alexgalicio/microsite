@@ -108,7 +108,7 @@ export function CalendarActionDialog({
     if (open) {
       form.reset(getDefaultValues());
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, selectedDate, selectedEvent]);
 
   async function onSubmit(values: EventForm) {
@@ -250,7 +250,7 @@ export function CalendarActionDialog({
           <Button
             type="submit"
             form="event-form"
-            className="w-30"
+            className="w-full sm:w-30"
             disabled={isLoading || !form.formState.isDirty}
           >
             {isLoading ? (

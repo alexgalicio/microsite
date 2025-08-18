@@ -54,7 +54,7 @@ export function ColorPicker({
           </div>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-64 pointer-events-auto">
+      <PopoverContent className="w-64">
         <div className="flex flex-wrap gap-1 mb-4">
           {solids.map((s) => (
             <div

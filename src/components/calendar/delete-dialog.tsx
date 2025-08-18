@@ -51,7 +51,7 @@ export function CalendarDeleteDialog({
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
-        <AlertDialogHeader>
+        <AlertDialogHeader className="text-left">
           <AlertDialogTitle>Delete Event</AlertDialogTitle>
           <AlertDialogDescription>
             Are you sure you want to delete the event{" "}
@@ -61,7 +61,7 @@ export function CalendarDeleteDialog({
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
           <Button
-            className="w-18"
+            className="w-full sm:w-18"
             onClick={handleDelete}
             variant="destructive"
             disabled={isDeleting}

@@ -81,7 +81,7 @@ export function DateTimePicker({ field }: DateTimePickerProps) {
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0 pointer-events-auto">
+      <PopoverContent className="w-auto p-0">
         <div className="sm:flex">
           <Calendar
             mode="single"
