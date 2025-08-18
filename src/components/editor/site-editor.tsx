@@ -8,10 +8,10 @@ import { useSession } from "@clerk/nextjs";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { buttonVariants } from "../ui/button";
-import { ArrowLeft, ChevronLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
-import "./styles.css";
 import { templateCSS, templateHTML } from "./template";
+import "./styles.css";
 
 export default function SiteEditor({ siteId }: { siteId: string }) {
   const { session } = useSession();
