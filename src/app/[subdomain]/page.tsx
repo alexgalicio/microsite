@@ -1,5 +1,6 @@
 import PrivateSite from "@/components/microsites/private-site";
 import { getSiteBySubdomain, getSiteData } from "@/lib/actions/site";
+import { notFound } from "next/navigation";
 
 export default async function SubdomainPage({
   params,
@@ -9,12 +10,12 @@ export default async function SubdomainPage({
   const { subdomain } = await params;
 
   const site = await getSiteBySubdomain(subdomain);
-  if (
-    !site ||
-    !site.data ||
-    site.data.status === "archived" ||
-    site.data.status === "draft"
-  ) {
+
+  if (!site || !site.data) {
+    return notFound();
+  }
+
+  if (site.data.status === "archived" || site.data.status === "draft") {
     return <PrivateSite />;
   }
 
