@@ -1,9 +1,10 @@
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
-import { Button, buttonVariants } from "../ui/button";
-import { Trash2 } from "lucide-react";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Bell, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Mail } from "@/lib/types";
+import { EmptyState } from "@/components/ui/empty-state";
 
 interface MailDisplayProps {
   mail: Mail | null;
@@ -65,9 +66,11 @@ export function MailDisplay({
           </div>
         </div>
       ) : (
-        <div className="p-8 text-center text-sm text-muted-foreground">
-          No notification selected
-        </div>
+        <EmptyState
+          title="No Notification Selected"
+          description="Select a notification to view details here."
+          icon={<Bell className="w-6 h-6 text-muted-foreground" />}
+        />
       )}
     </div>
   );

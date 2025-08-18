@@ -3,6 +3,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Mail } from "@/lib/types";
 import { formatDistanceToNow } from "date-fns";
 import { Inbox } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
 
 interface MailListProps {
   items: Mail[];
@@ -15,15 +16,11 @@ export function MailList({ items, selectedId, onSelectMail }: MailListProps) {
     <ScrollArea className="h-[calc(100vh-10rem)]">
       <div className="flex flex-col gap-2 pt-0">
         {items.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-8 text-center">
-            <Inbox className="h-12 w-12 text-muted-foreground/50 mb-4" />
-            <h3 className="text-lg font-medium text-muted-foreground">
-              No notifications
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              You&apos;re all caught up! No notifications to show.
-            </p>
-          </div>
+          <EmptyState
+            title="No Notifications"
+            description="You're all caught up! No notifications to show."
+            icon={<Inbox className="w-6 h-6 text-muted-foreground" />}
+          />
         ) : (
           items.map((item) => (
             <button
