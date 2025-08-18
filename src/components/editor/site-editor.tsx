@@ -8,7 +8,7 @@ import { useSession } from "@clerk/nextjs";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { buttonVariants } from "../ui/button";
-import { ChevronLeft } from "lucide-react";
+import { ArrowLeft, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import "./styles.css";
 import { templateCSS, templateHTML } from "./template";
@@ -203,9 +203,9 @@ export default function SiteEditor({ siteId }: { siteId: string }) {
         </h1>
         <Link
           href={`https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/microsites`}
-          className={cn(buttonVariants({ variant: "ghost" }), "text-primary!")}
+          className={cn(buttonVariants({ variant: "outline" }))}
         >
-          <ChevronLeft className="h-4 w-4" />
+          <ArrowLeft className="h-4 w-4" />
           Go Back
         </Link>
       </div>
