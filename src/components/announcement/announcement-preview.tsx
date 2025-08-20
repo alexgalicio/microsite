@@ -13,7 +13,7 @@ export default function AnnouncementPreview({
   announcements,
 }: AnnouncementsProps) {
   return (
-    <div className="grid grid-cols-1 gap-16 lg:gap-28 md:grid-cols-2 md:my-16 my-8">
+    <div className="grid grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-3 md:my-16 my-8">
       {announcements.length ? (
         announcements.map((announcement) => (
           <div className="break-words" key={announcement.id}>
@@ -28,7 +28,7 @@ export default function AnnouncementPreview({
               />
             </AspectRatio>
             <div className="grid grid-cols-1 gap-3 md:col-span-2 mt-4">
-              <h2 className="font-semibold tracking-tighter text-2xl md:text-3xl">
+              <h2 className="font-semibold tracking-tighter text-2xl">
                 <Link
                   key={announcement.id}
                   href={`/announcements/${announcement.slug}`}

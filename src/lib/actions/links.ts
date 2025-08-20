@@ -119,3 +119,18 @@ export async function deleteLink(id: string) {
 
   return { success: true };
 }
+
+export async function getLinksBySiteId(id: string) {
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from("links")
+    .select("*")
+    .eq("site_id", id)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, data };
+}

@@ -19,13 +19,19 @@ export default function LinksList({ links }: { links: Links[] }) {
   const [sort, setSort] = useState("ascending");
   const [search, setSearch] = useState("");
 
+  const searchLower = search.toLowerCase();
   const filteredLinks = links
     .sort((a, b) =>
       sort === "ascending"
         ? a.title.localeCompare(b.title)
         : b.title.localeCompare(a.title)
     )
-    .filter((link) => link.title.toLowerCase().includes(search.toLowerCase()));
+    .filter(
+      (link) =>
+        link.title.toLowerCase().includes(searchLower) ||
+        link.description.toLowerCase().includes(searchLower) ||
+        link.url.toLowerCase().includes(searchLower)
+    );
 
   return (
     <>
