@@ -27,17 +27,16 @@ export async function createNewAnnouncement(formData: {
   if (siteError || !siteData) {
     return {
       success: false,
-      error: "Please create a site before adding announcements",
+      error: "Please create a site before creating announcements",
     };
   }
 
   // create the announcement
-  const { data, error } = await supabase.from("announcements").insert({
+  const { error } = await supabase.from("announcements").insert({
     title: formData.title,
     content: formData.content,
     author: formData.author,
     cover: formData.cover,
-    user_id: userId,
     site_id: siteData.id,
   });
 
@@ -45,7 +44,7 @@ export async function createNewAnnouncement(formData: {
     return { success: false, error: error.message };
   }
 
-  return { success: true, data };
+  return { success: true };
 }
 
 export async function editAnnouncement(
@@ -64,7 +63,7 @@ export async function editAnnouncement(
   }
 
   const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from("announcements")
     .update({
       title: formData.title,
@@ -78,7 +77,7 @@ export async function editAnnouncement(
     return { success: false, error: error.message };
   }
 
-  return { success: true, data };
+  return { success: true };
 }
 
 export async function deleteAnnouncement(id: string) {
@@ -115,8 +114,14 @@ export async function getAnnouncementsByUserId(
   const supabase = createServerSupabaseClient();
   const { data, error, count } = await supabase
     .from("announcements")
-    .select("*", { count: "exact" })
-    .eq("user_id", id)
+    .select(
+      `*,
+       sites!inner (
+         user_id
+       )`,
+      { count: "exact" }
+    )
+    .eq("sites.user_id", id)
     .order("created_at", { ascending: false })
     .range(from, to);
 
