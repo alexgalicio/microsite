@@ -1,3 +1,4 @@
+import { NotFoundError } from "@/app/error/not-found";
 import AnnouncementPreview from "@/components/announcement/announcement-preview";
 import Header from "@/components/announcement/header";
 import { getAnnouncementsBySiteId } from "@/lib/actions/announcement";
@@ -12,7 +13,7 @@ export default async function Page({
 
   const response = await getSiteBySubdomain(subdomain);
   if (!response || !response.success) {
-    return <div>Site not found</div>;
+    return <NotFoundError />;
   }
 
   const announcements = await getAnnouncementsBySiteId(response.data?.id);
