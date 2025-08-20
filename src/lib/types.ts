@@ -78,13 +78,20 @@ export interface CalendarEvent {
   color?: string;
 }
 
+export interface Links {
+  id: string;
+  title: string;
+  url: string;
+  description: string;
+}
+
 export interface Mail {
-  id: string
-  name: string
-  email: string
-  message: string
-  created_at: string
-  is_read: boolean
+  id: string;
+  name: string;
+  email: string;
+  message: string;
+  created_at: string;
+  is_read: boolean;
 }
 
 export type MainNavItem = NavItemWithOptionalChildren;
