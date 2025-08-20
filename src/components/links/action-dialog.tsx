@@ -37,7 +37,10 @@ const formSchema = z.object({
     .max(50, "Title too long")
     .transform((str) => str.replace(/\s+/g, " ").trim())
     .refine((value) => value.replace(/\s+/g, "").length >= 3),
-  url: z.string().url("Invalid URL format"),
+  url: z
+    .string()
+    .url("Invalid URL format")
+    .regex(/^\S+$/, "Invalid URL format"),
   description: z
     .string()
     .min(3, "Description must be at least 3 characters")
