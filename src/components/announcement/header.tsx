@@ -14,7 +14,7 @@ export default function Header() {
   };
 
   return (
-    <section className="flex items-center justify-between mt-8 md:mt-16 mb-12">
+    <section className="flex items-center justify-between mt-8 mb-12">
       <Link href="/announcements">
         <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-tight">
           Announcements.
