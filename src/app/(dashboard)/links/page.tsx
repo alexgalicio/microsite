@@ -3,13 +3,21 @@ import LinksList from "@/components/links/links-list";
 import { PaginationWithLinks } from "@/components/announcement/pagination";
 import { CreateLinkButton } from "@/components/links/create-link";
 import { LinkDialogs } from "@/components/links/dialog";
-import { getAllLinks } from "@/lib/actions/links";
+import { getLinksByUserId } from "@/lib/actions/links";
+import { redirect } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
 
 export default async function Page({
   searchParams,
 }: {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    redirect("/sign-in");
+  }
+
   const params = await searchParams;
 
   const page = parseInt((params?.page as string) || "1");
@@ -18,7 +26,7 @@ export default async function Page({
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
-  const response = await getAllLinks(from, to);
+  const response = await getLinksByUserId(userId, from, to);
   if (response.error) {
     <div className="p-4">
       <h2>Error Loading Links</h2>

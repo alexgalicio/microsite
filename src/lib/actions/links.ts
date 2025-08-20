@@ -3,18 +3,7 @@
 import { createServerSupabaseClient } from "@/utils/server";
 import { auth } from "@clerk/nextjs/server";
 
-export async function getAllCategory() {
-  const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase
-    .from("link_category")
-    .select("id, title");
-
-  if (error) throw error;
-
-  return data;
-}
-
-export async function getAllLinks(from: number, to: number) {
+export async function getLinksByUserId(id: string, from: number, to: number) {
   const { userId } = await auth();
 
   if (!userId) {
@@ -25,6 +14,7 @@ export async function getAllLinks(from: number, to: number) {
   const { data, error, count } = await supabase
     .from("links")
     .select("*", { count: "exact" })
+    .eq("user_id", id)
     .order("created_at", { ascending: false })
     .range(from, to);
 
@@ -47,10 +37,28 @@ export async function addNewLink(formData: {
   }
 
   const supabase = createServerSupabaseClient();
+
+  // get users site
+  const { data: siteData, error: siteError } = await supabase
+    .from("sites")
+    .select("id")
+    .eq("user_id", userId)
+    .single();
+
+  if (siteError || !siteData) {
+    return {
+      success: false,
+      error: "Please create a site before adding links",
+    };
+  }
+
+  // add the link
   const { error } = await supabase.from("links").insert({
     title: formData.title,
     url: formData.url,
     description: formData.description,
+    site_id: siteData.id,
+    user_id: userId,
   });
 
   if (error) {
