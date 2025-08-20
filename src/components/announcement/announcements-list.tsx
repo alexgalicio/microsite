@@ -17,7 +17,7 @@ export default function AnnouncementsList({
   announcements,
 }: AnnouncementsProps) {
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
       {announcements.length ? (
         announcements.map((announcement) => (
           <div
