@@ -32,6 +32,9 @@ export async function createNewSite(formData: {
     return { success: false, error: "Submenu not found for this user" };
   }
 
+  const subdomain = formData.subdomain.toLowerCase();
+  const absoluteUrl = `https://${subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`;
+
   const { error } = await supabase.from("sites").insert({
     title: formData.title,
     subdomain: formData.subdomain.toLowerCase(),
@@ -39,6 +42,7 @@ export async function createNewSite(formData: {
     submenu_id: submenu.id,
     description: formData.description,
     bg_image: formData.bg_image,
+    url: absoluteUrl,
   });
 
   if (error) {
