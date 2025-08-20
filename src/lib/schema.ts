@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { string, z } from "zod";
 
 export const menuSchema = z.object({
   id: z.string(),
@@ -29,6 +29,14 @@ export const siteSchema = z.object({
   updated_at: z.string(),
 });
 
+export const linkSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  url: z.string(),
+  description: z.string(),
+});
+
 export type Menu = z.infer<typeof menuSchema>;
 export type Submenu = z.infer<typeof submenuSchema>;
 export type Site = z.infer<typeof siteSchema>;
+export type Links = z.infer<typeof linkSchema>;
