@@ -17,7 +17,7 @@ function Navbar() {
   )
 
   return (
-    <header className="bg-white sticky top-0 shadow-md z-[1000]">
+    <nav className="bg-white sticky top-0 shadow-md z-[1000]">
       <div className="container mx-auto flex justify-between items-center p-4 sm:p-6">
         <Link href={"/"}>
           <div className="flex items-center space-x-2">
@@ -40,7 +40,7 @@ function Navbar() {
         </ul>
       )}
       </div>
-    </header>
+    </nav>
   )
 }
 
