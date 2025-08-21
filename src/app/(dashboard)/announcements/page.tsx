@@ -52,17 +52,12 @@ export default async function Page({
       </div>
       <AnnouncementsList announcements={announcements} />
       {totalCount > pageSize && (
-        <div className="mt-4">
-          <PaginationWithLinks
-            page={page}
-            pageSize={pageSize}
-            totalCount={totalCount}
-            navigationMode="router"
-            pageSizeSelectOptions={{
-              pageSizeOptions: [10, 20, 30, 40, 50],
-            }}
-          />
-        </div>
+        <PaginationWithLinks
+          page={page}
+          pageSize={pageSize}
+          totalCount={totalCount}
+          navigationMode="router"
+        />
       )}
     </div>
   );
