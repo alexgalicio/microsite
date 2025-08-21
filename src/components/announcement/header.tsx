@@ -30,7 +30,7 @@ export default function Header() {
         ) : (
           <ChevronLeft className="h-4 w-4" />
         )}
-        <span className="hidden lg:inline">Home</span>
+        <span className="hidden md:inline">Home</span>
       </Link>
     </section>
   );
