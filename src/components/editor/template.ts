@@ -402,6 +402,34 @@ body {
   font-size: 0.85rem;
   line-height: 17px;
 }
+.link-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.link-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 40px;
+  background-color: #eee;
+  padding: 10px;
+  text-decoration: none;
+  border-radius: 5px;
+  color: #1e1e1e;
+  font-size: 0.8em;
+  width: 100px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+.link-btn:hover {
+  background-color: #ffbe17;
+  color: #fff;
+}
+.link-btn:active {
+  background-color: #ff9c45;
+  color: #fff;
+}
 .copyright {
   background-color: #1e1e1e;
   color: #fff;
@@ -617,6 +645,10 @@ export const templateHTML = `
               eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </div>
           </div>
+        </div>
+
+        <div class="link-wrapper">
+          <a href="#" class="link-btn">See More</a>
         </div>
       </div>
     </section>
