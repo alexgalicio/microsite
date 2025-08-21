@@ -15,6 +15,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -22,13 +23,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { InfoIcon, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { addNewLink, editLink } from "@/lib/actions/links";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { Alert, AlertTitle } from "../ui/alert";
 
 const formSchema = z.object({
   title: z
@@ -183,8 +185,13 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
                 </FormItem>
               )}
             />
+            <FormDescription>
+              Note: You can view all the announcements in https://[yourDomain].
+              {process.env.NEXT_PUBLIC_ROOT_DOMAIN}/announcements
+            </FormDescription>
           </form>
         </Form>
+
         <DialogFooter>
           <Button
             type="submit"
