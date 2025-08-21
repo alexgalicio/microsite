@@ -1,9 +1,9 @@
 type HeroProp = {
-    heading: string,
-    subheading: string
+  heading: string,
+  subheading: string
 }
 
-function Hero({ heading, subheading } : HeroProp) {
+function Hero({ heading, subheading }: HeroProp) {
   return (
     <section className="relative h-[80vh] bg-[url('/images/background.png')] bg-cover bg-no-repeat bg-right md:bg-center">
       <div className="absolute inset-0 bg-black/20"></div>
@@ -15,6 +15,9 @@ function Hero({ heading, subheading } : HeroProp) {
         <p className="text-lg md:text-2xl max-w-3xl font-light">
           {subheading}
         </p>
+        <a href="#" className="bg-white text-gray-800 py-2 px-6 font-semibold hover:opacity-80 transition">
+          Learn More
+        </a>
       </div>
     </section>
   );
