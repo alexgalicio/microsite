@@ -131,7 +131,7 @@ export async function getLinksBySiteId(id: string) {
     .from("links")
     .select("*")
     .eq("site_id", id)
-    .order("title", { ascending: false });
+    .order("title", { ascending: true });
 
   if (error) {
     return { success: false, error: error.message };
