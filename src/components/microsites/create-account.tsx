@@ -35,9 +35,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { MenuItem } from "@/lib/types";
-import { Loader2, Plus, PlusCircleIcon } from "lucide-react";
+import { InfoIcon, Loader2, Plus, PlusCircleIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 
 const formSchema = z.object({
   menu: z.string().min(1, "Please select a menu"),
@@ -94,7 +95,6 @@ export default function CreateAccount() {
         toast.success("Account created successfully");
         form.reset();
         setIsOpen(false);
-        console.log(response); // TODO: email user their details
         router.refresh();
       } else {
         toast.error(response.error);
@@ -118,6 +118,7 @@ export default function CreateAccount() {
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Create Account</DialogTitle>
+          <DialogDescription />
         </DialogHeader>
         <Form {...form}>
           <form
@@ -194,11 +195,13 @@ export default function CreateAccount() {
             />
           </form>
         </Form>
-        <DialogDescription className="p-4 text-sm text-blue-800 rounded-lg bg-blue-50">
-          <span className="font-medium">Note:</span> Password will be
-          automatically generated and account details will be sent to the
-          provided email address.
-        </DialogDescription>
+        <Alert className="border-cyan-600/50 text-cyan-600 dark:border-cyan-600 [&>svg]:text-cyan-600">
+          <InfoIcon className="h-4 w-4" />
+          <AlertTitle className="line-clamp-none">
+            Password will be automatically generated and account details will be
+            sent to the provided email address.
+          </AlertTitle>
+        </Alert>
         <DialogFooter>
           <Button
             type="submit"
