@@ -3,6 +3,7 @@ import Hero from "@/components/program-sites/sections/Hero"
 import About from "@/components/program-sites/sections/About"
 import Subjects from "@/components/program-sites/sections/Subjects"
 import Careers from "@/components/program-sites/sections/Careers"
+import Footer from "@/components/program-sites/sections/Footer"
 
 type Prop = {
   params : {
@@ -21,8 +22,9 @@ async function page({params} : Prop) {
             <Hero heading={data.heroSection.heading} subheading={data.heroSection.subheading}/>
             <About heading={data.aboutSection.heading} subheading={data.aboutSection.subheading}/>
             <Subjects years={data.subjectsSection}/>
-            <Careers/>
+            <Careers careers={data.careerSection}/>
         </main>
+        <Footer program={data.programName}/>
     </>
   )
 }

@@ -13,26 +13,81 @@
         {
             "title": "1st Year",
             "subjects": [
-                "Something about blis"
+                "Introduction to Library and Information Science",
+                "Information and Communications Technology in LIS",
+                "Collection Management of Information Resources",
+                "Library Materials for Children and Young Adult",
+                "Telecommunications and Networks for Library Information Science"
             ]
         },
         {
             "title": "2nd Year",
             "subjects": [
-                "Something about blis"
+                "Information Resources and Services",
+                "Organization of Information Resources",
+                "Information Processing and Handling in Libraries and Information Centers",
+                "Management of Libraries and Information Centers",
+                "Programming Fundamentals",
+                "Educational Technology",
+                "Web Technologies in Libraries and Information Centers",
+                "Special/Public Librarianship",
+                "School/Academic Librarianship"
             ]
         },
         {
             "title": "3rd Year",
             "subjects": [
-                "Something about blis"
+                "Introduction to Records Management and Archives",
+                "Preservation of Information Resources",
+                "Marketing Library and Information Services",
+                "Philosophies and Principles of Teaching in Lis",
+                "Indexing and Abstracting",
+                "Introduction to Archives Conservation",
+                "Systems Analysis and Design in Libraries and Information Centers",
+                "Database Design for Libraries",
+                "Digital Libraries and Resources",
+                "Information Literacy",
+                "Research Methods in Library and Information Science",
+                "Library Practice",
+                "Thesis/Research Writing",
+                "Archives Principles and Practices",
+                "Review in Organization, Management and Development and Maintenance of Multi-media based Library or Information Service, Laws, Trends and Practices affecting the Profession",
+                "Indigenous Knowledge and Multi-Culturism"
             ]
+        }
+    ],
+    "careerSection": [
+        {
+            "title": "Academic Librarian",
+            "description": "Manage and organize collections in universities, supporting students and faculty with research needs."
         },
         {
-            "title": "4th Year",
-            "subjects": [
-                "Something about blis"
-            ]
+            "title": "Archivist",
+            "description": "Preserve, manage, and provide access to historical documents, manuscripts, and digital archives."
+        },
+        {
+            "title": "Cataloger",
+            "description": "Classify and organize library resources using standard cataloging systems."
+        },
+        {
+            "title": "Records Manager",
+            "description": "Oversee the creation, maintenance, and disposal of an organization’s records for legal and operational needs."
+        },
+        {
+            "title": "Information Specialist",
+            "description": "Support organizations by managing digital information resources and research databases."
+        },
+        {
+            "title": "Public Librarian",
+            "description": "Work in community libraries to provide access to books, resources, and educational programs."
+        },
+        {
+            "title": "Digital Librarian",
+            "description": "Manage and curate digital collections, ensuring accessibility and preservation of e-resources."
+        },
+        {
+            "title": "Knowledge Manager",
+            "description": "Develop systems and practices that capture, share, and leverage organizational knowledge."
         }
     ]
 }

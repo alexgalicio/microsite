@@ -14,33 +14,40 @@
             "title": "1st Year",
             "subjects": [
                 "Intro to Programming",
-                "Programming Lab",
-                "Arts"
+                "Computer Programming",
+                "Hardware System and Servicing",
+                "Networking",
+                "Discrete Structures for IT"
             ]
         },
         {
             "title": "2nd Year",
             "subjects": [
                 "Data Structures and Algorithms",
-                "Discrete Math",
-                "Networking"
+                "Information Management",
+                "Advanced Database Systems",
+                "Networking",
+                "Object-Oriented Programming",
+                "Human Computer Interface"
             ]
         },
         {
             "title": "3rd Year",
             "subjects": [
                 "Web Systems and Technology",
-                "Mobile App Development",
-                "Game Development"
+                "System Analysis and Design",
+                "Electives",
+                "Application Development and Emerging Technologies",
+                "Capstone Project and Research",
+                "Information Assurance and Security"
             ]
         },
         {
             "title": "4th Year",
             "subjects": [
-                "System Admin",
+                "System Administration and Maintenance",
                 "System Architecture and Integration",
-                "Capstone Project",
-                "Gender and Society",
+                "Capstone Project and Research",
                 "Web Systems and Technology"
             ]
         }
