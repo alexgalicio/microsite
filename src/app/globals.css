@@ -128,9 +128,9 @@
   body {
     @apply bg-background text-foreground;
     /* temporary bug fix */
-    pointer-events: auto !important; 
+    pointer-events: auto !important;
   }
-  
+
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
@@ -211,5 +211,14 @@
     border-left: 3px solid rgba(61, 37, 20, 0.12);
     margin: 1.5rem 0;
     padding-left: 1rem;
+  }
+
+  img {
+    display: block;
+    margin: 0 auto;
+
+    &.ProseMirror-selectednode {
+      outline: 3px solid var(--primary);
+    }
   }
 }
