@@ -20,7 +20,7 @@ export async function createNewAnnouncement(formData: {
   // get users site
   const { data: siteData, error: siteError } = await supabase
     .from("sites")
-    .select("id")
+    .select("id, status")
     .eq("user_id", userId)
     .single();
 
@@ -28,6 +28,11 @@ export async function createNewAnnouncement(formData: {
     return {
       success: false,
       error: "Please create a site before creating announcements",
+    };
+  } else if (siteData.status != "published") {
+    return {
+      success: false,
+      error: "Please make your site public before creating announcements",
     };
   }
 
@@ -132,20 +137,23 @@ export async function getAnnouncementsByUserId(
   return { success: true, data, count };
 }
 
-export async function getAnnouncementsBySiteId(id: string) {
+export async function getAnnouncementsBySiteId(siteId: string, { limit, offset }: { limit: number, offset: number }) {
   const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase
+
+  const { data, count, error } = await supabase
     .from("announcements")
-    .select("*")
-    .eq("site_id", id)
-    .order("created_at", { ascending: false });
+    .select("*", { count: "exact" })
+    .eq("site_id", siteId)
+    .order("created_at", { ascending: false })
+    .range(offset, offset + limit - 1);
 
   if (error) {
     return { success: false, error: error.message };
   }
 
-  return { success: true, data };
+  return { success: true, data, count };
 }
+
 
 export async function getAnnouncementById(id: string) {
   const { userId } = await auth();

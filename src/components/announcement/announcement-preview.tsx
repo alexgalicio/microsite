@@ -13,7 +13,7 @@ export default function AnnouncementPreview({
   announcements,
 }: AnnouncementsProps) {
   return (
-    <div className="grid grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-3 md:my-16 my-8">
+    <div className="grid grid-cols-1 gap-16 lg:gap-28 md:grid-cols-2 md:my-16 my-8">
       {announcements.length ? (
         announcements.map((announcement) => (
           <div className="break-words" key={announcement.id}>

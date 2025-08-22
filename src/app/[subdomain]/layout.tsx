@@ -1,5 +1,8 @@
+import PrivateSite from "@/components/microsites/private-site";
+import { SiteProvider } from "@/components/subdomain-provider";
 import { getSiteBySubdomain } from "@/lib/actions/site";
 import { Metadata } from "next";
+import { NotFoundError } from "../error/not-found";
 
 export async function generateMetadata({
   params,
@@ -23,8 +26,26 @@ export async function generateMetadata({
 
 export default async function SubdomainLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ subdomain: string }>;
 }) {
-  return <div>{children}</div>;
+  const { subdomain } = await params;
+
+  const response = await getSiteBySubdomain(subdomain);
+
+  if (!response || !response.success) {
+    return <NotFoundError />;
+  }
+
+  if (response.data?.status !== "published") {
+    return <PrivateSite />;
+  }
+
+  return (
+    <SiteProvider site={response.data}>
+      <div>{children}</div>
+    </SiteProvider>
+  );
 }

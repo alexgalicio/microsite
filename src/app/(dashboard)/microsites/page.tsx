@@ -10,17 +10,37 @@ import { checkRole } from "@/utils/role";
 import { auth } from "@clerk/nextjs/server";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Globe } from "lucide-react";
+import { redirect } from "next/navigation";
+import { PaginationWithLinks } from "@/components/announcement/pagination";
 
-export default async function SitesPage() {
+export default async function SitePages({
+  searchParams,
+}: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const { userId } = await auth();
+
+  if (!userId) {
+    redirect("/sign-in");
+  }
 
   const isAdmin = await checkRole("admin");
 
-  let result;
+  const params = await searchParams;
+
+  const page = parseInt((params?.page as string) || "1");
+  const pageSize = parseInt((params?.pageSize as string) || "9");
+
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
+  let result,
+    totalCount = 0;
   if (isAdmin) {
-    result = await getAllSite();
+    result = await getAllSite(from, to);
+    totalCount = result.count || 0;
   } else {
-    result = await getSiteByUserId(userId || "");
+    result = await getSiteByUserId(userId);
   }
 
   if (result.error) {
@@ -38,7 +58,17 @@ export default async function SitesPage() {
           {isAdmin ? <CreateAccount /> : <CreateSiteButton />}
         </div>
         {isAdmin ? (
-          <SearchMicrosites sites={result.data || []} />
+          <>
+            <SearchMicrosites sites={result.data || []} />
+            {totalCount > pageSize && (
+              <PaginationWithLinks
+                page={page}
+                pageSize={pageSize}
+                totalCount={totalCount}
+                navigationMode="router"
+              />
+            )}
+          </>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {result.data && result.data.length > 0 ? (

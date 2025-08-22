@@ -1,40 +1,34 @@
+"use client";
+
 import PrivateSite from "@/components/microsites/private-site";
-import { getSiteBySubdomain, getSiteData } from "@/lib/actions/site";
-import { NotFoundError } from "../error/not-found";
+import { getSiteData } from "@/lib/actions/site";
+import { useSite } from "@/components/subdomain-provider";
+import { useEffect, useState } from "react";
 
-export default async function SubdomainPage({
-  params,
-}: Readonly<{
-  params: Promise<{ subdomain: string }>;
-}>) {
-  const { subdomain } = await params;
+export default function SubdomainPage() {
+  const [html, setHtml] = useState("");
+  const [css, setCss] = useState("");
+  const site = useSite();
 
-  const site = await getSiteBySubdomain(subdomain);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getSiteData(site.id);
+      if (!response || !response.success) {
+        return (
+          <div className="p-4">
+            <h2>Error Loading Page</h2>
+            <p>{response.error}</p>
+          </div>
+        );
+      } else if (!response || !response.data) {
+        return <PrivateSite />;
+      }
 
-  if (!site || !site.data) {
-    return <NotFoundError />;
-  }
-
-  if (site.data.status === "archived" || site.data.status === "draft") {
-    return <PrivateSite />;
-  }
-
-  const content = await getSiteData(site.data?.id);
-  const html = content.data?.html || "";
-  const css = content.data?.css || "";
-
-  if (!content || !content.data) {
-    return <PrivateSite />;
-  }
-
-  if (!content || !content.success) {
-    return (
-      <div className="p-4">
-        <h2>Error Loading Page</h2>
-        <p>{content.error}</p>
-      </div>
-    );
-  }
+      setHtml(response.data.html || "");
+      setCss(response.data.css || "");
+    };
+    fetchData();
+  }, [site.id]);
 
   return (
     <>

@@ -54,9 +54,6 @@ export default async function Page({
               pageSize={pageSize}
               totalCount={totalCount}
               navigationMode="router"
-              pageSizeSelectOptions={{
-                pageSizeOptions: [10, 20, 30, 40, 50],
-              }}
             />
           </div>
         )}

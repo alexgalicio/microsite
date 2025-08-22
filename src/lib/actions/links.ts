@@ -41,7 +41,7 @@ export async function addNewLink(formData: {
   // get users site
   const { data: siteData, error: siteError } = await supabase
     .from("sites")
-    .select("id")
+    .select("id, status")
     .eq("user_id", userId)
     .single();
 
@@ -49,6 +49,11 @@ export async function addNewLink(formData: {
     return {
       success: false,
       error: "Please create a site before adding links",
+    };
+  } else if (siteData.status != "published") {
+    return {
+      success: false,
+      error: "Please make your site public before adding links",
     };
   }
 
@@ -126,7 +131,7 @@ export async function getLinksBySiteId(id: string) {
     .from("links")
     .select("*")
     .eq("site_id", id)
-    .order("created_at", { ascending: false });
+    .order("title", { ascending: true });
 
   if (error) {
     return { success: false, error: error.message };

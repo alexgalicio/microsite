@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -240,6 +241,10 @@ export default function AnnouncementForm({
             </FormItem>
           )}
         />
+        <FormDescription>
+          Note: You can view all the links in https://[yourDomain].
+          {process.env.NEXT_PUBLIC_ROOT_DOMAIN}/links
+        </FormDescription>
         <div className="flex items-center gap-2">
           <Button type="submit" className="w-20" disabled={isLoading}>
             {isLoading ? (

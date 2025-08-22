@@ -128,7 +128,7 @@ export async function getSiteData(id: string) {
   return { success: true, data };
 }
 
-export async function getAllSite() {
+export async function getAllSite(from: number, to: number) {
   const { userId } = await auth();
 
   if (!userId) {
@@ -137,7 +137,10 @@ export async function getAllSite() {
 
   const supabase = createServerSupabaseClient();
   // query to get all sites with submenu and menu details
-  const { data, error } = await supabase.from("sites").select(`
+  const { data, error, count } = await supabase
+    .from("sites")
+    .select(
+      `
     *,
     submenu:submenu_id ( 
       id,
@@ -147,11 +150,15 @@ export async function getAllSite() {
         title
       )
     )
-  `);
+  `,
+      { count: "exact" }
+    )
+    .order("created_at", { ascending: false })
+    .range(from, to);
 
   if (error) return { success: false, error: error.message };
 
-  return { success: true, data };
+  return { success: true, data, count };
 }
 
 export async function getSiteByUserId(id: string) {
