@@ -6,6 +6,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import Link from "@tiptap/extension-link";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { TextStyleKit } from "@tiptap/extension-text-style";
+import Image from "@tiptap/extension-image";
 
 export default function RichTextEditor({
   content,
@@ -33,8 +34,9 @@ export default function RichTextEditor({
         },
       }),
       TextStyleKit,
+      Image,
       TextAlign.configure({
-        types: ["heading", "paragraph"],
+        types: ["heading", "paragraph", "image"],
       }),
       Link.configure({
         openOnClick: false,

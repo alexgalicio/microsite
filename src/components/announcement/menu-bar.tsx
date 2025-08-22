@@ -9,6 +9,7 @@ import {
   Heading1,
   Heading2,
   Heading3,
+  ImageIcon,
   Italic,
   Link2,
   List,
@@ -50,6 +51,16 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
       .setLink({ href: url.startsWith("http") ? url : `http://${url}` })
       .run();
   }, [editor]);
+
+  const addImage = () => {
+    if (!editor) return;
+
+    const url = window.prompt("URL");
+
+    if (url) {
+      editor.chain().focus().setImage({ src: url, alt: "image" }).run();
+    }
+  };
 
   if (!editor) {
     return null;
@@ -118,6 +129,11 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
         disabled={!editor.isActive("link")}
       >
         <Unlink className="h-4 w-4" />
+      </Toggle>
+
+      {/* image */}
+      <Toggle size="sm" onPressedChange={addImage}>
+        <ImageIcon className="h-4 w-4" />
       </Toggle>
 
       {/* Heading 1 */}
