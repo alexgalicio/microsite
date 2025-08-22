@@ -1,0 +1,38 @@
+{
+    "programName": "Bachelor of Science in Information Systems",
+    "acronym": "BSIS",
+    "heroSection": {
+        "heading": "Bachelor of Science in Information Systems",
+        "subheading": "Choose BSIS as ur course lol it's fun trust me :)"
+    },
+    "aboutSection": {
+        "heading": "This is where imma put the about section heading",
+        "subheading": "This is an about section subheading where you tell your site visitors something about your college. Maybe vision or mission it's up to you."
+    },
+    "subjectsSection": [
+        {
+            "title": "1st Year",
+            "subjects": [
+                "Something about bsis"
+            ]
+        },
+        {
+            "title": "2nd Year",
+            "subjects": [
+                "Something about bsis"
+            ]
+        },
+        {
+            "title": "3rd Year",
+            "subjects": [
+                "Something about bsis"
+            ]
+        },
+        {
+            "title": "4th Year",
+            "subjects": [
+                "Something about bsis"
+            ]
+        }
+    ]
+}

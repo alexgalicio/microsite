@@ -23,7 +23,7 @@ function Navbar({ programName }: NavbarProp) {
     return (
         <nav className="bg-white sticky top-0 shadow-md z-[1000]">
             <div className="container mx-auto flex justify-between items-center p-4 sm:p-6">
-                <Link href={"/"} className="text-xl font-bold">
+                <Link href={"/"} className="text-xl font-bold md:text-2xl">
                     {programName}
                 </Link>
 

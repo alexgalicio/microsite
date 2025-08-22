@@ -1,0 +1,38 @@
+{
+    "programName": "Bachelor of Libary and Information Science",
+    "acronym": "BLIS",
+    "heroSection": {
+        "heading": "Bachelor of Libary and Information Science",
+        "subheading": "Choose BLIS as ur course lol it's fun trust me :)"
+    },
+    "aboutSection": {
+        "heading": "This is where imma put the about section heading",
+        "subheading": "This is an about section subheading where you tell your site visitors something about your college. Maybe vision or mission it's up to you."
+    },
+    "subjectsSection": [
+        {
+            "title": "1st Year",
+            "subjects": [
+                "Something about blis"
+            ]
+        },
+        {
+            "title": "2nd Year",
+            "subjects": [
+                "Something about blis"
+            ]
+        },
+        {
+            "title": "3rd Year",
+            "subjects": [
+                "Something about blis"
+            ]
+        },
+        {
+            "title": "4th Year",
+            "subjects": [
+                "Something about blis"
+            ]
+        }
+    ]
+}

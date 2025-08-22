@@ -1,0 +1,90 @@
+{
+    "programName": "Bachelor of Science in Information Technology",
+    "acronym": "BSIT",
+    "heroSection": {
+        "heading": "Bachelor of Science in Information Technology",
+        "subheading": "Choose BSIT as ur course lol it's fun trust me :)"
+    },
+    "aboutSection": {
+        "heading": "This is where imma put the about section heading",
+        "subheading": "This is an about section subheading where you tell your site visitors something about your college. Maybe vision or mission it's up to you."
+    },
+    "subjectsSection": [
+        {
+            "title": "1st Year",
+            "subjects": [
+                "Intro to Programming",
+                "Programming Lab",
+                "Arts"
+            ]
+        },
+        {
+            "title": "2nd Year",
+            "subjects": [
+                "Data Structures and Algorithms",
+                "Discrete Math",
+                "Networking"
+            ]
+        },
+        {
+            "title": "3rd Year",
+            "subjects": [
+                "Web Systems and Technology",
+                "Mobile App Development",
+                "Game Development"
+            ]
+        },
+        {
+            "title": "4th Year",
+            "subjects": [
+                "System Admin",
+                "System Architecture and Integration",
+                "Capstone Project",
+                "Gender and Society",
+                "Web Systems and Technology"
+            ]
+        }
+    ],
+    "careerSection": [
+        {
+            "title": "Software Developer",
+            "description": "Design, build, and maintain applications for web, mobile, or desktop platforms using modern programming languages and frameworks."
+        },
+        {
+            "title": "Web Developer",
+            "description": "Create and maintain websites and web applications, focusing on front-end user experience or back-end server logic."
+        },
+        {
+            "title": "Database Administrator",
+            "description": "Manage and secure databases, ensuring data integrity, performance, and availability for organizations."
+        },
+        {
+            "title": "Systems Analyst",
+            "description": "Analyze business requirements and design technology solutions that improve efficiency and meet organizational needs."
+        },
+        {
+            "title": "Network Administrator",
+            "description": "Configure, manage, and troubleshoot computer networks of organizations to ensure reliable communication and security."
+        },
+        {
+            "title": "IT Support Specialist",
+            "description": "Provide technical assistance, troubleshoot hardware and software issues, and support end-users within organizations."
+        },
+        {
+            "title": "Cybersecurity Specialist",
+            "description": "Protect systems and data from security breaches by implementing defenses, monitoring threats, and enforcing security policies."
+        },
+        {
+            "title": "Mobile Application Developer",
+            "description": "Design and develop mobile apps for iOS and Android platforms, focusing on performance, usability, and user experience."
+        },
+        {
+            "title": "Game Developer",
+            "description": "Build interactive video games by combining programming, graphics, and game design principles."
+        },
+        {
+            "title": "IT Project Manager",
+            "description": "Oversee technology projects, manage teams, allocate resources, and ensure projects are delivered on time and within budget."
+        }
+    ]
+}

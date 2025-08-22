@@ -15,7 +15,7 @@ function Hero({ heading, subheading }: HeroProp) {
         <p className="text-lg md:text-2xl max-w-3xl font-light">
           {subheading}
         </p>
-        <a href="#" className="bg-white text-gray-800 py-2 px-6 font-semibold hover:opacity-80 transition">
+        <a href="#" className="bg-white text-gray-800 py-2 px-6 font-semibold hover:bg-gray-200 transition">
           Learn More
         </a>
       </div>
