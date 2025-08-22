@@ -30,7 +30,6 @@ export default async function SitePages({
 
   const page = parseInt((params?.page as string) || "1");
   const pageSize = parseInt((params?.pageSize as string) || "9");
-
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 

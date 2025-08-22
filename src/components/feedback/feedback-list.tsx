@@ -1,24 +1,24 @@
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Mail } from "@/lib/types";
+import { Feedback } from "@/lib/types";
 import { formatDistanceToNow } from "date-fns";
 import { Inbox } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 
-interface MailListProps {
-  items: Mail[];
+interface FeedbackListProps {
+  items: Feedback[];
   selectedId: string | null;
-  onSelectMail: (id: string) => void;
+  onSelectFeedback: (id: string) => void;
 }
 
-export function MailList({ items, selectedId, onSelectMail }: MailListProps) {
+export function FeedbackList({ items, selectedId, onSelectFeedback }: FeedbackListProps) {
   return (
     <ScrollArea className="h-[calc(100vh-10rem)]">
       <div className="flex flex-col gap-2 pt-0">
         {items.length === 0 ? (
           <EmptyState
-            title="No Notifications"
-            description="You're all caught up! No notifications to show."
+            title="No Feedback"
+            description="You're all caught up! No feedback to show."
             icon={<Inbox className="w-6 h-6 text-muted-foreground" />}
           />
         ) : (
@@ -30,7 +30,7 @@ export function MailList({ items, selectedId, onSelectMail }: MailListProps) {
                 selectedId === item.id && "bg-muted"
               )}
               onClick={() => {
-                onSelectMail(item.id);
+                onSelectFeedback(item.id);
               }}
             >
               <div className="flex w-full flex-col gap-1">

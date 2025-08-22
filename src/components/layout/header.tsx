@@ -7,7 +7,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Breadcrumbs } from "../breadcrumbs";
 import { UserNav } from "./user-nav";
 import { useUser } from "@clerk/nextjs";
-import NotificationPopover from "../mail/notification-popover";
+import NotificationPopover from "@/components/feedback/notification-popover";
 
 interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   className?: string;

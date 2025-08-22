@@ -1,8 +1,8 @@
-import { Mail } from "@/components/mail/mail";
-import { getAllNotifications } from "@/lib/actions/notification";
+import { Feedback } from "@/components/feedback/feedback";
+import { getAllFeedback } from "@/lib/actions/feedback";
 
 export default async function Page() {
-  const { data, error } = await getAllNotifications();
+  const { data, error } = await getAllFeedback();
 
   if (error) {
     return (
@@ -13,5 +13,5 @@ export default async function Page() {
     );
   }
 
-  return <Mail mails={data} />;
+  return <Feedback feedbacks={data} />;
 }

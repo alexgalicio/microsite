@@ -11,18 +11,18 @@ import { Bell, Clock } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { getUnreadNotifications } from "@/lib/actions/notification";
+import { getUnreadFeedback } from "@/lib/actions/feedback";
 import { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { useRouter } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import { useSession } from "@clerk/nextjs";
-import { Mail } from "@/lib/types";
+import { Feedback } from "@/lib/types";
 
 export default function NotificationPopover() {
   const router = useRouter();
   const { session } = useSession();
-  const [notifications, setNotifications] = useState<Mail[]>([]);
+  const [notifications, setNotifications] = useState<Feedback[]>([]);
   const [open, setOpen] = useState(false);
 
   const DISPLAY_LIMIT = 5;
@@ -44,7 +44,7 @@ export default function NotificationPopover() {
 
   useEffect(() => {
     async function loadNotifications() {
-      const response = await getUnreadNotifications();
+      const response = await getUnreadFeedback();
       if (response.success && response.data) {
         setNotifications(response.data);
       } else {
@@ -62,12 +62,12 @@ export default function NotificationPopover() {
         { event: "*", schema: "public", table: "notifications" },
         (payload) => {
           if (payload.eventType === "INSERT") {
-            setNotifications((prev) => [payload.new as Mail, ...prev]);
+            setNotifications((prev) => [payload.new as Feedback, ...prev]);
           }
           if (payload.eventType === "UPDATE") {
             setNotifications((prev) =>
               prev.map((n) =>
-                n.id === payload.new.id ? (payload.new as Mail) : n
+                n.id === payload.new.id ? (payload.new as Feedback) : n
               )
             );
           }

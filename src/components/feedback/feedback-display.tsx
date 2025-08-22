@@ -3,20 +3,20 @@ import { format } from "date-fns";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Bell, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Mail } from "@/lib/types";
+import { Feedback } from "@/lib/types";
 import { EmptyState } from "@/components/ui/empty-state";
 
-interface MailDisplayProps {
-  mail: Mail | null;
+interface FeedbackDisplayProps {
+  feedback: Feedback | null;
   onMarkAllAsRead: () => void;
   onDelete: (id: string) => void;
 }
 
-export function MailDisplay({
-  mail,
+export function FeedbackDisplay({
+  feedback,
   onMarkAllAsRead,
   onDelete,
-}: MailDisplayProps) {
+}: FeedbackDisplayProps) {
   return (
     <div className="flex h-full flex-col border">
       <div className="flex justify-between items-center p-2">
@@ -35,8 +35,8 @@ export function MailDisplay({
           <Button
             variant="ghost"
             size="icon"
-            disabled={!mail}
-            onClick={() => mail && onDelete(mail.id)}
+            disabled={!feedback}
+            onClick={() => feedback && onDelete(feedback.id)}
           >
             <Trash2 className="h-4 w-4 text-red-500" />
             <span className="sr-only">Delete</span>
@@ -45,30 +45,30 @@ export function MailDisplay({
       </div>
 
       <Separator />
-      {mail ? (
+      {feedback ? (
         <div className="flex flex-1 flex-col">
           <div className="flex items-start p-4">
             <div className="flex items-start gap-4 text-sm">
               <div className="grid gap-1">
-                <div className="font-semibold">{mail.name}</div>
-                <div className="line-clamp-1 text-xs">{mail.email}</div>
+                <div className="font-semibold">{feedback.name}</div>
+                <div className="line-clamp-1 text-xs">{feedback.email}</div>
               </div>
             </div>
-            {mail.created_at && (
+            {feedback.created_at && (
               <div className="ml-auto text-xs text-muted-foreground">
-                {format(new Date(mail.created_at), "PPp")}
+                {format(new Date(feedback.created_at), "PPp")}
               </div>
             )}
           </div>
           <Separator />
           <div className="flex-1 whitespace-pre-wrap p-4 text-sm">
-            {mail.message}
+            {feedback.message}
           </div>
         </div>
       ) : (
         <EmptyState
-          title="No Notification Selected"
-          description="Select a notification to view details here."
+          title="No Feedback Selected"
+          description="Select a feedback to view details here."
           icon={<Bell className="w-6 h-6 text-muted-foreground" />}
         />
       )}

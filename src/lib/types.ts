@@ -85,7 +85,7 @@ export interface Links {
   description: string;
 }
 
-export interface Mail {
+export interface Feedback {
   id: string;
   name: string;
   email: string;

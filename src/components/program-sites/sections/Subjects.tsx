@@ -13,7 +13,6 @@ type SubjectsProps = {
 };
 
 function Subjects({ years }: SubjectsProps) {
-  // Track which years are open → array of booleans
   const [open, setOpen] = useState<boolean[]>(Array(years.length).fill(false));
 
   const toggle = (i: number) => {
@@ -25,7 +24,7 @@ function Subjects({ years }: SubjectsProps) {
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto flex flex-col items-center space-y-8">
-        {/* Heading */}
+        
         <h2 className="text-3xl md:text-4xl font-extrabold text-center text-gray-900">
           Subjects
         </h2>
@@ -33,7 +32,6 @@ function Subjects({ years }: SubjectsProps) {
           Explore the subjects you’ll take each year in this program.
         </p>
 
-        {/* Accordions */}
         <div className="w-full max-w-2xl space-y-6">
           {years.map((year, i) => (
             <div

@@ -1,7 +1,7 @@
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/server";
-import { Mail } from "../types";
+import { Feedback } from "../types";
 
 export async function submitForm(formData: {
   name: string;
@@ -9,7 +9,7 @@ export async function submitForm(formData: {
   message: string;
 }) {
   const supabase = createServerSupabaseClient();
-  const { error } = await supabase.from("notifications").insert([formData]);
+  const { error } = await supabase.from("feedback").insert([formData]);
 
   if (error) {
     return { success: false, error: error.message };
@@ -18,13 +18,13 @@ export async function submitForm(formData: {
   return { success: true };
 }
 
-export async function getAllNotifications(): Promise<{
-  data: Mail[];
+export async function getAllFeedback(): Promise<{
+  data: Feedback[];
   error: string | null;
 }> {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase
-    .from("notifications")
+    .from("feedback")
     .select("*")
     .order("created_at", { ascending: false });
 
@@ -43,10 +43,10 @@ export async function getAllNotifications(): Promise<{
   return { data: mappedData, error: null };
 }
 
-export async function getUnreadNotifications() {
+export async function getUnreadFeedback() {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase
-    .from("notifications")
+    .from("feedback")
     .select("*")
     .eq("is_read", false)
     .order("created_at", { ascending: false });
@@ -58,10 +58,10 @@ export async function getUnreadNotifications() {
   return { success: true, data };
 }
 
-export async function markNotificationsAsRead(id: string) {
+export async function markFeedbackAsRead(id: string) {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase
-    .from("notifications")
+    .from("feedback")
     .update({ is_read: true })
     .eq("id", id)
     .select();
@@ -73,10 +73,10 @@ export async function markNotificationsAsRead(id: string) {
   return { success: true, data };
 }
 
-export async function markAllNotificationsAsRead() {
+export async function markAllFeedbackAsRead() {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase
-    .from("notifications")
+    .from("feedback")
     .update({ is_read: true })
     .eq("is_read", false)
     .select();
@@ -88,10 +88,10 @@ export async function markAllNotificationsAsRead() {
   return { success: true, data };
 }
 
-export async function deleteNotification(id: string) {
+export async function deleteFeedback(id: string) {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase
-    .from("notifications")
+    .from("feedback")
     .delete()
     .eq("id", id);
 

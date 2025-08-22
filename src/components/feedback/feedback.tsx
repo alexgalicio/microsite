@@ -1,13 +1,13 @@
 "use client";
 
-import { MailList } from "./mail-list";
-import { MailDisplay } from "./mail-display";
-import { type Mail } from "@/lib/types";
+import { FeedbackList } from "./feedback-list";
+import { FeedbackDisplay } from "./feedback-display";
+import { type Feedback } from "@/lib/types";
 import {
-  deleteNotification,
-  markAllNotificationsAsRead,
-  markNotificationsAsRead,
-} from "@/lib/actions/notification";
+  deleteFeedback,
+  markAllFeedbackAsRead,
+  markFeedbackAsRead,
+} from "@/lib/actions/feedback";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
 import { useEffect, useState } from "react";
@@ -22,14 +22,14 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 
-interface MailProps {
-  mails: Mail[];
+interface FeedbackProps {
+  feedbacks: Feedback[];
 }
 
-export function Mail({ mails: initialMails }: MailProps) {
+export function Feedback({ feedbacks: initialFeedbacks }: FeedbackProps) {
   const { session } = useSession();
-  const [selectedMailId, setSelectedMailId] = useState<string | null>(null);
-  const [mails, setMails] = useState<Mail[]>(initialMails);
+  const [selectedFeedbackId, setSelectedFeedbackId] = useState<string | null>(null);
+  const [feedbacks, setFeedbacks] = useState<Feedback[]>(initialFeedbacks);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const isMobile = useIsMobile();
 
@@ -48,24 +48,24 @@ export function Mail({ mails: initialMails }: MailProps) {
   useEffect(() => {
     const supabase = createClerkSupabaseClient();
     const channel = supabase
-      .channel("notifications")
+      .channel("feedback")
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "notifications" },
+        { event: "*", schema: "public", table: "feedback" },
         (payload) => {
           if (payload.eventType === "INSERT") {
-            setMails((prev) => [payload.new as Mail, ...prev]);
+            setFeedbacks((prev) => [payload.new as Feedback, ...prev]);
           }
           if (payload.eventType === "UPDATE") {
-            setMails((prev) =>
-              prev.map((mail) =>
-                mail.id === payload.new.id ? (payload.new as Mail) : mail
+            setFeedbacks((prev) =>
+              prev.map((feedback) =>
+                feedback.id === payload.new.id ? (payload.new as Feedback) : feedback
               )
             );
           }
           if (payload.eventType === "DELETE") {
-            setMails((prev) =>
-              prev.filter((mail) => mail.id !== payload.old.id)
+            setFeedbacks((prev) =>
+              prev.filter((feedback) => feedback.id !== payload.old.id)
             );
           }
         }
@@ -76,14 +76,14 @@ export function Mail({ mails: initialMails }: MailProps) {
       supabase.removeChannel(channel);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedMailId]);
+  }, [selectedFeedbackId]);
 
-  const handleSelectMail = async (id: string) => {
-    setSelectedMailId(id);
-    const selectedMail = mails.find((mail) => mail.id === id);
+  const handleSelectedFeedback = async (id: string) => {
+    setSelectedFeedbackId(id);
+    const selectedFeedback = feedbacks.find((feedback) => feedback.id === id);
 
-    if (selectedMail && !selectedMail.is_read) {
-      const response = await markNotificationsAsRead(id);
+    if (selectedFeedback && !selectedFeedback.is_read) {
+      const response = await markFeedbackAsRead(id);
       if (response.success === false) {
         toast.error(handleError(response.error));
       }
@@ -95,16 +95,16 @@ export function Mail({ mails: initialMails }: MailProps) {
   };
 
   const handleMarkAllAsRead = async () => {
-    const response = await markAllNotificationsAsRead();
+    const response = await markAllFeedbackAsRead();
     if (response.success === false) {
       toast.error(handleError(response.error));
     }
   };
 
-  const handleDeleteNotif = async (id: string) => {
-    const response = await deleteNotification(id);
+  const handleDeleteFeedback = async (id: string) => {
+    const response = await deleteFeedback(id);
     if (response.success) {
-      toast.success("Notification deleted successfully");
+      toast.success("Feedback deleted successfully");
     } else {
       toast.error(handleError(response.error));
     }
@@ -132,17 +132,17 @@ export function Mail({ mails: initialMails }: MailProps) {
             </TabsList>
           </div>
           <TabsContent value="all" className="m-0">
-            <MailList
-              items={mails}
-              selectedId={selectedMailId}
-              onSelectMail={handleSelectMail}
+            <FeedbackList
+              items={feedbacks}
+              selectedId={selectedFeedbackId}
+              onSelectFeedback={handleSelectedFeedback}
             />
           </TabsContent>
           <TabsContent value="unread" className="m-0">
-            <MailList
-              items={mails.filter((item) => !item.is_read)}
-              selectedId={selectedMailId}
-              onSelectMail={handleSelectMail}
+            <FeedbackList
+              items={feedbacks.filter((item) => !item.is_read)}
+              selectedId={selectedFeedbackId}
+              onSelectFeedback={handleSelectedFeedback}
             />
           </TabsContent>
         </Tabs>
@@ -151,10 +151,10 @@ export function Mail({ mails: initialMails }: MailProps) {
       {/* display panel */}
       {!isMobile && (
         <div className="pl-4 w-1/3">
-          <MailDisplay
-            mail={mails.find((item) => item.id === selectedMailId) || null}
+          <FeedbackDisplay
+            feedback={feedbacks.find((item) => item.id === selectedFeedbackId) || null}
             onMarkAllAsRead={handleMarkAllAsRead}
-            onDelete={handleDeleteNotif}
+            onDelete={handleDeleteFeedback}
           />
         </div>
       )}
@@ -167,10 +167,10 @@ export function Mail({ mails: initialMails }: MailProps) {
               <DrawerTitle>Notification</DrawerTitle>
             </DrawerHeader>
             <div className="p-4">
-              <MailDisplay
-                mail={mails.find((item) => item.id === selectedMailId) || null}
+              <FeedbackDisplay
+                feedback={feedbacks.find((item) => item.id === selectedFeedbackId) || null}
                 onMarkAllAsRead={handleMarkAllAsRead}
-                onDelete={handleDeleteNotif}
+                onDelete={handleDeleteFeedback}
               />
             </div>
           </DrawerContent>
