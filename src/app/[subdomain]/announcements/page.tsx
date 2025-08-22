@@ -6,12 +6,14 @@ import { PaginationWithLinks } from "@/components/announcement/pagination";
 import { useSite } from "@/components/subdomain-provider";
 import { getAnnouncementsBySiteId } from "@/lib/actions/announcement";
 import { Announcements } from "@/lib/types";
+import { handleError } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
   const [announcementData, setAnnouncementData] = useState<Announcements[]>([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [error, setError] = useState<string | null>(null);
   const site = useSite();
   const searchParams = useSearchParams();
 
@@ -20,24 +22,30 @@ export default function Page() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setError(null);
+
       const response = await getAnnouncementsBySiteId(site.id, {
         limit: pageSize,
         offset: (page - 1) * pageSize,
       });
-      if (!response.success) {
-        return (
-          <div className="p-4">
-            <h2>Error Loading Announcements</h2>
-            <p>{response.error}</p>
-          </div>
-        );
+      if (response.success) {
+        setAnnouncementData(response.data || []);
+        setTotalCount(response.count || 0);
+      } else {
+        setError(handleError(response.error));
       }
-
-      setAnnouncementData(response.data || []);
-      setTotalCount(response.count || 0);
     };
     fetchData();
   }, [site.id, page]);
+
+  if (error) {
+    return (
+      <div className="p-4">
+        <h2>Error Loading Announcements</h2>
+        <p>{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-5 mb-10">

@@ -1,11 +1,11 @@
 import AnnouncementsList from "@/components/announcement/announcements-list";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { PaginationWithLinks } from "@/components/announcement/pagination";
 import { getAnnouncementsByUserId } from "@/lib/actions/announcement";
 import { auth } from "@clerk/nextjs/server";
 import { Plus } from "lucide-react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
-import { PaginationWithLinks } from "@/components/announcement/pagination";
 
 export default async function Page({
   searchParams,
@@ -22,12 +22,10 @@ export default async function Page({
 
   const page = parseInt((params?.page as string) || "1");
   const pageSize = parseInt((params?.pageSize as string) || "8");
-
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
   const response = await getAnnouncementsByUserId(userId, from, to);
-
   if (!response.success) {
     return (
       <div className="p-4">

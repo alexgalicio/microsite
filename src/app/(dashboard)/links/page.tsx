@@ -22,7 +22,6 @@ export default async function Page({
 
   const page = parseInt((params?.page as string) || "1");
   const pageSize = parseInt((params?.pageSize as string) || "12");
-
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
@@ -48,14 +47,12 @@ export default async function Page({
         </div>
         <LinksList links={links} />
         {totalCount > pageSize && (
-          <div className="mt-4">
-            <PaginationWithLinks
-              page={page}
-              pageSize={pageSize}
-              totalCount={totalCount}
-              navigationMode="router"
-            />
-          </div>
+          <PaginationWithLinks
+            page={page}
+            pageSize={pageSize}
+            totalCount={totalCount}
+            navigationMode="router"
+          />
         )}
       </div>
       <LinkDialogs />

@@ -1,4 +1,4 @@
-import { Mail } from "@/components/mail/mail";
+import { Feedback } from "@/components/feedback/feedback";
 import { getAllNotifications } from "@/lib/actions/notification";
 
 export default async function Page() {
@@ -13,5 +13,5 @@ export default async function Page() {
     );
   }
 
-  return <Mail mails={data} />;
+  return <Feedback feedbacks={data} />;
 }

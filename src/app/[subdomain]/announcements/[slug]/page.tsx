@@ -6,6 +6,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn, formatDate } from "@/lib/utils";
 import { createServerSupabaseClient } from "@/utils/server";
 import { ChevronLeft } from "lucide-react";
+import { NotFoundError } from "@/app/error/not-found";
 
 export default async function Page({
   params,
@@ -21,7 +22,7 @@ export default async function Page({
     .eq("slug", slug);
 
   if (error || !data) {
-    return <div>Site not found</div>;
+    return <NotFoundError />;
   }
 
   return (
