@@ -1,8 +1,8 @@
 import { Feedback } from "@/components/feedback/feedback";
-import { getAllNotifications } from "@/lib/actions/notification";
+import { getAllFeedback } from "@/lib/actions/feedback";
 
 export default async function Page() {
-  const { data, error } = await getAllNotifications();
+  const { data, error } = await getAllFeedback();
 
   if (error) {
     return (

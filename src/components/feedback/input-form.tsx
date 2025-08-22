@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { submitForm } from "@/lib/actions/notification";
+import { submitForm } from "@/lib/actions/feedback";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
 import { Loader2 } from "lucide-react";

@@ -11,7 +11,7 @@ import { Bell, Clock } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { getUnreadNotifications } from "@/lib/actions/notification";
+import { getUnreadFeedback } from "@/lib/actions/feedback";
 import { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { useRouter } from "next/navigation";
@@ -44,7 +44,7 @@ export default function NotificationPopover() {
 
   useEffect(() => {
     async function loadNotifications() {
-      const response = await getUnreadNotifications();
+      const response = await getUnreadFeedback();
       if (response.success && response.data) {
         setNotifications(response.data);
       } else {

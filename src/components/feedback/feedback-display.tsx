@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Feedback } from "@/lib/types";
 import { EmptyState } from "@/components/ui/empty-state";
 
-interface MailDisplayProps {
+interface FeedbackDisplayProps {
   feedback: Feedback | null;
   onMarkAllAsRead: () => void;
   onDelete: (id: string) => void;
@@ -16,7 +16,7 @@ export function FeedbackDisplay({
   feedback,
   onMarkAllAsRead,
   onDelete,
-}: MailDisplayProps) {
+}: FeedbackDisplayProps) {
   return (
     <div className="flex h-full flex-col border">
       <div className="flex justify-between items-center p-2">

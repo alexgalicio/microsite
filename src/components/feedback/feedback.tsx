@@ -4,10 +4,10 @@ import { FeedbackList } from "./feedback-list";
 import { FeedbackDisplay } from "./feedback-display";
 import { type Feedback } from "@/lib/types";
 import {
-  deleteNotification,
-  markAllNotificationsAsRead,
-  markNotificationsAsRead,
-} from "@/lib/actions/notification";
+  deleteFeedback,
+  markAllFeedbackAsRead,
+  markFeedbackAsRead,
+} from "@/lib/actions/feedback";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
 import { useEffect, useState } from "react";
@@ -48,10 +48,10 @@ export function Feedback({ feedbacks: initialFeedbacks }: FeedbackProps) {
   useEffect(() => {
     const supabase = createClerkSupabaseClient();
     const channel = supabase
-      .channel("notifications")
+      .channel("feedback")
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "notifications" },
+        { event: "*", schema: "public", table: "feedback" },
         (payload) => {
           if (payload.eventType === "INSERT") {
             setFeedbacks((prev) => [payload.new as Feedback, ...prev]);
@@ -83,7 +83,7 @@ export function Feedback({ feedbacks: initialFeedbacks }: FeedbackProps) {
     const selectedFeedback = feedbacks.find((feedback) => feedback.id === id);
 
     if (selectedFeedback && !selectedFeedback.is_read) {
-      const response = await markNotificationsAsRead(id);
+      const response = await markFeedbackAsRead(id);
       if (response.success === false) {
         toast.error(handleError(response.error));
       }
@@ -95,16 +95,16 @@ export function Feedback({ feedbacks: initialFeedbacks }: FeedbackProps) {
   };
 
   const handleMarkAllAsRead = async () => {
-    const response = await markAllNotificationsAsRead();
+    const response = await markAllFeedbackAsRead();
     if (response.success === false) {
       toast.error(handleError(response.error));
     }
   };
 
   const handleDeleteFeedback = async (id: string) => {
-    const response = await deleteNotification(id);
+    const response = await deleteFeedback(id);
     if (response.success) {
-      toast.success("Notification deleted successfully");
+      toast.success("Feedback deleted successfully");
     } else {
       toast.error(handleError(response.error));
     }
