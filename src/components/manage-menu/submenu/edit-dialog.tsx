@@ -41,8 +41,8 @@ import {
 const formSchema = z.object({
   title: z
     .string()
-    .min(3, "Submenu must be at least 3 characters")
-    .max(50, "Submenu must be less than 50 characters")
+    .min(2, "Submenu must be at least 2 characters")
+    .max(100, "Submenu must be 100 characters or fewer")
     .transform((str) => str.replace(/\s+/g, " ").trim())
     .refine((value) => value.replace(/\s+/g, "").length >= 3),
   menu: z.string().min(1, "Please select a menu"),
@@ -91,7 +91,7 @@ export function SubmenuActionDialog({ currentRow, open, onOpenChange }: Props) {
         values.menu
       );
       if (response.success) {
-        toast.success("Submenu updated successfully");
+        toast.success("Submenu updated successfully.");
         onOpenChange(false);
         router.refresh();
       } else {
@@ -156,7 +156,7 @@ export function SubmenuActionDialog({ currentRow, open, onOpenChange }: Props) {
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a menu item" />
+                        <SelectValue placeholder="Please select a menu" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>

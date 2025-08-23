@@ -8,7 +8,7 @@ export async function createNewMenu(title: string) {
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   const supabase = createServerSupabaseClient();
@@ -16,7 +16,7 @@ export async function createNewMenu(title: string) {
 
   if (error) {
     if (error.code === "23505") {
-      return { success: false, error: "Menu already exist" };
+      return { success: false, error: "A menu with this name already exists." };
     }
     return { success: false, error: error.message };
   }
@@ -28,7 +28,7 @@ export async function editMenu(id: string, title: string) {
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   const supabase = createServerSupabaseClient();
@@ -39,7 +39,7 @@ export async function editMenu(id: string, title: string) {
 
   if (error) {
     if (error.code === "23505") {
-      return { success: false, error: "Menu already exist" };
+      return { success: false, error: "A menu with this name already exists." };
     }
     return { success: false, error: error.message };
   }
@@ -51,7 +51,7 @@ export async function deleteMenu(id: string) {
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   const supabase = createServerSupabaseClient();

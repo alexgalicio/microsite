@@ -8,7 +8,7 @@ export async function editSubmenu(id: string, title: string, menu_id: string) {
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   const supabase = createServerSupabaseClient();
@@ -19,7 +19,7 @@ export async function editSubmenu(id: string, title: string, menu_id: string) {
 
   if (error) {
     if (error.code === "23505") {
-      return { success: false, error: "Submenu already exist on the menu" };
+      return { success: false, error: "A submenu with this name already exists." };
     }
     return { success: false, error: error.message };
   }
@@ -31,7 +31,7 @@ export async function deleteSubmenu(id: string) {
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   const supabase = createServerSupabaseClient();

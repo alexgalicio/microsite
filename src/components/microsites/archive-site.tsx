@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
 import { archiveSite } from "@/lib/actions/site";
 import { useRouter } from "next/navigation";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface Props {
   open: boolean;
@@ -33,7 +33,7 @@ export function ArchiveSiteDialog({ open, onOpenChange, currentRow }: Props) {
     try {
       const response = await archiveSite(currentRow.id);
       if (response.success) {
-        console.log(`Site ${currentRow.title} archived successfully`);
+        toast.success(`Microsite "${currentRow.title}" archived successfully.`);
         router.refresh();
       } else {
         toast.error(response.error);
@@ -62,7 +62,7 @@ export function ArchiveSiteDialog({ open, onOpenChange, currentRow }: Props) {
             <Alert className="text-left">
               <Info />
               <AlertTitle>
-                You are about to archive {currentRow.title}. This action will:
+                You are about to archive &quot;{currentRow.title}&quot;. This action will:
               </AlertTitle>
               <AlertDescription>
                 <ul className="list-inside list-disc text-sm">

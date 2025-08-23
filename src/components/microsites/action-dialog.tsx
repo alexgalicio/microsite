@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import {
   removeBgImage,
@@ -37,14 +38,14 @@ import { Loader2 } from "lucide-react";
 const formSchema = z.object({
   title: z
     .string()
-    .min(3, "Title must be at least 3 characters")
-    .max(30, "Title must be less than 30 characters")
+    .min(2, "Title must be at least 2 characters")
+    .max(100, "Title must be 100 characters or fewer")
     .transform((str) => str.replace(/\s+/g, " ").trim())
     .refine((value) => value.replace(/\s+/g, "").length >= 3),
   subdomain: z
     .string()
-    .min(3, "Subdomain must be at least 3 characters")
-    .max(50, "Subdomain must be less than 50 characters")
+    .min(2, "Subdomain must be at least 2 characters")
+    .max(50, "Subdomain must be 50 characters or fewer")
     .regex(/^[a-zA-Z0-9-]+$/, {
       message: "Subdomain can only contain letters, numbers, and hyphens",
     })
@@ -52,7 +53,7 @@ const formSchema = z.object({
     .refine((value) => value.replace(/\s+/g, "").length >= 3),
   description: z
     .string()
-    .max(200, "Description must be less than 200 characters")
+    .max(200, "Description must be 200 characters or fewer")
     .transform((str) => str.replace(/\s+/g, " ").trim()),
   bg_image: z.string(),
   isEdit: z.boolean(),
@@ -95,7 +96,7 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
     const file = event.target.files?.[0];
     if (file) {
       if (!file.type.startsWith("image/")) {
-        toast.error("Please select a valid image file");
+        toast.error("Please select a valid image file.");
         event.target.value = "";
         setImageFile(null);
         form.setValue("bg_image", "");
@@ -103,7 +104,7 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
       }
 
       if (file.size > 2 * 1024 * 1024) {
-        toast.error("Image size must be less than 2MB");
+        toast.error("Image size must be less than 2MB.");
         event.target.value = "";
         setImageFile(null);
         form.setValue("bg_image", "");
@@ -145,7 +146,7 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
       if (isEdit && currentRow) {
         const editRes = await editSite(currentRow.id, updatedValues);
         if (editRes.success) {
-          toast.success("Site updated successfully");
+          toast.success("Microsite updated successfully.");
           router.refresh();
         } else {
           toast.error(editRes.error);
@@ -153,7 +154,7 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
       } else {
         const createRes = await createNewSite(updatedValues);
         if (createRes.success) {
-          toast.success(`Site ${values.title} has been created`);
+          toast.success(`Microsite "${values.title}" created successfully.`);
           router.refresh();
         } else {
           toast.error(createRes.error);
@@ -181,7 +182,9 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
     >
       <DialogContent className="sm:max-w-lg">
         <DialogHeader className="text-left">
-          <DialogTitle>{isEdit ? "Edit Site" : "Create New Site"}</DialogTitle>
+          <DialogTitle>
+            {isEdit ? "Edit Microsite" : "Create New Microsite"}
+          </DialogTitle>
           <DialogDescription />
         </DialogHeader>
         <Form {...form}>
@@ -199,7 +202,7 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
                   <FormControl>
                     <Input
                       id="title"
-                      placeholder="Enter site title"
+                      placeholder="Enter microsite title"
                       autoComplete="off"
                       {...field}
                     />
@@ -217,7 +220,7 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
                   <FormControl>
                     <Input
                       id="subdomain"
-                      placeholder="Enter site subdomain"
+                      placeholder="Eg. microsite"
                       autoComplete="off"
                       {...field}
                     />
@@ -233,10 +236,8 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
                 <FormItem className="grid gap-2">
                   <FormLabel htmlFor="description">Description</FormLabel>
                   <FormControl>
-                    <Input
-                      id="description"
-                      placeholder="Enter site description"
-                      autoComplete="off"
+                    <Textarea
+                      placeholder="Enter microsite description..."
                       {...field}
                     />
                   </FormControl>

@@ -29,7 +29,7 @@ export function SubmenuDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       setIsLoading(true);
       const response = await deleteSubmenu(currentRow.id);
       if (response.success) {
-        toast.success("Submenu deleted successfully");
+        toast.success("Submenu deleted successfully.");
         onOpenChange(false);
         router.refresh();
       } else {
@@ -49,7 +49,7 @@ export function SubmenuDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
       disabled={value.trim() !== currentRow.title || isLoading}
-      title={`Confirm deletion of ${currentRow.title}`}
+      title={`Confirm deletion of "${currentRow.title}"`}
       desc={
         <div className="space-y-4">
           <Alert
@@ -57,12 +57,14 @@ export function SubmenuDeleteDialog({ open, onOpenChange, currentRow }: Props) {
             className="bg-destructive/10 dark:bg-destructive/20 border-destructive/50 dark:border-destructive/70"
           >
             <OctagonAlertIcon className="w-4 h-4" />
-            <AlertTitle>You cannot recover this menu once deleted</AlertTitle>
+            <AlertTitle>
+              You cannot recover this submenu once deleted
+            </AlertTitle>
             <AlertDescription>
               <p>
-                Your menu{" "}
+                The submenu{" "}
                 <strong className="font-medium">{currentRow.title}</strong> and
-                all its contents will be permanently deleted.
+                its associated account will be permanently deleted.
               </p>
             </AlertDescription>
           </Alert>

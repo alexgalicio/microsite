@@ -23,7 +23,7 @@ export async function createNewAccount(formData: {
     const { userId } = await auth();
 
     if (!userId) {
-      return { success: false, error: "User not signed in" };
+      return { success: false, error: "User not signed in." };
     }
 
     const password = generatePassword(12);
@@ -48,6 +48,13 @@ export async function createNewAccount(formData: {
     if (profileError) {
       // delete the Clerk user if profile creation fails
       await clerk.users.deleteUser(user.id);
+
+      if (profileError.code === "23505") {
+        return {
+          success: false,
+          error: "That email address is taken. Please try another.",
+        };
+      }
       return { success: false, error: profileError.message };
     }
 
@@ -64,7 +71,10 @@ export async function createNewAccount(formData: {
       await clerk.users.deleteUser(user.id);
 
       if (submenuError?.code === "23505") {
-        return { success: false, error: "Submenu already exists in this menu" };
+        return {
+          success: false,
+          error: `Submenu "${formData.submenu}" already exists in that menu.`,
+        };
       }
       return { success: false, error: submenuError.message };
     }
@@ -84,12 +94,12 @@ export async function createNewAccount(formData: {
 
       if (error) {
         console.error("Failed to send welcome email:", error);
-        console.log('errr', error)
+        console.log("errr", error);
         // don't fail the account creation if email fails
       }
     } catch (emailError) {
       console.error("Failed to send welcome email:", emailError);
-      console.log('error', emailError)
+      console.log("error", emailError);
       // don't fail the account creation if email fails
     }
 

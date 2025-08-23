@@ -12,11 +12,11 @@ export async function createNewSite(formData: {
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   if (formData.subdomain.toLocaleLowerCase() === "www") {
-    return { success: false, error: "Not allowed to use www as subdomain" };
+    return { success: false, error: "The subdomain www is not allowed." };
   }
 
   const supabase = createServerSupabaseClient();
@@ -29,7 +29,7 @@ export async function createNewSite(formData: {
     .single();
 
   if (!submenu || submenuError) {
-    return { success: false, error: "Submenu not found for this user" };
+    return { success: false, error: "No submenu found for your account." };
   }
 
   const subdomain = formData.subdomain.toLowerCase();
@@ -51,10 +51,10 @@ export async function createNewSite(formData: {
       if (error.message.includes("user_id")) {
         return {
           success: false,
-          error: "You can only create one site per account",
+          error: "You can create only one site per account.",
         };
       }
-      return { success: false, error: "Subdomain is taken" };
+      return { success: false, error: "That subdomain is already in use. Please try another." };
     }
     return { success: false, error: error.message };
   }
@@ -74,11 +74,11 @@ export async function editSite(
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   if (formData.subdomain.toLocaleLowerCase() === "www") {
-    return { success: false, error: "Not allowed to use www as subdomain" };
+    return { success: false, error: "The subdomain www is not allowed." };
   }
 
   const supabase = createServerSupabaseClient();
@@ -94,7 +94,7 @@ export async function editSite(
 
   if (error) {
     if (error.code === "23505") {
-      return { success: false, error: "Subdomain is taken" };
+      return { success: false, error: "That subdomain is already in use. Please try another." };
     }
     return { success: false, error: error.message };
   }
@@ -132,7 +132,7 @@ export async function getAllSite(from: number, to: number) {
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   const supabase = createServerSupabaseClient();
@@ -165,7 +165,7 @@ export async function getSiteByUserId(id: string) {
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   const supabase = createServerSupabaseClient();
@@ -183,7 +183,7 @@ export async function archiveSite(id: string) {
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   const supabase = createServerSupabaseClient();
@@ -201,7 +201,7 @@ export async function restoreSite(id: string) {
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   const supabase = createServerSupabaseClient();
@@ -219,7 +219,7 @@ export async function uploadBgImage(file: File) {
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   // create unique filename
@@ -252,7 +252,7 @@ export async function removeBgImage(url: string) {
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   // extract filename from url

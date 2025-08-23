@@ -25,7 +25,7 @@ export function LinkDeleteDialog({ open, onOpenChange, currentRow }: Props) {
     try {
       const response = await deleteLink(currentRow.id);
       if (response?.success) {
-        toast.success("Link deleted successfully");
+        toast.success("Link deleted successfully.");
         onOpenChange(false);
         router.refresh();
       } else {
@@ -44,7 +44,7 @@ export function LinkDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       open={open}
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
-      title={`Confirm deletion of ${currentRow.title}`}
+      title={`Confirm deletion of "${currentRow.title}"`}
       desc={
         <div className="space-y-4">
           <Alert
@@ -55,7 +55,7 @@ export function LinkDeleteDialog({ open, onOpenChange, currentRow }: Props) {
             <AlertTitle>You cannot recover this link once deleted</AlertTitle>
             <AlertDescription>
               <p>
-                Your link{" "}
+                The link{" "}
                 <strong className="font-medium">{currentRow.url}</strong> will be permanently deleted. This action cannot
                 be undone.
               </p>

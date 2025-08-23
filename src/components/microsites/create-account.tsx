@@ -44,8 +44,8 @@ const formSchema = z.object({
   menu: z.string().min(1, "Please select a menu"),
   submenu: z
     .string()
-    .min(3, "Submenu must be at least 3 characters")
-    .max(50, "Submenu must be less than 50 characters")
+    .min(2, "Submenu must be at least 2 characters")
+    .max(100, "Submenu must be 100 characters or fewer")
     .transform((str) => str.replace(/\s+/g, " ").trim())
     .refine((value) => value.replace(/\s+/g, "").length >= 3),
   email: z.string().email(),
@@ -92,7 +92,7 @@ export default function CreateAccount() {
     try {
       const response = await createNewAccount(values);
       if (response.success) {
-        toast.success("Account created successfully");
+        toast.success("Account details sent successfully.");
         form.reset();
         setIsOpen(false);
         router.refresh();
@@ -138,7 +138,7 @@ export default function CreateAccount() {
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a menu item" />
+                        <SelectValue placeholder="Please select a menu" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
