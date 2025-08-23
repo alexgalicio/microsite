@@ -13,25 +13,25 @@
         {
             "title": "1st Year",
             "subjects": [
-                "Something about bsis"
+                "Presentation Skills and Personality Development",
+                "Introduction to Computing",
+                "Computer Programming",
+                "Fundamentals of Information Systems",
+                "Human Computer Interaction"
             ]
         },
         {
             "title": "2nd Year",
             "subjects": [
-                "Something about bsis"
-            ]
-        },
-        {
-            "title": "3rd Year",
-            "subjects": [
-                "Something about bsis"
-            ]
-        },
-        {
-            "title": "4th Year",
-            "subjects": [
-                "Something about bsis"
+                "Organization and Management Concepts",
+                "IT Infrastructure and Network Technologies",
+                "Professional Issues in Information Systems",
+                "Data Structures and Algorithms",
+                "Elective",
+                "Business Intelligence",
+                "Financial Management",
+                "System Analysis and Design",
+                "Information Management"
             ]
         }
     ],
