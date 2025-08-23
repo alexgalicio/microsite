@@ -166,9 +166,8 @@ export default function SiteEditor({ siteId }: { siteId: string }) {
 
     if (error) {
       console.error("Error saving to Supabase (save site):", error);
-      toast.error("error save");
     } else {
-      toast.success("Site saved successfully");
+      toast.success("Microsite published successfully.");
       console.log("Data saved successfully:", data);
     }
   };
@@ -183,12 +182,10 @@ export default function SiteEditor({ siteId }: { siteId: string }) {
 
     if (error) {
       console.error("Error saving to Supabase (load site):", error);
-      toast.error("error load");
     } else if (data) {
       editor.setComponents(data.html);
       editor.setStyle(data.css);
       editor.UndoManager.clear();
-      console.log("retrieved");
     } else {
       editor.setComponents(templateHTML);
       editor.setStyle(templateCSS);

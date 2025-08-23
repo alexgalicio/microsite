@@ -32,8 +32,8 @@ import { Loader2 } from "lucide-react";
 const formSchema = z.object({
   title: z
     .string()
-    .min(3, "Menu must be at least 3 characters")
-    .max(50, "Menu must be less than 50 characters")
+    .min(2, "Menu name must be at least 2 characters")
+    .max(100, "Menu must be 100 characters or fewer")
     .transform((str) => str.replace(/\s+/g, " ").trim())
     .refine((value) => value.replace(/\s+/g, "").length >= 3),
   isEdit: z.boolean(),
@@ -71,7 +71,7 @@ export function MenuActionDialog({ currentRow, open, onOpenChange }: Props) {
       if (isEdit && currentRow) {
         const editRes = await editMenu(currentRow.id, values.title);
         if (editRes.success) {
-          toast.success("Menu updated successfully");
+          toast.success("Menu updated successfully.");
           router.refresh();
         } else {
           toast.error(editRes.error);
@@ -79,7 +79,7 @@ export function MenuActionDialog({ currentRow, open, onOpenChange }: Props) {
       } else {
         const addRes = await createNewMenu(values.title);
         if (addRes.success) {
-          toast.success("Menu added successfully");
+          toast.success("Menu created successfully.");
           router.refresh();
         } else {
           toast.error(addRes.error);

@@ -34,6 +34,14 @@ export const columns: ColumnDef<Submenu>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Submenu" />
     ),
+    cell: ({ row }) => {
+      const title = row.getValue("title") as string;
+      return (
+        <div className="max-w-[200px] truncate" title={title}>
+          {title}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "profiles.email",

@@ -35,6 +35,14 @@ export const columns: ColumnDef<Menu>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Menu" />
     ),
+    cell: ({ row }) => {
+      const title = row.getValue("title") as string;
+      return (
+        <div className="max-w-[200px] truncate" title={title}>
+          {title}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "submenu_count",

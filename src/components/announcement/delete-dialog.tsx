@@ -26,7 +26,7 @@ export default function DeleteAnnouncementDialog({ id }: { id: string }) {
     try {
       const response = await deleteAnnouncement(id);
       if (response.success) {
-        toast.success("Announcement deleted successfully");
+        toast.success("Announcement deleted successfully.");
         setIsOpen(false);
         router.push("/announcements");
       } else {
@@ -49,8 +49,8 @@ export default function DeleteAnnouncementDialog({ id }: { id: string }) {
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Announcement</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone and will permanently remove the
-            announcement from the system.
+            This action cannot be undone and will permanently delete the
+            announcement.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

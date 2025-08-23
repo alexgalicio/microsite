@@ -34,21 +34,15 @@ const formSchema = z.object({
     .string()
     .trim()
     .min(3, "Title must be at least 3 characters")
-    .max(100, "Title must be less than 100 characters")
-    .refine(
-      (value) => value.replace(/\s+/g, "").length >= 3,
-      "Title must be at least 3 characters excluding spaces"
-    ),
+    .max(100, "Title must be 100 characters or fewer")
+    .refine((value) => value.replace(/\s+/g, "").length >= 3),
   author: z
     .string()
     .trim()
     .min(3, "Author name must be at least 3 characters")
-    .max(50, "Author name must be less than 50 characters")
-    .refine(
-      (value) => value.replace(/\s+/g, "").length >= 3,
-      "Author name must be at least 3 characters excluding spaces"
-    ),
-  content: z.string().min(1, "Content is required"),
+    .max(100, "Author name must be 100 characters or fewer")
+    .refine((value) => value.replace(/\s+/g, "").length >= 3),
+  content: z.string().min(1, "Content cannot be empty"),
   cover: z.string(),
 });
 
@@ -111,7 +105,7 @@ export default function AnnouncementForm({
       if (isEditing) {
         const editRes = await editAnnouncement(initialData.id, updatedValues);
         if (editRes.success) {
-          toast.success("Announcement updated successfully");
+          toast.success("Announcement updated successfully.");
           router.push("/announcements");
         } else {
           toast.error(editRes.error);
@@ -119,7 +113,7 @@ export default function AnnouncementForm({
       } else {
         const response = await createNewAnnouncement(updatedValues);
         if (response.success) {
-          toast.success("Announcement published successfully");
+          toast.success("Announcement published successfully.");
           router.push("/announcements");
         } else {
           toast.error(response.error);
@@ -137,7 +131,7 @@ export default function AnnouncementForm({
     const file = event.target.files?.[0];
     if (file) {
       if (!file.type.startsWith("image/")) {
-        toast.error("Please select a valid image file");
+        toast.error("Please select a valid image file.");
         event.target.value = "";
         setImageFile(null);
         form.setValue("cover", "");
@@ -145,7 +139,7 @@ export default function AnnouncementForm({
       }
 
       if (file.size > 2 * 1024 * 1024) {
-        toast.error("Image size must be less than 2MB");
+        toast.error("Image size must be less than 2MB.");
         event.target.value = "";
         setImageFile(null);
         form.setValue("cover", "");

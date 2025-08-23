@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { InfoIcon, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { addNewLink, editLink } from "@/lib/actions/links";
 import { Textarea } from "@/components/ui/textarea";
@@ -36,7 +36,7 @@ const formSchema = z.object({
   title: z
     .string()
     .min(3, "Title must be at least 3 characters")
-    .max(50, "Title too long")
+    .max(100, "Title must be 100 characters or fewer")
     .transform((str) => str.replace(/\s+/g, " ").trim())
     .refine((value) => value.replace(/\s+/g, "").length >= 3),
   url: z
@@ -46,7 +46,7 @@ const formSchema = z.object({
   description: z
     .string()
     .min(3, "Description must be at least 3 characters")
-    .max(200, "Description too long")
+    .max(200, "Description must be 200 characters or fewer")
     .transform((str) => str.replace(/\s+/g, " ").trim())
     .refine((value) => value.replace(/\s+/g, "").length >= 3),
   isEdit: z.boolean(),
@@ -88,7 +88,7 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
       if (isEdit && currentRow) {
         const editRes = await editLink(currentRow.id, values);
         if (editRes.success) {
-          toast.success("Link updated successfully");
+          toast.success("Link updated successfully.");
           router.refresh();
         } else {
           toast.error(editRes.error);
@@ -96,7 +96,7 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
       } else {
         const createRes = await addNewLink(values);
         if (createRes.success) {
-          toast.success(`${values.url} has been created`);
+          toast.success(`${values.url} added successfully.`);
           router.refresh();
         } else {
           toast.error(createRes.error);
@@ -122,7 +122,7 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
     >
       <DialogContent className="sm:max-w-lg">
         <DialogHeader className="text-left">
-          <DialogTitle>{isEdit ? "Edit Link" : "Create New Link"}</DialogTitle>
+          <DialogTitle>{isEdit ? "Edit Link" : "Add New Link"}</DialogTitle>
           <DialogDescription />
         </DialogHeader>
         <Form {...form}>
@@ -185,7 +185,7 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
                 </FormItem>
               )}
             />
-            <FormDescription>
+            <FormDescription className="break-all">
               Note: You can view all the announcements in https://[yourDomain].
               {process.env.NEXT_PUBLIC_ROOT_DOMAIN}/announcements
             </FormDescription>

@@ -32,7 +32,7 @@ export function RestoreSiteDialog({ open, onOpenChange, currentRow }: Props) {
     try {
       const response = await restoreSite(currentRow.id);
       if (response.success) {
-        console.log(`Site ${currentRow.title} restored successfully`);
+        toast.success(`Microsite "${currentRow.title}" restored successfully.`);
         onOpenChange(false);
         router.refresh();
       } else {
@@ -58,8 +58,8 @@ export function RestoreSiteDialog({ open, onOpenChange, currentRow }: Props) {
           <DialogHeader>
             <DialogTitle>Restore Site</DialogTitle>
             <DialogDescription>
-              You are about to restore{" "}
-              <span className="font-medium">{currentRow.title}</span>. This will
+              You are about to restore &quot;
+              <span className="font-medium">{currentRow.title}</span>&quot;. This will
               make the site publicly accessible again.
             </DialogDescription>
           </DialogHeader>

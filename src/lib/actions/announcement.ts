@@ -12,7 +12,7 @@ export async function createNewAnnouncement(formData: {
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   const supabase = createServerSupabaseClient();
@@ -27,12 +27,12 @@ export async function createNewAnnouncement(formData: {
   if (siteError || !siteData) {
     return {
       success: false,
-      error: "Please create a site before creating announcements",
+      error: "Please create a site to start posting announcements.",
     };
   } else if (siteData.status != "published") {
     return {
       success: false,
-      error: "Please make your site public before creating announcements",
+      error: "Please make your site public before creating announcements.",
     };
   }
 
@@ -64,7 +64,7 @@ export async function editAnnouncement(
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   const supabase = createServerSupabaseClient();
@@ -89,7 +89,7 @@ export async function deleteAnnouncement(id: string) {
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   const supabase = createServerSupabaseClient();
@@ -113,7 +113,7 @@ export async function getAnnouncementsByUserId(
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   const supabase = createServerSupabaseClient();
@@ -159,7 +159,7 @@ export async function getAnnouncementById(id: string) {
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   const supabase = createServerSupabaseClient();
@@ -180,7 +180,7 @@ export async function uploadCoverImage(file: File) {
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   // create unique filename
@@ -213,7 +213,7 @@ export async function removeCoverImage(url: string) {
   const { userId } = await auth();
 
   if (!userId) {
-    return { success: false, error: "User not signed in" };
+    return { success: false, error: "User not signed in." };
   }
 
   // extract filename from url

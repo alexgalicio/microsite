@@ -29,7 +29,7 @@ export function MenuDeleteDialog({ open, onOpenChange, currentRow }: Props) {
     try {
       const response = await deleteMenu(currentRow.id);
       if (response?.success) {
-        toast.success("Menu deleted successfully");
+        toast.success("Menu deleted successfully.");
         onOpenChange(false);
         router.refresh();
       } else {
@@ -49,7 +49,7 @@ export function MenuDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
       disabled={value.trim() !== currentRow.title || isLoading}
-      title={`Confirm deletion of ${currentRow.title}`}
+      title={`Confirm deletion of "${currentRow.title}"`}
       desc={
         <div className="space-y-4">
           <Alert
@@ -60,7 +60,7 @@ export function MenuDeleteDialog({ open, onOpenChange, currentRow }: Props) {
             <AlertTitle>You cannot recover this menu once deleted</AlertTitle>
             <AlertDescription>
               <p>
-                Your menu{" "}
+                The menu{" "}
                 <strong className="font-medium">{currentRow.title}</strong> and
                 all its contents will be permanently deleted. This action cannot
                 be undone.
