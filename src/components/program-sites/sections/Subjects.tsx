@@ -36,7 +36,7 @@ function Subjects({ years }: SubjectsProps) {
           {years.map((year, i) => (
             <div
               key={year.title}
-              className="border rounded-2xl shadow-sm bg-white overflow-hidden transition hover:shadow-md"
+              className="border rounded-2xl shadow-md bg-white overflow-hidden transition hover:shadow-md"
             >
               <button
                 onClick={() => toggle(i)}

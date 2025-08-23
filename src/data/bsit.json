@@ -3,11 +3,11 @@
     "acronym": "BSIT",
     "heroSection": {
         "heading": "Bachelor of Science in Information Technology",
-        "subheading": "Choose BSIT as ur course lol it's fun trust me :)"
+        "subheading": "Build a strong foundation in programming, networking, and system design to prepare for diverse careers in the IT industry"
     },
     "aboutSection": {
-        "heading": "This is where imma put the about section heading",
-        "subheading": "This is an about section subheading where you tell your site visitors something about your college. Maybe vision or mission it's up to you."
+        "heading": "Technology Skills for the Real World",
+        "subheading": "The Bachelor of Science in Information Technology (BSIT) program provides students with hands-on experience and technical expertise in software development, database management, networking, and system administration. With a balance of theory and practice, the program prepares graduates to create solutions that meet the demands of businesses and communities in today’s digital world."
     },
     "subjectsSection": [
         {
@@ -54,44 +54,40 @@
     ],
     "careerSection": [
         {
-            "title": "Software Developer",
-            "description": "Design, build, and maintain applications for web, mobile, or desktop platforms using modern programming languages and frameworks."
-        },
-        {
-            "title": "Web Developer",
-            "description": "Create and maintain websites and web applications, focusing on front-end user experience or back-end server logic."
-        },
-        {
-            "title": "Database Administrator",
-            "description": "Manage and secure databases, ensuring data integrity, performance, and availability for organizations."
-        },
-        {
-            "title": "Systems Analyst",
-            "description": "Analyze business requirements and design technology solutions that improve efficiency and meet organizational needs."
+            "title": "Software Developer / Engineer",
+            "description": "Designs, develops, and maintains software and applications."
         },
         {
             "title": "Network Administrator",
-            "description": "Configure, manage, and troubleshoot computer networks of organizations to ensure reliable communication and security."
+            "description": "Manages and supports a company's computer networks."
+        },
+        {
+            "title": "Data Analyst / Scientist",
+            "description": "Works with large datasets to extract insights and inform business decisions."
+        },
+        {
+            "title": "IT Security Analyst",
+            "description": "Protects computer systems and networks from threats and breaches."
+        },
+        {
+            "title": "Web Developer",
+            "description": "Builds, creates, and maintains websites."
         },
         {
             "title": "IT Support Specialist",
-            "description": "Provide technical assistance, troubleshoot hardware and software issues, and support end-users within organizations."
+            "description": "Provides technical assistance and troubleshooting to users."
         },
         {
-            "title": "Cybersecurity Specialist",
-            "description": "Protect systems and data from security breaches by implementing defenses, monitoring threats, and enforcing security policies."
+            "title": "Systems Analyst",
+            "description": "Analyzes business needs to design and implement technology solutions."
         },
         {
-            "title": "Mobile Application Developer",
-            "description": "Design and develop mobile apps for iOS and Android platforms, focusing on performance, usability, and user experience."
+            "title": "Cloud Solutions Architect",
+            "description": "Designs and manages cloud computing infrastructure."
         },
         {
-            "title": "Game Developer",
-            "description": "Build interactive video games by combining programming, graphics, and game design principles."
-        },
-        {
-            "title": "IT Project Manager",
-            "description": "Oversee technology projects, manage teams, allocate resources, and ensure projects are delivered on time and within budget."
+            "title": "Business Analyst (IT)",
+            "description": "Bridges the gap between business needs and technical solutions."
         }
     ]
 }

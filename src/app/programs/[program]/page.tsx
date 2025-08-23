@@ -20,7 +20,7 @@ async function page({params} : Prop) {
         <Navbar programName={data.acronym}></Navbar>
         <main>
             <Hero heading={data.heroSection.heading} subheading={data.heroSection.subheading}/>
-            <About heading={data.aboutSection.heading} subheading={data.aboutSection.subheading}/>
+            <About programName = {data.acronym} heading={data.aboutSection.heading} subheading={data.aboutSection.subheading}/>
             <Subjects years={data.subjectsSection}/>
             <Careers careers={data.careerSection}/>
         </main>

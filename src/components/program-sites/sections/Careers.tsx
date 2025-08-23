@@ -17,7 +17,7 @@ function Careers({ careers }: CareersProps) {
                     Career Paths
                 </h2>
                 <p className="text-gray-600 text-center max-w-xl text-base md:text-lg">
-                    See your possible career path when you choose this program
+                    See common career paths when you choose this program
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">

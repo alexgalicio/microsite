@@ -3,11 +3,11 @@
     "acronym": "BSIS",
     "heroSection": {
         "heading": "Bachelor of Science in Information Systems",
-        "subheading": "Choose BSIS as ur course lol it's fun trust me :)"
+        "subheading": "Learn to design, manage, and optimize information systems that drive business innovation and organizational success"
     },
     "aboutSection": {
-        "heading": "This is where imma put the about section heading",
-        "subheading": "This is an about section subheading where you tell your site visitors something about your college. Maybe vision or mission it's up to you."
+        "heading": "Connecting People, Processes, and Technology",
+        "subheading": "The Bachelor of Science in Information Systems (BSIS) program focuses on the strategic use of technology to support organizations. Students gain skills in systems analysis, business process management, and information systems design, preparing them to serve as a vital link between technical teams and business stakeholders. Graduates are equipped to create efficient solutions that improve decision-making and drive growth in the digital economy."
     },
     "subjectsSection": [
         {
@@ -37,36 +37,44 @@
     ],
     "careerSection": [
         {
-            "title": "Business Systems Analyst",
-            "description": "Bridge the gap between business needs and technology solutions by analyzing processes and designing information systems."
+            "title": "Information Systems Manager",
+            "description": "Oversees IT infrastructure and operations within an organization."
         },
         {
-            "title": "IT Business Analyst",
-            "description": "Work with stakeholders to gather requirements and translate them into system specifications for developers."
+            "title": "Systems Analyst",
+            "description": "Analyzes and improves IT systems to meet business requirements."
         },
         {
-            "title": "Systems Designer",
-            "description": "Create detailed designs and models for information systems that meet organizational goals."
+            "title": "Data Analyst / Scientist",
+            "description": "Collects, analyzes, and interprets data to provide insights for business decisions."
         },
         {
-            "title": "Project Manager (IT/IS)",
-            "description": "Lead teams in implementing information systems projects, ensuring they are delivered on time and within scope."
-        },
-        {
-            "title": "Data Analyst",
-            "description": "Interpret and analyze business data to provide actionable insights for decision-making."
-        },
-        {
-            "title": "Information Systems Auditor",
-            "description": "Evaluate and monitor information systems to ensure compliance, security, and efficiency."
-        },
-        {
-            "title": "ERP Specialist",
-            "description": "Configure and maintain Enterprise Resource Planning (ERP) systems to support business processes."
+            "title": "Cybersecurity Analyst",
+            "description": "Protects systems and data from cyber threats."
         },
         {
             "title": "IT Consultant",
-            "description": "Advise businesses on the best ways to use information technology to meet their objectives."
+            "description": "Provides expert advice on IT strategies and solutions to businesses."
+        },
+        {
+            "title": "Database Administrator",
+            "description": "Manages and maintains an organization's databases."
+        },
+        {
+            "title": "Software Engineer / Developer",
+            "description": "Designs, develops, and tests software applications."
+        },
+        {
+            "title": "Web Developer",
+            "description": "Creates and maintains websites."
+        },
+        {
+            "title": "Technical Support Specialist",
+            "description": "Provides technical assistance to users and businesses."
+        },
+        {
+            "title": "Business Analyst",
+            "description": "Focuses on improving business processes through technology solutions."
         }
     ]
 }

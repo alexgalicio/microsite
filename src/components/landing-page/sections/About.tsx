@@ -4,11 +4,11 @@ function About() {
     return (
         <section className="py-8">
             <div className="container mx-auto items-center px-4 flex flex-col gap-4 md:flex-row">
-                <div className="text-center flex flex-col md:text-left md:w-1/2">
-                    <p className="font-semibold text-sm uppercase">
-                        About CICT
-                    </p>
-                    <h2 className="text-3xl md:text-4xl font-extrabold mb-4 text-gray-900 leading-snug">
+                <div className="text-center flex flex-col gap-2 md:text-left md:w-1/2">
+                    <small className="font-extrabold text-gray-800">
+                        ABOUT CICT
+                    </small>
+                    <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 leading-snug">
                         Empowering Future Tech Innovators
                     </h2>
                     <p className="text-gray-700 text-base md:text-lg">
