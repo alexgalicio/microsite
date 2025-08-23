@@ -128,8 +128,7 @@ body {
     position: absolute;
     top: 100%;
     right: 0;
-    /* background-color: rgba(0, 0, 0, 0.9); */
-    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.9);
     min-width: 200px;
     border-radius: 5px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -144,10 +143,6 @@ body {
   }
   .menu-item:last-child {
     border-bottom: none;
-  }
-  .menu-item:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #fff;
   }
   #menu-checkbox:checked ~ .menu-items {
     display: block;
@@ -452,7 +447,7 @@ export const templateHTML = `
           <div class="logo-container">
             <div class="logo">
               <div class="logo-icon">
-                <img src="/cict.png" alt="Logo" />
+                <img src="/" alt="Logo" />
               </div>
               <a href="#" class="logo-text">MICROSITE</a>
             </div>
@@ -485,7 +480,7 @@ export const templateHTML = `
       <div class="container-width">
         <div class="about-container">
           <div class="about-image">
-            <img src="/cict.png" alt="About" />
+            <img src="/" alt="About" />
           </div>
           <div class="about-content">
             <div class="about-pre">WHO ARE WE</div>
@@ -525,22 +520,22 @@ export const templateHTML = `
         </div>
         <div class="cards">
           <div class="card">
-            <img src="/cict.png" alt="photo-showcase" />
+            <img src="/" alt="photo-showcase" />
           </div>
           <div class="card">
-            <img src="/cict.png" alt="photo-showcase" />
+            <img src="/" alt="photo-showcase" />
           </div>
           <div class="card">
-            <img src="/cict.png" alt="photo-showcase" />
+            <img src="/" alt="photo-showcase" />
           </div>
           <div class="card">
-            <img src="/cict.png" alt="photo-showcase" />
+            <img src="/" alt="photo-showcase" />
           </div>
           <div class="card">
-            <img src="/cict.png" alt="photo-showcase" />
+            <img src="/" alt="photo-showcase" />
           </div>
           <div class="card">
-            <img src="/cict.png" alt="photo-showcase" />
+            <img src="/" alt="photo-showcase" />
           </div>
         </div>
       </div>
@@ -551,35 +546,35 @@ export const templateHTML = `
         <h1 class="bdg-title">The team</h1>
         <div class="badges">
           <div class="badge">
-            <img src="/cict.png" class="badge-avatar" alt="profile" />
+            <img src="/" class="badge-avatar" alt="profile" />
             <div class="badge-body">
               <div class="badge-name">Alex Galicio</div>
               <div class="badge-role">Developer</div>
             </div>
           </div>
           <div class="badge">
-            <img src="/cict.png" class="badge-avatar" alt="profile" />
+            <img src="/" class="badge-avatar" alt="profile" />
             <div class="badge-body">
               <div class="badge-name">Eddhan Tan</div>
               <div class="badge-role">Developer</div>
             </div>
           </div>
           <div class="badge">
-            <img src="/cict.png" class="badge-avatar" alt="profile" />
+            <img src="/" class="badge-avatar" alt="profile" />
             <div class="badge-body">
               <div class="badge-name">Ynez Sanchez</div>
               <div class="badge-role">Member</div>
             </div>
           </div>
           <div class="badge">
-            <img src="/cict.png" class="badge-avatar" alt="profile" />
+            <img src="/" class="badge-avatar" alt="profile" />
             <div class="badge-body">
               <div class="badge-name">Joshua Alcaraz</div>
               <div class="badge-role">Member</div>
             </div>
           </div>
           <div class="badge">
-            <img src="/cict.png" class="badge-avatar" alt="profile" />
+            <img src="/" class="badge-avatar" alt="profile" />
             <div class="badge-body">
               <div class="badge-name">Reyan Concepcion</div>
               <div class="badge-role">Member</div>
@@ -599,7 +594,7 @@ export const templateHTML = `
             nunc in lectus dignissim porttitor.
           </div>
           <div class="badge">
-            <img src="/cict.png" class="badge-avatar" alt="profile" />
+            <img src="/" class="badge-avatar" alt="profile" />
             <div class="badge-body">
               <div class="badge-name">John Doe</div>
               <div>President</div>
@@ -648,7 +643,7 @@ export const templateHTML = `
         </div>
 
         <div class="link-wrapper">
-          <a href="#" class="link-btn">See More</a>
+          <a href="https://[yourDomain].alexgalicio.dev/links" class="link-btn">See More</a>
         </div>
       </div>
     </section>
