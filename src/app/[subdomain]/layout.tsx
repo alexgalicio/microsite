@@ -2,7 +2,7 @@ import PrivateSite from "@/components/microsites/private-site";
 import { SiteProvider } from "@/components/subdomain-provider";
 import { getSiteBySubdomain } from "@/lib/actions/site";
 import { Metadata } from "next";
-import { NotFoundError } from "@/app/error/not-found";
+import { NotFoundError } from "@/components/not-found";
 
 export async function generateMetadata({
   params,
