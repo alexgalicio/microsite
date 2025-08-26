@@ -2,18 +2,44 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { getLink } from "./lib/getLink";
 
-const isProtectedRoute = createRouteMatcher([
+const isAdminRoute = createRouteMatcher([
   "/dashboard(.*)",
-  "/editor(.*)",
-  "/settings(.*)",
-  "/microsites(.*)",
   "/manage-menu(.*)",
   "/calendar(.*)",
   "/notifications(.*)",
 ]);
 
+const isUserRoute = createRouteMatcher([
+  "/editor(.*)",
+  "/announcements(.*)",
+  "/links(.*)",
+]);
+
+const isSharedRoute = createRouteMatcher(["/settings(.*)", "/microsites(.*)"]);
+
 export default clerkMiddleware(async (auth, req) => {
-  if (isProtectedRoute(req)) await auth.protect();
+  const { sessionClaims } = await auth();
+
+  // redirect if not logged in
+  if (isAdminRoute(req) || isUserRoute(req) || isSharedRoute(req)) {
+    await auth.protect();
+  }
+  const role = sessionClaims?.metadata?.role;
+
+  // user-only routes
+  if (isUserRoute(req) && role !== "user") {
+    return NextResponse.redirect(new URL("/forbidden", req.url));
+  }
+
+  // admin-only routes
+  if (isAdminRoute(req) && role !== "admin") {
+    return NextResponse.redirect(new URL("/forbidden", req.url));
+  }
+
+  // shared routes
+  if (isSharedRoute(req)) {
+    return NextResponse.next();
+  }
 
   const url = req.nextUrl;
   const path = url.pathname;
@@ -45,9 +71,7 @@ export default clerkMiddleware(async (auth, req) => {
 
 export const config = {
   matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
     "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    // Always run for API routes
     "/(api|trpc)(.*)",
   ],
 };
