@@ -1,0 +1,80 @@
+{
+    "programName": "Bachelor of Science in Information Systems",
+    "acronym": "BSIS",
+    "heroSection": {
+        "heading": "Bachelor of Science in Information Systems",
+        "subheading": "Learn to design, manage, and optimize information systems that drive business innovation and organizational success"
+    },
+    "aboutSection": {
+        "heading": "Connecting People, Processes, and Technology",
+        "subheading": "The Bachelor of Science in Information Systems (BSIS) program focuses on the strategic use of technology to support organizations. Students gain skills in systems analysis, business process management, and information systems design, preparing them to serve as a vital link between technical teams and business stakeholders. Graduates are equipped to create efficient solutions that improve decision-making and drive growth in the digital economy."
+    },
+    "subjectsSection": [
+        {
+            "title": "1st Year",
+            "subjects": [
+                "Presentation Skills and Personality Development",
+                "Introduction to Computing",
+                "Computer Programming",
+                "Fundamentals of Information Systems",
+                "Human Computer Interaction"
+            ]
+        },
+        {
+            "title": "2nd Year",
+            "subjects": [
+                "Organization and Management Concepts",
+                "IT Infrastructure and Network Technologies",
+                "Professional Issues in Information Systems",
+                "Data Structures and Algorithms",
+                "Elective",
+                "Business Intelligence",
+                "Financial Management",
+                "System Analysis and Design",
+                "Information Management"
+            ]
+        }
+    ],
+    "careerSection": [
+        {
+            "title": "Information Systems Manager",
+            "description": "Oversees IT infrastructure and operations within an organization."
+        },
+        {
+            "title": "Systems Analyst",
+            "description": "Analyzes and improves IT systems to meet business requirements."
+        },
+        {
+            "title": "Data Analyst / Scientist",
+            "description": "Collects, analyzes, and interprets data to provide insights for business decisions."
+        },
+        {
+            "title": "Cybersecurity Analyst",
+            "description": "Protects systems and data from cyber threats."
+        },
+        {
+            "title": "IT Consultant",
+            "description": "Provides expert advice on IT strategies and solutions to businesses."
+        },
+        {
+            "title": "Database Administrator",
+            "description": "Manages and maintains an organization's databases."
+        },
+        {
+            "title": "Software Engineer / Developer",
+            "description": "Designs, develops, and tests software applications."
+        },
+        {
+            "title": "Web Developer",
+            "description": "Creates and maintains websites."
+        },
+        {
+            "title": "Technical Support Specialist",
+            "description": "Provides technical assistance to users and businesses."
+        },
+        {
+            "title": "Business Analyst",
+            "description": "Focuses on improving business processes through technology solutions."
+        }
+    ]
+}

@@ -1,0 +1,93 @@
+{
+    "programName": "Bachelor of Science in Information Technology",
+    "acronym": "BSIT",
+    "heroSection": {
+        "heading": "Bachelor of Science in Information Technology",
+        "subheading": "Build a strong foundation in programming, networking, and system design to prepare for diverse careers in the IT industry"
+    },
+    "aboutSection": {
+        "heading": "Technology Skills for the Real World",
+        "subheading": "The Bachelor of Science in Information Technology (BSIT) program provides students with hands-on experience and technical expertise in software development, database management, networking, and system administration. With a balance of theory and practice, the program prepares graduates to create solutions that meet the demands of businesses and communities in today’s digital world."
+    },
+    "subjectsSection": [
+        {
+            "title": "1st Year",
+            "subjects": [
+                "Intro to Programming",
+                "Computer Programming",
+                "Hardware System and Servicing",
+                "Networking",
+                "Discrete Structures for IT"
+            ]
+        },
+        {
+            "title": "2nd Year",
+            "subjects": [
+                "Data Structures and Algorithms",
+                "Information Management",
+                "Advanced Database Systems",
+                "Networking",
+                "Object-Oriented Programming",
+                "Human Computer Interface"
+            ]
+        },
+        {
+            "title": "3rd Year",
+            "subjects": [
+                "Web Systems and Technology",
+                "System Analysis and Design",
+                "Electives",
+                "Application Development and Emerging Technologies",
+                "Capstone Project and Research",
+                "Information Assurance and Security"
+            ]
+        },
+        {
+            "title": "4th Year",
+            "subjects": [
+                "System Administration and Maintenance",
+                "System Architecture and Integration",
+                "Capstone Project and Research",
+                "Web Systems and Technology"
+            ]
+        }
+    ],
+    "careerSection": [
+        {
+            "title": "Software Developer / Engineer",
+            "description": "Designs, develops, and maintains software and applications."
+        },
+        {
+            "title": "Network Administrator",
+            "description": "Manages and supports a company's computer networks."
+        },
+        {
+            "title": "Data Analyst / Scientist",
+            "description": "Works with large datasets to extract insights and inform business decisions."
+        },
+        {
+            "title": "IT Security Analyst",
+            "description": "Protects computer systems and networks from threats and breaches."
+        },
+        {
+            "title": "Web Developer",
+            "description": "Builds, creates, and maintains websites."
+        },
+        {
+            "title": "IT Support Specialist",
+            "description": "Provides technical assistance and troubleshooting to users."
+        },
+        {
+            "title": "Systems Analyst",
+            "description": "Analyzes business needs to design and implement technology solutions."
+        },
+        {
+            "title": "Cloud Solutions Architect",
+            "description": "Designs and manages cloud computing infrastructure."
+        },
+        {
+            "title": "Business Analyst (IT)",
+            "description": "Bridges the gap between business needs and technical solutions."
+        }
+    ]
+}

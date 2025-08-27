@@ -1,0 +1,85 @@
+{
+    "programName": "Bachelor of Library and Information Science",
+    "acronym": "BLIS",
+    "heroSection": {
+        "heading": "Bachelor of Library and Information Science",
+        "subheading": "Develop the expertise to organize, preserve, and deliver information resources in both traditional and digital environments"
+    },
+    "aboutSection": {
+        "heading": "Shaping Knowledge and Access",
+        "subheading": "The Bachelor of Library and Information Science (BLIS) program trains students to manage information resources, library systems, and digital archives. It emphasizes research, information organization, and the use of modern technologies to support learning, literacy, and lifelong access to knowledge. Graduates are prepared for careers in libraries, information centers, and knowledge management across diverse fields."
+    },
+    "subjectsSection": [
+        {
+            "title": "1st Year",
+            "subjects": [
+                "Introduction to Library and Information Science",
+                "Information and Communications Technology in LIS",
+                "Collection Management of Information Resources",
+                "Library Materials for Children and Young Adult",
+                "Telecommunications and Networks for Library Information Science"
+            ]
+        },
+        {
+            "title": "2nd Year",
+            "subjects": [
+                "Information Resources and Services",
+                "Organization of Information Resources",
+                "Information Processing and Handling in Libraries and Information Centers",
+                "Management of Libraries and Information Centers",
+                "Programming Fundamentals",
+                "Educational Technology",
+                "Web Technologies in Libraries and Information Centers",
+                "Special/Public Librarianship",
+                "School/Academic Librarianship"
+            ]
+        },
+        {
+            "title": "3rd Year",
+            "subjects": [
+                "Introduction to Records Management and Archives",
+                "Preservation of Information Resources",
+                "Marketing Library and Information Services",
+                "Philosophies and Principles of Teaching in LIS",
+                "Indexing and Abstracting",
+                "Introduction to Archives Conservation",
+                "Systems Analysis and Design in Libraries and Information Centers",
+                "Database Design for Libraries",
+                "Digital Libraries and Resources",
+                "Information Literacy",
+                "Research Methods in Library and Information Science",
+                "Library Practice",
+                "Thesis/Research Writing",
+                "Archives Principles and Practices",
+                "Review in Organization, Management and Development and Maintenance of Multi-media based Library or Information Service, Laws, Trends and Practices affecting the Profession",
+                "Indigenous Knowledge and Multi-Culturism"
+            ]
+        }
+    ],
+    "careerSection": [
+        {
+            "title": "Librarian",
+            "description": "Manages library collections, provides information services and research assistance to patrons, and develops databases and programs."
+        },
+        {
+            "title": "Library Assistant",
+            "description": "Supports librarians by handling tasks such as checking out materials, shelving books, assisting patrons with basic inquiries, and maintaining library collections."
+        },
+        {
+            "title": "Archivist",
+            "description": "Organizes and preserves historical documents, photographs, audiovisual materials, and other records, making them accessible for future use."
+        },
+        {
+            "title": "Library Technician",
+            "description": "Assists with a variety of library functions, including cataloging materials, managing interlibrary loans, and performing clerical duties related to collection management."
+        },
+        {
+            "title": "Data Analyst / Information Analyst",
+            "description": "Applies information science principles to analyze and interpret data, develop information systems, and use technology to solve organizational problems."
+        },
+        {
+            "title": "Library Technology Officer",
+            "description": "Focuses on building and maintaining the digital infrastructure and platforms that support modern library services and operations."
+        }
+    ]
+}
