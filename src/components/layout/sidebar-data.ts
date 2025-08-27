@@ -17,6 +17,7 @@ export const navItems: NavItem[] = [
     icon: LayoutDashboard,
     isActive: false,
     items: [], // array for sub items in the future
+    role: "admin",
   },
   {
     title: "Microsites",
