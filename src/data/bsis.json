@@ -27,11 +27,36 @@
                 "IT Infrastructure and Network Technologies",
                 "Professional Issues in Information Systems",
                 "Data Structures and Algorithms",
-                "Elective",
+                "Elective 1",
                 "Business Intelligence",
                 "Financial Management",
                 "System Analysis and Design",
                 "Information Management"
+            ]
+        },
+        {
+            "title": "3rd Year",
+            "subjects": [
+                "Enterprise Architecture",
+                "Business Process Management",
+                "Quantitative Methods",
+                "IT Security and Management",
+                "Electives 2-6",
+                "IS Project Management",
+                "Evaluation of Business Performance",
+                "Introduction to Data Analytics",
+                "Capstone Project",
+                "Technopreneurship"
+            ]
+        },
+        {
+            "title": "4th Year",
+            "subjects": [
+                "Application Development and Emerging Technologies",
+                "IS Strategy, Management, and Acquisition",
+                "Capstone Project",
+                "Elective 7",
+                "Practicum for Information Systems"
             ]
         }
     ],
