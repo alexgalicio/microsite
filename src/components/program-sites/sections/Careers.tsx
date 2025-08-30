@@ -11,7 +11,7 @@ type CareersProps = {
 
 function Careers({ careers }: CareersProps) {
     return (
-        <section className="py-8">
+        <section className="py-16 bg-gray-50">
             <div className="container mx-auto px-4 flex flex-col items-center space-y-6">
                 <h2 className="text-3xl md:text-4xl font-extrabold text-center text-gray-900">
                     Career Paths

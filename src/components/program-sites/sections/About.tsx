@@ -8,7 +8,7 @@ type AboutProps = {
 
 function About({ programName, heading, subheading }: AboutProps) {
     return (
-        <section className="py-8">
+        <section className="py-20">
             <div className="container mx-auto px-4 flex flex-col md:flex-row gap-4 items-center space-y-4">
                 <div className="flex flex-col gap-2 text-center md:text-left md:w-1/2">
                     <small className="font-extrabold text-gray-800">ABOUT {programName}</small>

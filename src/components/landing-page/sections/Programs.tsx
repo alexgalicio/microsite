@@ -4,7 +4,7 @@ import ProgramCard from "@/components/landing-page/ui/ProgramCard"
 
 function Programs() {
   return (
-    <section className="py-8">
+    <section className="py-16">
         <div className="container mx-auto px-4">
             <h2 className="text-center font-medium text-3xl mb-12 md:text-4xl">
                 Our Programs

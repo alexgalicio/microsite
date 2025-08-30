@@ -1,6 +1,6 @@
 function Hero() {
   return (
-    <section className="relative h-[80vh] bg-[url('/images/background.png')] bg-cover bg-no-repeat bg-right md:bg-center">
+    <section className="relative h-[80vh] bg-[url('/images/pimentel.jpg')] bg-cover bg-no-repeat bg-center">
       <div className="absolute inset-0 bg-black/20"></div>
 
       <div className="container mx-auto px-4 flex flex-col justify-center items-center h-full text-center text-white space-y-4 relative z-10">

@@ -22,7 +22,7 @@ function Subjects({ years }: SubjectsProps) {
   };
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8">
+    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-200">
       <div className="container mx-auto flex flex-col items-center space-y-8">
         
         <h2 className="text-3xl md:text-4xl font-extrabold text-center text-gray-900">
