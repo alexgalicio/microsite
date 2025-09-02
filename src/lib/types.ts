@@ -94,5 +94,6 @@ export interface Feedback {
   is_read: boolean;
 }
 
+export type FeedbackType = "helpful" | "unhelpful" | null;
 export type MainNavItem = NavItemWithOptionalChildren;
 export type SidebarNavItem = NavItemWithChildren;
