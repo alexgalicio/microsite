@@ -84,7 +84,10 @@ export async function getMenuTitle(menuId: string) {
   return { success: true, data: data.title };
 }
 
-export async function getTableData(): Promise<{ data: Menu[]; error: string | null }> {
+export async function getTableData(): Promise<{
+  data: Menu[];
+  error: string | null;
+}> {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase.from("menu").select(`
         id, 
@@ -102,4 +105,37 @@ export async function getTableData(): Promise<{ data: Menu[]; error: string | nu
     })) || [];
 
   return { data: mappedData, error: null };
+}
+
+export async function getMenuandSubmenu() {
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase.from("menu").select(`
+      id,
+      title,
+      submenu (
+        id,
+        title,
+        sites (
+          id,
+          url
+        )
+      )
+    `);
+
+  if (error) {
+    return [];
+  }
+
+  const formatted = data.map((menu) => ({
+    id: menu.id,
+    title: menu.title,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    sublink: menu.submenu.map((sub: any) => ({
+      id: sub.id,
+      name: sub.title,
+      link: sub.sites?.[0]?.url || "#",
+    })),
+  }));
+
+  return formatted;
 }
