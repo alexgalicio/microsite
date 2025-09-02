@@ -84,3 +84,32 @@ export async function deleteCalendarEvent(id: string) {
 
   return { success: true };
 }
+
+export async function getNextEvents() {
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from("calendar_events")
+    .select("start, end, title")
+    .gte("start", new Date().toISOString())
+    .order("start", { ascending: true })
+    .limit(4);
+
+  if (error) {
+    return [];
+  }
+
+  return data.map((event) => {
+    const startDate = new Date(event.start);
+
+    return {
+      day: startDate
+        .toLocaleDateString("en-US", { weekday: "long" })
+        .toUpperCase(),
+      month: startDate
+        .toLocaleDateString("en-US", { month: "short" })
+        .toUpperCase(),
+      date: startDate.getDate().toString(),
+      title: event.title,
+    };
+  });
+}
