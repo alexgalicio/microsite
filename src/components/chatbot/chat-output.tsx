@@ -62,7 +62,7 @@ const AssistantChat = ({ content }: { content: string }) => {
         <ReactMarkdown
           components={{
             a: ({ href, children }) => (
-              <a target="_blank" href={href}>
+              <a target="_blank" href={href} className="text-underline">
                 {children}
               </a>
             ),
