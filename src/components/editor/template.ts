@@ -13,7 +13,7 @@ body {
   padding-bottom: 0;
   color: #ffffff;
   font-weight: 100;
-  background-image: url("/images/background.png");
+  background-image: url("/images/pimentel.jpg");
   background-attachment: fixed;
   background-position: center center;
   background-repeat: no-repeat;
@@ -188,7 +188,7 @@ body {
   max-width: 650px;
   line-height: 30px;
   margin-bottom: 30px;
-  color: #c6c6c6;
+  color: #fff;
 }
 .about-sect {
   padding-top: 100px;
