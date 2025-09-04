@@ -94,6 +94,13 @@ export interface Feedback {
   is_read: boolean;
 }
 
+export interface SiteAnalytics {
+  id: string;
+  title: string;
+  updated_at: string;
+  url: string;
+}
+
 export type FeedbackType = "helpful" | "unhelpful" | null;
 export type MainNavItem = NavItemWithOptionalChildren;
 export type SidebarNavItem = NavItemWithChildren;
