@@ -12,7 +12,7 @@ export default async function ProgramPage({
 }) {
   const { program } = await params;
 
-  const data = await import(`@/data/${program}.json`).then(
+  const data = await import(`@/components/landing-page/data/${program}.json`).then(
     (mod) => mod.default
   );
 
