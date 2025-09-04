@@ -10,7 +10,7 @@ export default function Page() {
         backgroundPosition: "center",
       }}
     >
-      <div className="absolute inset-0 bg-black/20"></div>
+      <div className="absolute inset-0 bg-black/10"></div>
 
       <div className="relative">
         <SignIn />
