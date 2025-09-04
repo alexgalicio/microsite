@@ -106,7 +106,7 @@ export default function Chat() {
                 <ScrollArea className="h-[300px] pr-3">
                   <div className="space-y-4">
                     <div className="rounded-lg bg-primary text-primary-foreground p-2 rounded-bl-none">
-                      Hi, my name is Foxy. How can I help you today?
+                      Hi, my name is Foxy. How can I help you?
                     </div>
 
                     <ChatOutput messages={messages} status={status} />
