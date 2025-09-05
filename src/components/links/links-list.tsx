@@ -16,22 +16,25 @@ import { EmptyState } from "@/components/ui/empty-state";
 import LinkItem from "./link-item";
 
 export default function LinksList({ links }: { links: Links[] }) {
-  const [sort, setSort] = useState("ascending");
+  const [sort, setSort] = useState("default");
   const [search, setSearch] = useState("");
 
   const searchLower = search.toLowerCase();
-  const filteredLinks = links
-    .sort((a, b) =>
+
+  let filteredLinks = links.filter(
+    (link) =>
+      link.title.toLowerCase().includes(searchLower) ||
+      link.description.toLowerCase().includes(searchLower) ||
+      link.url.toLowerCase().includes(searchLower)
+  );
+
+  if (sort === "ascending" || sort === "descending") {
+    filteredLinks = filteredLinks.sort((a, b) =>
       sort === "ascending"
         ? a.title.localeCompare(b.title)
         : b.title.localeCompare(a.title)
-    )
-    .filter(
-      (link) =>
-        link.title.toLowerCase().includes(searchLower) ||
-        link.description.toLowerCase().includes(searchLower) ||
-        link.url.toLowerCase().includes(searchLower)
     );
+  }
 
   return (
     <>

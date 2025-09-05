@@ -184,10 +184,6 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
                 </FormItem>
               )}
             />
-            <FormDescription className="break-all">
-              Note: You can view all the announcements in https://[yourDomain].
-              {process.env.NEXT_PUBLIC_ROOT_DOMAIN}/announcements
-            </FormDescription>
           </form>
         </Form>
 

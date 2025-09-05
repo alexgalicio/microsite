@@ -2,13 +2,19 @@
 
 import { Links } from "@/lib/types";
 import { useState } from "react";
-import { X } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import LinkPreview from "./link-preview";
 
-export default function SearchableLinks({ links }: { links: Links[] }) {
+export default function SearchableLinks({
+  links,
+  loading = false,
+}: {
+  links: Links[];
+  loading?: boolean;
+}) {
   const [search, setSearch] = useState("");
 
   const searchLower = search.toLowerCase();
@@ -47,17 +53,25 @@ export default function SearchableLinks({ links }: { links: Links[] }) {
         <Separator className="shadow-sm" />
 
         <div className="flex-1 overflow-y-auto min-h-0 pr-2">
-          <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-4 pb-10 pt-4">
-            {filteredLinks.length ? (
-              filteredLinks.map((link) => (
-                <LinkPreview key={link.id} link={link} />
-              ))
-            ) : (
-              <div className="col-span-full text-center mt-20">
-                No links found.
-              </div>
-            )}
-          </div>
+          {loading ? (
+            // Loading state
+            <div className="flex flex-col items-center justify-center min-h-[200px] gap-4">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+              <p className="text-muted-foreground">Loading links...</p>
+            </div>
+          ) : (
+            <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-4 pb-10 pt-4">
+              {filteredLinks.length ? (
+                filteredLinks.map((link) => (
+                  <LinkPreview key={link.id} link={link} />
+                ))
+              ) : (
+                <div className="col-span-full text-center mt-20">
+                  No links found.
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </>
