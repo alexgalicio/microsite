@@ -11,19 +11,28 @@ import { useEffect, useState } from "react";
 export default function Page() {
   const [linkData, setLinkData] = useState<Links[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const site = useSite();
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       setError(null);
 
-      const response = await getLinksBySiteId(site.id);
-      if (response.success) {
-        setLinkData(response.data || []);
-      } else {
-        setError(handleError(response.error));
+      try {
+        const response = await getLinksBySiteId(site.id);
+        if (response.success) {
+          setLinkData(response.data || []);
+        } else {
+          setError(handleError(response.error));
+        }
+      } catch (err) {
+        setError("An unexpected error occurred");
+      } finally {
+        setLoading(false);
       }
     };
+    
     fetchData();
   }, [site.id]);
 
@@ -39,7 +48,7 @@ export default function Page() {
   return (
     <div className="max-w-6xl mx-auto px-5 h-screen flex flex-col">
       <Header />
-      <SearchableLinks links={linkData} />
+      <SearchableLinks links={linkData} loading={loading} />
     </div>
   );
 }
