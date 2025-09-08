@@ -9,8 +9,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useLink } from "./link-context";
 import { Links } from "@/lib/types";
+import { format } from "date-fns";
 
 export default function LinkItem({ link }: { link: Links }) {
   const { setOpen, setCurrentRow } = useLink();
@@ -67,7 +69,20 @@ export default function LinkItem({ link }: { link: Links }) {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <p className="line-clamp-2 text-gray-500 text-sm">{link.description}</p>
+        <p className="line-clamp-2 text-gray-500 text-sm mb-4">
+          {link.description}
+        </p>
+
+        <div className="flex items-center justify-between">
+          <p className="text-gray-500 text-sm">
+            {format(new Date(link.created_at), "M/d/yyyy")}
+          </p>
+
+          <div className="flex gap-1">
+            <Badge className="bg-green-500">{link.link_category.title}</Badge>
+            <Badge className="bg-purple-500">{link.link_to.title}</Badge>
+          </div>
+        </div>
       </div>
     </div>
   );
