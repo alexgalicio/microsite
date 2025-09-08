@@ -1,7 +1,7 @@
 "use client";
 
-import Header from "@/components/links/header";
 import SearchableLinks from "@/components/links/search-link";
+import SubdomainHeader from "@/components/subdomain-header";
 import { useSite } from "@/components/subdomain-provider";
 import { getLinksBySiteId } from "@/lib/actions/links";
 import { Links } from "@/lib/types";
@@ -26,13 +26,13 @@ export default function Page() {
         } else {
           setError(handleError(response.error));
         }
-      } catch (err) {
-        setError("An unexpected error occurred");
+      } catch (error) {
+        setError(handleError(error));
       } finally {
         setLoading(false);
       }
     };
-    
+
     fetchData();
   }, [site.id]);
 
@@ -46,9 +46,9 @@ export default function Page() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-5 h-screen flex flex-col">
-      <Header />
+    <>
+      <SubdomainHeader title={site.title} subdomain={site.subdomain} />
       <SearchableLinks links={linkData} loading={loading} />
-    </div>
+    </>
   );
 }
