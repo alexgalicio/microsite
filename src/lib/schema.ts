@@ -33,7 +33,16 @@ export const linkSchema = z.object({
   id: z.string(),
   title: z.string(),
   url: z.string(),
+  link_category: z.object({
+    id: z.string(),
+    title: z.string(),
+  }),
+  link_to: z.object({
+    id: z.string(),
+    title: z.string(),
+  }),
   description: z.string(),
+  created_at: z.string(),
 });
 
 export type Menu = z.infer<typeof menuSchema>;

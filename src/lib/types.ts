@@ -82,7 +82,16 @@ export interface Links {
   id: string;
   title: string;
   url: string;
+  link_category: {
+    id: string;
+    title: string;
+  };
+  link_to: {
+    id: string;
+    title: string;
+  };
   description: string;
+  created_at: string;
 }
 
 export interface Feedback {
