@@ -237,7 +237,7 @@ export function SiteActionDialog({ currentRow, open, onOpenChange }: Props) {
                   <FormLabel htmlFor="description">Description</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Enter microsite description..."
+                      placeholder="Enter description"
                       {...field}
                     />
                   </FormControl>
