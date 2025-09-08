@@ -4,17 +4,26 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import DOMPurify from "isomorphic-dompurify";
 import Image from "next/image";
 import Link from "next/link";
+import { Loader2 } from "lucide-react";
 
 interface AnnouncementsProps {
   announcements: Announcements[];
+  loading?: boolean;
 }
 
 export default function AnnouncementPreview({
   announcements,
+  loading = false,
 }: AnnouncementsProps) {
   return (
-    <div className="grid grid-cols-1 gap-16 lg:gap-28 md:grid-cols-2 md:my-16 my-8">
-      {announcements.length ? (
+    
+    <div className="grid grid-cols-1 gap-16 lg:gap-28 md:grid-cols-2 my-8">
+       {loading ? (
+        <div className="flex flex-col items-center justify-center min-h-[200px] gap-4 col-span-full">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+       ) : announcements.length ? (
         announcements.map((announcement) => (
           <div className="break-words" key={announcement.id}>
             <AspectRatio ratio={16 / 9} className="w-full">
