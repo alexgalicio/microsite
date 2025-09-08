@@ -1,7 +1,7 @@
 "use client";
 
+import SubdomainHeader from "@/components/subdomain-header";
 import AnnouncementPreview from "@/components/announcement/announcement-preview";
-import Header from "@/components/announcement/header";
 import { PaginationWithLinks } from "@/components/announcement/pagination";
 import { useSite } from "@/components/subdomain-provider";
 import { getAnnouncementsBySiteId } from "@/lib/actions/announcement";
@@ -14,6 +14,7 @@ export default function Page() {
   const [announcementData, setAnnouncementData] = useState<Announcements[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const site = useSite();
   const searchParams = useSearchParams();
 
@@ -22,6 +23,7 @@ export default function Page() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       setError(null);
 
       const response = await getAnnouncementsBySiteId(site.id, {
@@ -34,6 +36,8 @@ export default function Page() {
       } else {
         setError(handleError(response.error));
       }
+
+      setLoading(false);
     };
     fetchData();
   }, [site.id, page]);
@@ -48,19 +52,29 @@ export default function Page() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-5 mb-10">
-      <Header />
-      <AnnouncementPreview announcements={announcementData} />
-      <div className="flex justify-center">
-        <div className="w-auto">
-          <PaginationWithLinks
-            page={page}
-            pageSize={pageSize}
-            totalCount={totalCount}
-            navigationMode="router"
-          />
-        </div>
+    <>
+      <SubdomainHeader title={site.title} subdomain={site.subdomain} />
+      <div className="max-w-6xl mx-auto px-5 mt-25 mb-10">
+        <h2 className="text-3xl font-semibold text-foreground">
+          Announcements
+        </h2>
+        <AnnouncementPreview
+          announcements={announcementData}
+          loading={loading}
+        />
+        {!loading && (
+          <div className="flex justify-center">
+            <div className="w-auto">
+              <PaginationWithLinks
+                page={page}
+                pageSize={pageSize}
+                totalCount={totalCount}
+                navigationMode="router"
+              />
+            </div>
+          </div>
+        )}
       </div>
-    </div>
+    </>
   );
 }
