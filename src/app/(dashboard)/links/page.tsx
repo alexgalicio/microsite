@@ -21,7 +21,7 @@ export default async function Page({
   const params = await searchParams;
 
   const page = parseInt((params?.page as string) || "1");
-  const pageSize = parseInt((params?.pageSize as string) || "12");
+  const pageSize = parseInt((params?.pageSize as string) || "9");
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
