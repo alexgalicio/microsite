@@ -13,7 +13,20 @@ export async function getLinksByUserId(id: string, from: number, to: number) {
   const supabase = createServerSupabaseClient();
   const { data, error, count } = await supabase
     .from("links")
-    .select("*", { count: "exact" })
+    .select(
+      `
+      *,
+      link_category (
+        id,
+        title
+      ),
+      link_to (
+        id,
+        title
+      )
+    `,
+      { count: "exact" }
+    )
     .eq("user_id", id)
     .order("created_at", { ascending: false })
     .range(from, to);
@@ -28,6 +41,8 @@ export async function getLinksByUserId(id: string, from: number, to: number) {
 export async function addNewLink(formData: {
   title: string;
   url: string;
+  category: string;
+  to: string;
   description: string;
 }) {
   const { userId } = await auth();
@@ -61,6 +76,8 @@ export async function addNewLink(formData: {
   const { error } = await supabase.from("links").insert({
     title: formData.title,
     url: formData.url,
+    category_id: formData.category,
+    to_id: formData.to,
     description: formData.description,
     site_id: siteData.id,
     user_id: userId,
@@ -81,6 +98,8 @@ export async function editLink(
   formData: {
     title: string;
     url: string;
+    category: string;
+    to: string;
     description: string;
   }
 ) {
@@ -96,6 +115,8 @@ export async function editLink(
     .update({
       title: formData.title,
       url: formData.url,
+      category_id: formData.category,
+      to_id: formData.to,
       description: formData.description,
     })
     .eq("id", id);
@@ -129,7 +150,19 @@ export async function getLinksBySiteId(id: string) {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase
     .from("links")
-    .select("*")
+    .select(
+      `
+      *,
+      link_category (
+        id,
+        title
+      ),
+      link_to (
+        id,
+        title
+      )
+    `
+    )
     .eq("site_id", id)
     .order("title", { ascending: true });
 
@@ -138,4 +171,130 @@ export async function getLinksBySiteId(id: string) {
   }
 
   return { success: true, data };
+}
+
+export async function getAllCategories() {
+  const supabase = createServerSupabaseClient();
+
+  const { data: categories, error } = await supabase
+    .from("link_category")
+    .select("*")
+    .order("title");
+
+  if (error) {
+    return { success: false, error: error.message, data: [] };
+  }
+
+  return { success: true, data: categories || [] };
+}
+
+export async function createCategory(title: string) {
+  const supabase = createServerSupabaseClient();
+
+  if (!title || typeof title !== "string" || title.trim().length === 0) {
+    return { success: false, error: "Title is required" };
+  }
+
+  const trimmedTitle = title.trim();
+
+  // Check if category already exists
+  const { data: existingCategory } = await supabase
+    .from("link_category")
+    .select("*")
+    .ilike("title", trimmedTitle)
+    .single();
+
+  if (existingCategory) {
+    return { success: false, error: "Category with this title already exists" };
+  }
+
+  // Create new category
+  const { data, error } = await supabase
+    .from("link_category")
+    .insert([{ title: trimmedTitle }])
+    .select("id, title")
+    .single();
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, data };
+}
+
+export async function getAllTo() {
+  const supabase = createServerSupabaseClient();
+
+  const { data: categories, error } = await supabase
+    .from("link_to")
+    .select("*")
+    .order("title");
+
+  if (error) {
+    return { success: false, error: error.message, data: [] };
+  }
+
+  return { success: true, data: categories || [] };
+}
+
+export async function createTo(title: string) {
+  const supabase = createServerSupabaseClient();
+
+  if (!title || typeof title !== "string" || title.trim().length === 0) {
+    return { success: false, error: "Title is required" };
+  }
+
+  const trimmedTitle = title.trim();
+
+  // check if category already exists
+  const { data: existingCategory } = await supabase
+    .from("link_to")
+    .select("*")
+    .ilike("title", trimmedTitle)
+    .single();
+
+  if (existingCategory) {
+    return { success: false, error: "Category with this title already exists" };
+  }
+
+  // Create new category
+  const { data: newCategory, error } = await supabase
+    .from("link_to")
+    .insert([{ title: trimmedTitle }])
+    .select("id, title")
+    .single();
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, data: newCategory };
+}
+
+export async function getLatestLinks() {
+  const supabase = createServerSupabaseClient();
+
+  const { data, error } = await supabase
+    .from("links")
+    .select(
+      `
+      *,
+      link_category (
+        id,
+        title
+      ),
+      link_to (
+        id,
+        title
+      )
+    `
+    )
+    .order("created_at", { ascending: false })
+    .limit(4);
+
+  if (error) {
+    return [];
+  }
+
+  return data || [];
 }
