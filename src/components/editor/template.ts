@@ -7,20 +7,14 @@ body {
   margin: 0;
 }
 .header-banner {
-  min-height: 100vh;
   width: 100%;
-  padding-top: 35px;
-  padding-bottom: 0;
-  color: #ffffff;
-  font-weight: 100;
-  background-image: url("/images/pimentel.jpg");
-  background-attachment: fixed;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  display: flex;
-  flex-direction: column;
-  position: relative;
+  padding: 6px 0;
+  background-color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.1);
 }
 .container-width {
   width: 90%;
@@ -34,7 +28,6 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: auto;
 }
 .logo-container {
   flex: 0 0 auto;
@@ -51,8 +44,8 @@ body {
   width: auto;
 }
 .logo-icon {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -69,35 +62,37 @@ body {
 .logo-text {
   font-weight: 600;
   letter-spacing: 0.5px;
-  color: #ffffff;
+  color: #000;
   text-decoration: none;
 }
 .menu {
   flex: 0 0 auto;
 }
+.menu-items {
+  display: flex;
+  align-items: center;
+}
 .menu-item {
-  float: right;
-  font-size: 15px;
-  color: #eee;
-  width: 130px;
-  padding: 10px;
+  font-size: 16px;
+  color: #000;
+  padding: 10px 20px;
   min-height: 50px;
   text-align: center;
   line-height: 30px;
   font-weight: 400;
   text-decoration: none;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.3s ease;
   cursor: pointer;
+  white-space: nowrap;
 }
 .menu-item:hover {
-  color: #fff;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
+  text-decoration: underline;
 }
 .menu-toggle {
   display: none;
-  float: right;
   flex-direction: column;
   cursor: pointer;
   padding: 15px;
@@ -106,14 +101,14 @@ body {
 .hamburger {
   width: 25px;
   height: 3px;
-  background-color: #fff;
+  background-color: #000;
   margin: 3px 0;
   transition: 0.3s;
 }
 #menu-checkbox {
   display: none;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 950px) {
   .nav-header {
     flex-direction: row;
   }
@@ -128,24 +123,25 @@ body {
     position: absolute;
     top: 100%;
     right: 0;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: #fff;
     min-width: 200px;
     border-radius: 5px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1000;
+    flex-direction: column;
   }
   .menu-item {
-    float: none;
     width: 100%;
     text-align: left;
     padding: 15px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    justify-content: flex-start;
   }
   .menu-item:last-child {
     border-bottom: none;
   }
   #menu-checkbox:checked ~ .menu-items {
-    display: block;
+    display: flex;
   }
   #menu-checkbox:checked ~ .menu-toggle .hamburger:nth-child(1) {
     transform: rotate(-45deg) translate(-6px, 6px);
@@ -168,8 +164,20 @@ body {
     margin-bottom: 20px;
   }
   .hero-title {
-    padding: 30px 0;
+    padding: 30px 8px;
   }
+}
+.hero-sect {
+  min-height: 100vh;
+  background-image: url("/images/pimentel.jpg");
+  background-attachment: fixed;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 100px;
 }
 .hero-title {
   display: flex;
@@ -178,11 +186,12 @@ body {
   align-items: center;
   text-align: center;
   flex-grow: 1;
-  padding: 50px 0;
+  padding: 50px 8px;
 }
 .lead-title {
   margin: 0 0 30px 0;
   font-size: 50px;
+  color: #fff;
 }
 .sub-lead-title {
   max-width: 650px;
@@ -447,9 +456,9 @@ export const templateHTML = `
           <div class="logo-container">
             <div class="logo">
               <div class="logo-icon">
-                <img src="/" alt="Logo" />
+                <img src="/logo.jpg" alt="Logo" />
               </div>
-              <a href="#" class="logo-text">MICROSITE</a>
+              <a href="#home" class="logo-text">Microsite</a>
             </div>
           </div>
           <nav class="menu">
@@ -460,12 +469,20 @@ export const templateHTML = `
               <div class="hamburger"></div>
             </label>
             <div class="menu-items">
-              <a href="#" class="menu-item">LINK 3</a>
-              <a href="#" class="menu-item">LINK 2</a>
-              <a href="#" class="menu-item">LINK 1</a>
+              <a href="#home" class="menu-item">Home</a>
+              <a href="#" class="menu-item">Announcements</a>
+              <a href="#photos" class="menu-item">Photos</a>
+              <a href="#about" class="menu-item">About</a>
+              <a href="#testimonial" class="menu-item">Testimonial</a>
+              <a href="#" class="menu-item">Links</a>
             </div>
           </nav>
         </div>
+      </div>
+    </header>
+
+    <section id="home" class="hero-sect">
+      <div class="container-width">
         <div class="hero-title">
           <div class="lead-title">Ready to get started?</div>
           <div class="sub-lead-title">
@@ -474,9 +491,38 @@ export const templateHTML = `
           </div>
         </div>
       </div>
-    </header>
+    </section>
 
-    <section class="about-sect">
+    <section id="photos" class="images-sect">
+      <div class="container-width">
+        <div class="flex-title">Photo Showcase</div>
+        <div class="flex-desc">
+          Explore our vibrant moments and unforgettable events.
+        </div>
+        <div class="cards">
+          <div class="card">
+            <img src="/" alt="photo-showcase" />
+          </div>
+          <div class="card">
+            <img src="/" alt="photo-showcase" />
+          </div>
+          <div class="card">
+            <img src="/" alt="photo-showcase" />
+          </div>
+          <div class="card">
+            <img src="/" alt="photo-showcase" />
+          </div>
+          <div class="card">
+            <img src="/" alt="photo-showcase" />
+          </div>
+          <div class="card">
+            <img src="/" alt="photo-showcase" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="about-sect">
       <div class="container-width">
         <div class="about-container">
           <div class="about-image">
@@ -507,35 +553,6 @@ export const templateHTML = `
             nunc in lectus dignissim porttitor. Aenean sit amet iaculis justo.
             Nam iaculis, quam nec tempor condimentum, dui urna sollicitudin
             lorem, ac facilisis felis nibh eu nibh.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="images-sect">
-      <div class="container-width">
-        <div class="flex-title">Photo Showcase</div>
-        <div class="flex-desc">
-          Explore our vibrant moments and unforgettable events.
-        </div>
-        <div class="cards">
-          <div class="card">
-            <img src="/" alt="photo-showcase" />
-          </div>
-          <div class="card">
-            <img src="/" alt="photo-showcase" />
-          </div>
-          <div class="card">
-            <img src="/" alt="photo-showcase" />
-          </div>
-          <div class="card">
-            <img src="/" alt="photo-showcase" />
-          </div>
-          <div class="card">
-            <img src="/" alt="photo-showcase" />
-          </div>
-          <div class="card">
-            <img src="/" alt="photo-showcase" />
           </div>
         </div>
       </div>
@@ -584,7 +601,7 @@ export const templateHTML = `
       </div>
     </section>
 
-    <section class="tstm-sect">
+    <section id="testimonial" class="tstm-sect">
       <div class="container-width">
         <div class="tstm-container">
           <div class="tstm-title">Testimonial</div>
@@ -643,7 +660,9 @@ export const templateHTML = `
         </div>
 
         <div class="link-wrapper">
-          <a href="https://[yourDomain].alexgalicio.dev/links" class="link-btn">See More</a>
+          <a href="https://[yourDomain].alexgalicio.dev/links" class="link-btn"
+            >See More</a
+          >
         </div>
       </div>
     </section>
