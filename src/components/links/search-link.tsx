@@ -1,11 +1,19 @@
 "use client";
 
 import { Links } from "@/lib/types";
-import { useState } from "react";
-import { Loader2, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowDownAZ, Loader2, SlidersHorizontal, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { getAllCategories, getAllTo } from "@/lib/actions/links";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import LatestLinks from "./latest-links";
 import LinkPreview from "./link-preview";
 
 export default function SearchableLinks({
@@ -15,62 +23,193 @@ export default function SearchableLinks({
   links: Links[];
   loading?: boolean;
 }) {
+  const [sort, setSort] = useState("newest");
   const [search, setSearch] = useState("");
+  const [categories, setCategories] = useState<Links[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [tos, setTo] = useState<Links[]>([]);
+  const [selectedTo, setSelectedTo] = useState<string | null>(null);
+  const isFiltered =
+    search.length > 0 || selectedTo !== null || selectedCategory !== null;
+
+  // fetch category
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categData = await getAllCategories();
+        if (categData.success) {
+          setCategories(categData.data);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // fetch to
+  useEffect(() => {
+    const fetchTo = async () => {
+      try {
+        const toData = await getAllTo();
+        if (toData.success) {
+          setTo(toData.data);
+        }
+      } catch (error) {
+        console.error("Error fetching to:", error);
+      }
+    };
+    fetchTo();
+  }, []);
 
   const searchLower = search.toLowerCase();
-  const filteredLinks = links.filter(
-    (link) =>
-      link.title.toLowerCase().includes(searchLower) ||
-      link.description.toLowerCase().includes(searchLower) ||
-      link.url.toLowerCase().includes(searchLower)
-  );
+  const filteredLinks = links
+    .sort((a, b) =>
+      sort === "newest"
+        ? new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        : new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    )
+    .filter(
+      (link) =>
+        (link.url.toLowerCase().includes(searchLower) ||
+          link.title.toLowerCase().includes(searchLower) ||
+          link.description.toLowerCase().includes(searchLower)) &&
+        (selectedCategory
+          ? link.link_category?.id === selectedCategory
+          : true) &&
+        (selectedTo ? link.link_to?.id === selectedTo : true)
+    );
+
+  const resetFilters = () => {
+    setSearch("");
+    setSelectedCategory(null);
+    setSelectedTo(null);
+  };
 
   return (
     <>
-      <div className="flex flex-col flex-1 min-h-0">
-        <div className="flex flex-col-reverse items-start sm:flex-row sm:items-center sm:space-x-2 pb-4">
-          {/* input search */}
-          <Input
-            className="h-9 w-50 lg:w-[350px]"
-            placeholder="Search link"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+      <div className="mt-20 mb-8">
+        <div className="sticky top-20 z-40 bg-background border-b">
+          <div className="container mx-auto px-4 pt-8 py-4 xl:px-24">
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col-reverse items-start sm:flex-row sm:items-center sm:space-x-2">
+                {/* input search */}
+                <Input
+                  className="h-9 w-50 lg:w-[250px]"
+                  placeholder="Search link"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
 
-          {/* reset filter */}
-          {search.length > 0 && (
-            <Button
-              variant="ghost"
-              onClick={() => setSearch("")}
-              className="h-8 px-2 lg:px-3"
-            >
-              Reset
-              <X className="ml-2 h-4 w-4" />
-            </Button>
-          )}
+                <div className="flex gap-2">
+                  {/* filter by category */}
+                  <Select
+                    value={selectedCategory ?? ""}
+                    onValueChange={(value) =>
+                      setSelectedCategory(value === "all" ? null : value)
+                    }
+                  >
+                    <SelectTrigger className="h-9 border-dashed">
+                      <SelectValue placeholder="Category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All</SelectItem>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.title}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  {/* filter by to */}
+                  <Select
+                    value={selectedTo ?? ""}
+                    onValueChange={(value) =>
+                      setSelectedTo(value === "all" ? null : value)
+                    }
+                  >
+                    <SelectTrigger className="h-9 border-dashed">
+                      <SelectValue placeholder="To" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All</SelectItem>
+                      {tos.map((to) => (
+                        <SelectItem key={to.id} value={to.id}>
+                          {to.title}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* reset filter */}
+                {isFiltered && (
+                  <Button
+                    variant="ghost"
+                    onClick={resetFilters}
+                    className="h-8 px-2 lg:px-3"
+                  >
+                    Reset
+                    <X className="ml-2 h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+              <div className="ml-auto hidden h-9 lg:flex">
+                {/* sort */}
+                <Select value={sort} onValueChange={setSort}>
+                  <SelectTrigger className="w-16">
+                    <SelectValue>
+                      <SlidersHorizontal size={18} />
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent align="end">
+                    <SelectItem value="newest">
+                      <div className="flex items-center gap-4">
+                        <ArrowDownAZ size={16} />
+                        <span>Newest to Oldest</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="oldest">
+                      <div className="flex items-center gap-4">
+                        <ArrowDownAZ size={16} />
+                        <span>Oldest to Newest</span>
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <Separator className="shadow-sm" />
+        <LatestLinks />
 
-        <div className="flex-1 overflow-y-auto min-h-0 pr-2">
+        <div className="container mx-auto p-4 xl:px-24">
           {loading ? (
             // Loading state
             <div className="flex flex-col items-center justify-center min-h-[200px] gap-4">
               <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-              <p className="text-muted-foreground">Loading links...</p>
+              <p className="text-muted-foreground">Loading...</p>
             </div>
           ) : (
-            <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-4 pb-10 pt-4">
-              {filteredLinks.length ? (
-                filteredLinks.map((link) => (
-                  <LinkPreview key={link.id} link={link} />
-                ))
-              ) : (
-                <div className="col-span-full text-center mt-20">
-                  No links found.
-                </div>
-              )}
-            </div>
+            <>
+              <h2 className="text-2xl font-semibold text-foreground">
+                More Links
+              </h2>
+
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-10 pt-4">
+                {filteredLinks.length ? (
+                  filteredLinks.map((link) => (
+                    <LinkPreview key={link.id} link={link} />
+                  ))
+                ) : (
+                  <div className="col-span-full text-center mt-20">
+                    No links found.
+                  </div>
+                )}
+              </div>
+            </>
           )}
         </div>
       </div>
