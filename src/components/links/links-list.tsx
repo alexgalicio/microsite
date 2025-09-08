@@ -1,7 +1,7 @@
 "use client";
 
 import { Links } from "@/lib/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -13,28 +13,72 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowDownAZ, Link, SlidersHorizontal, X } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
+import { getAllCategories, getAllTo } from "@/lib/actions/links";
 import LinkItem from "./link-item";
 
 export default function LinksList({ links }: { links: Links[] }) {
-  const [sort, setSort] = useState("default");
+  const [sort, setSort] = useState("newest");
   const [search, setSearch] = useState("");
+  const [categories, setCategories] = useState<Links[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [tos, setTo] = useState<Links[]>([]);
+  const [selectedTo, setSelectedTo] = useState<string | null>(null);
+  const isFiltered =
+    search.length > 0 || selectedTo !== null || selectedCategory !== null;
+
+  // fetch category
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categData = await getAllCategories();
+        if (categData.success) {
+          setCategories(categData.data);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // fetch to
+  useEffect(() => {
+    const fetchTo = async () => {
+      try {
+        const toData = await getAllTo();
+        if (toData.success) {
+          setTo(toData.data);
+        }
+      } catch (error) {
+        console.error("Error fetching to:", error);
+      }
+    };
+    fetchTo();
+  }, []);
 
   const searchLower = search.toLowerCase();
-
-  let filteredLinks = links.filter(
-    (link) =>
-      link.title.toLowerCase().includes(searchLower) ||
-      link.description.toLowerCase().includes(searchLower) ||
-      link.url.toLowerCase().includes(searchLower)
-  );
-
-  if (sort === "ascending" || sort === "descending") {
-    filteredLinks = filteredLinks.sort((a, b) =>
-      sort === "ascending"
-        ? a.title.localeCompare(b.title)
-        : b.title.localeCompare(a.title)
+  const filteredLinks = links
+    .sort((a, b) =>
+      sort === "newest"
+        ? new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        : new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    )
+    .filter(
+      (link) =>
+        (link.url.toLowerCase().includes(searchLower) ||
+          link.title.toLowerCase().includes(searchLower) ||
+          link.description.toLowerCase().includes(searchLower)) &&
+        (selectedCategory
+          ? link.link_category?.id === selectedCategory
+          : true) &&
+        (selectedTo ? link.link_to?.id === selectedTo : true)
     );
-  }
+
+  const resetFilters = () => {
+    setSearch("");
+    setSelectedCategory(null);
+    setSelectedTo(null);
+  };
 
   return (
     <>
@@ -48,11 +92,53 @@ export default function LinksList({ links }: { links: Links[] }) {
             onChange={(e) => setSearch(e.target.value)}
           />
 
+          <div className="flex gap-2">
+            {/* filter by category */}
+            <Select
+              value={selectedCategory ?? ""}
+              onValueChange={(value) =>
+                setSelectedCategory(value === "all" ? null : value)
+              }
+            >
+              <SelectTrigger className="h-9 border-dashed">
+                <SelectValue placeholder="Category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                {categories.map((category) => (
+                  <SelectItem key={category.id} value={category.id}>
+                    {category.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {/* filter by to */}
+            <Select
+              value={selectedTo ?? ""}
+              onValueChange={(value) =>
+                setSelectedTo(value === "all" ? null : value)
+              }
+            >
+              <SelectTrigger className="h-9 border-dashed">
+                <SelectValue placeholder="To" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                {tos.map((to) => (
+                  <SelectItem key={to.id} value={to.id}>
+                    {to.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
           {/* reset filter */}
-          {search.length > 0 && (
+          {isFiltered && (
             <Button
               variant="ghost"
-              onClick={() => setSearch("")}
+              onClick={resetFilters}
               className="h-8 px-2 lg:px-3"
             >
               Reset
@@ -69,16 +155,16 @@ export default function LinksList({ links }: { links: Links[] }) {
               </SelectValue>
             </SelectTrigger>
             <SelectContent align="end">
-              <SelectItem value="ascending">
+              <SelectItem value="newest">
                 <div className="flex items-center gap-4">
                   <ArrowDownAZ size={16} />
-                  <span>Ascending</span>
+                  <span>Newest to Oldest</span>
                 </div>
               </SelectItem>
-              <SelectItem value="descending">
+              <SelectItem value="oldest">
                 <div className="flex items-center gap-4">
                   <ArrowDownAZ size={16} />
-                  <span>Descending</span>
+                  <span>Oldest to Newest</span>
                 </div>
               </SelectItem>
             </SelectContent>
