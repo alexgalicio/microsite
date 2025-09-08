@@ -22,7 +22,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { UserAvatarProfile } from "@/components/user-avatar-profile";
+import { UserAvatarProfile } from "@/components/layout/user-avatar-profile";
 import { usePathname, useRouter } from "next/navigation";
 import { navItems } from "./sidebar-data";
 import Link from "next/link";
