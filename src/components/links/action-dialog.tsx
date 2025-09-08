@@ -23,12 +23,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-import { useState } from "react";
-import { addNewLink, editLink } from "@/lib/actions/links";
+import { useEffect, useState } from "react";
+import {
+  addNewLink,
+  createCategory,
+  createTo,
+  editLink,
+  getAllCategories,
+  getAllTo,
+} from "@/lib/actions/links";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import Combobox, { ComboboxOptions } from "./combo-box-create";
 
 const formSchema = z.object({
   title: z
@@ -41,6 +49,8 @@ const formSchema = z.object({
     .string()
     .url("Invalid URL format")
     .regex(/^\S+$/, "Invalid URL format"),
+  category: z.string().min(1, "This field is required"),
+  to: z.string().min(1, "This field is required"),
   description: z
     .string()
     .min(3, "Description must be at least 3 characters")
@@ -63,22 +73,82 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
+  // state for options
+  const [categories, setCategories] = useState<ComboboxOptions[]>([]);
+  const [targetAudiences, setTargetAudiences] = useState<ComboboxOptions[]>([]);
+
+  // loading states
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [audiencesLoading, setAudiencesLoading] = useState(true);
+  const [isCreatingCategory, setIsCreatingCategory] = useState(false);
+  const [isCreatingTo, setIsCreatingTo] = useState(false);
+
   const form = useForm<LinkForm>({
     resolver: zodResolver(formSchema),
     defaultValues: isEdit
       ? {
           title: currentRow.title,
           url: currentRow.url,
+          category: currentRow.link_category.id,
+          to: currentRow.link_to.id,
           description: currentRow.description || "",
           isEdit,
         }
       : {
           title: "",
           url: "",
+          category: "",
+          to: "",
           description: "",
           isEdit,
         },
   });
+
+  useEffect(() => {
+    if (open) {
+      fetchAllOptions();
+    }
+  }, [open]);
+
+  async function fetchAllOptions() {
+    try {
+      setCategoriesLoading(true);
+      setAudiencesLoading(true);
+
+      const [catRes, toRes] = await Promise.all([
+        getAllCategories(),
+        getAllTo(),
+      ]);
+
+      if (catRes.success) {
+        setCategories(
+          catRes.data.map((cat) => ({
+            id: cat.id,
+            title: cat.title,
+          }))
+        );
+      } else {
+        toast.error("Failed to fetch categories");
+      }
+
+      if (toRes.success) {
+        setTargetAudiences(
+          toRes.data.map((to) => ({
+            id: to.id,
+            title: to.title,
+          }))
+        );
+      } else {
+        toast.error("Failed to fetch target audiences");
+      }
+    } catch (error) {
+      toast.error("Failed to load options");
+      console.error(error);
+    } finally {
+      setCategoriesLoading(false);
+      setAudiencesLoading(false);
+    }
+  }
 
   async function onSubmit(values: LinkForm) {
     setIsLoading(true);
@@ -107,6 +177,60 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
       console.error("Link Action Dialog Error: ", error);
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  function handleCategorySelect(option: ComboboxOptions) {
+    form.setValue("category", option.id);
+  }
+
+  function handleTargetAudienceSelect(option: ComboboxOptions) {
+    form.setValue("to", option.id);
+  }
+
+  async function handleCreateCategory(label: string) {
+    try {
+      setIsCreatingCategory(true);
+      const result = await createCategory(label);
+      if (result.success) {
+        const newCategory = {
+          id: result.data?.id,
+          title: result.data?.title,
+        };
+        setCategories((prev) => [...prev, newCategory]);
+        handleCategorySelect(newCategory);
+        toast.success("Category created successfully");
+      } else {
+        toast.error(result.error);
+      }
+    } catch (error) {
+      console.error("Error creating category:", error);
+      toast.error("Failed to create category");
+    } finally {
+      setIsCreatingCategory(false);
+    }
+  }
+
+  async function handleCreateTargetAudience(label: string) {
+    try {
+      setIsCreatingTo(true);
+      const result = await createTo(label);
+      if (result.success) {
+        const newAudience = {
+          id: result.data?.id,
+          title: result.data?.title,
+        };
+        setTargetAudiences((prev) => [...prev, newAudience]);
+        handleTargetAudienceSelect(newAudience);
+        toast.success("Item created successfully");
+      } else {
+        toast.error(result.error);
+      }
+    } catch (error) {
+      console.error("Error creating target audience:", error);
+      toast.error("Failed to create item");
+    } finally {
+      setIsCreatingTo(false);
     }
   }
 
@@ -169,13 +293,69 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
 
             <FormField
               control={form.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel>Category</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Combobox
+                        options={categories}
+                        placeholder="Please select an option"
+                        selected={field.value}
+                        disabled={categoriesLoading}
+                        onChange={handleCategorySelect}
+                        onCreate={handleCreateCategory}
+                      />
+                      {(categoriesLoading || isCreatingCategory) && (
+                        <div className="absolute right-8 top-1/2 -translate-y-1/2">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        </div>
+                      )}
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="to"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel>To</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Combobox
+                        options={targetAudiences}
+                        placeholder="Please select an option"
+                        selected={field.value}
+                        disabled={audiencesLoading}
+                        onChange={handleTargetAudienceSelect}
+                        onCreate={handleCreateTargetAudience}
+                      />
+                      {(audiencesLoading || isCreatingTo) && (
+                        <div className="absolute right-8 top-1/2 -translate-y-1/2">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        </div>
+                      )}
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="description"
               render={({ field }) => (
                 <FormItem className="grid gap-2">
                   <FormLabel htmlFor="description">Description</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Enter brief description..."
+                      placeholder="Enter description"
                       {...field}
                     />
                   </FormControl>
