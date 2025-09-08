@@ -123,7 +123,7 @@ export default function ContactForm() {
               <FormLabel>Mesage</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Type your message here."
+                  placeholder="Type your message here"
                   className="rounded-xs resize-none min-h-[150px] py-4 px-6"
                   {...field}
                 />
