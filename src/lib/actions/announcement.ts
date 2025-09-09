@@ -137,7 +137,10 @@ export async function getAnnouncementsByUserId(
   return { success: true, data, count };
 }
 
-export async function getAnnouncementsBySiteId(siteId: string, { limit, offset }: { limit: number, offset: number }) {
+export async function getAnnouncementsBySiteId(
+  siteId: string,
+  { limit, offset }: { limit: number; offset: number }
+) {
   const supabase = createServerSupabaseClient();
 
   const { data, count, error } = await supabase
@@ -153,7 +156,6 @@ export async function getAnnouncementsBySiteId(siteId: string, { limit, offset }
 
   return { success: true, data, count };
 }
-
 
 export async function getAnnouncementById(id: string) {
   const { userId } = await auth();
@@ -225,4 +227,19 @@ export async function removeCoverImage(url: string) {
   const { error } = await supabase.storage.from("assets").remove([filePath]);
 
   if (error) return { success: false, error: error.message };
+}
+
+export async function getAnnouncementBySlug(slug: string) {
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from("announcements")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, data };
 }
