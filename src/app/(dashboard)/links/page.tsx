@@ -6,6 +6,7 @@ import { LinkDialogs } from "@/components/links/dialog";
 import { getLinksByUserId } from "@/lib/actions/links";
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
+import { checkRole } from "@/utils/role";
 
 export default async function Page({
   searchParams,
@@ -16,6 +17,11 @@ export default async function Page({
 
   if (!userId) {
     redirect("/sign-in");
+  }
+
+  const isAdmin = await checkRole("admin");
+  if (isAdmin) {
+    redirect("/forbidden");
   }
 
   const params = await searchParams;
