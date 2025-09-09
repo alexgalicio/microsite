@@ -48,7 +48,7 @@ export default function Page() {
   return (
     <>
       <SubdomainHeader title={site.title} subdomain={site.subdomain} />
-      <SearchableLinks links={linkData} loading={loading} />
+      <SearchableLinks links={linkData} loading={loading} id={site.id} />
     </>
   );
 }
