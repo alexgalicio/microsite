@@ -73,14 +73,18 @@ export default function LinkItem({ link }: { link: Links }) {
           {link.description}
         </p>
 
-        <div className="flex items-center justify-between">
-          <p className="text-gray-500 text-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <p className="text-gray-500 text-xs sm:text-sm order-2 sm:order-1">
             {format(new Date(link.created_at), "M/d/yyyy")}
           </p>
 
-          <div className="flex gap-1">
-            <Badge className="bg-green-500">{link.link_category.title}</Badge>
-            <Badge className="bg-purple-500">{link.link_to.title}</Badge>
+          <div className="flex flex-wrap gap-1 order-1 sm:order-2">
+            <Badge className="bg-green-500 text-xs">
+              {link.link_category.title}
+            </Badge>
+            <Badge className="bg-purple-500 text-xs">
+              {link.link_to.title}
+            </Badge>
           </div>
         </div>
       </div>
