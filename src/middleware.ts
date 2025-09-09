@@ -9,15 +9,15 @@ const isAdminRoute = createRouteMatcher([
   "/notifications(.*)",
 ]);
 
-const isUserRoute = createRouteMatcher([
-  "/editor(.*)",
-  "/announcements(.*)",
-  "/links(.*)",
-]);
+const isUserRoute = createRouteMatcher(["/editor(.*)"]);
 
 const isSharedRoute = createRouteMatcher(["/settings(.*)", "/microsites(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
+  if (req.nextUrl.pathname.startsWith("/api")) {
+    return NextResponse.next();
+  }
+
   const { sessionClaims } = await auth();
 
   // redirect if not logged in
