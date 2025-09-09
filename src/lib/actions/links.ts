@@ -271,7 +271,7 @@ export async function createTo(title: string) {
   return { success: true, data: newCategory };
 }
 
-export async function getLatestLinks() {
+export async function getLatestLinksBySiteId(id: string) {
   const supabase = createServerSupabaseClient();
 
   const { data, error } = await supabase
@@ -289,6 +289,7 @@ export async function getLatestLinks() {
       )
     `
     )
+    .eq("site_id", id)
     .order("created_at", { ascending: false })
     .limit(4);
 
