@@ -1,11 +1,10 @@
 "use client";
 
 import { Announcements } from "@/lib/types";
-import { formatDate } from "@/lib/utils";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Megaphone } from "lucide-react";
-import DOMPurify from "isomorphic-dompurify";
+import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -17,7 +16,7 @@ export default function AnnouncementsList({
   announcements,
 }: AnnouncementsProps) {
   return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {announcements.length ? (
         announcements.map((announcement) => (
           <div
@@ -42,18 +41,9 @@ export default function AnnouncementsList({
                 <h2 className="text-xl font-semibold tracking-tight line-clamp-2">
                   {announcement.title}
                 </h2>
-                <p className="line-clamp-3 text-muted-foreground">
-                  {DOMPurify.sanitize(announcement.content, {
-                    ALLOWED_TAGS: [],
-                  })}
+                <p className="text-sm text-muted-foreground">
+                  {format(new Date(announcement.created_at), "MMMM d, yyyy")}
                 </p>
-                <div className="flex text-sm text-muted-foreground gap-2">
-                  <p>{announcement.author}</p>
-                  <span>•</span>
-                  <time dateTime={announcement.created_at}>
-                    {formatDate(announcement.created_at)}
-                  </time>
-                </div>
               </div>
             </Link>
           </div>
