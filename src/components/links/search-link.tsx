@@ -16,13 +16,17 @@ import {
 import LatestLinks from "./latest-links";
 import LinkPreview from "./link-preview";
 
+interface SearchableLinksProps {
+  links: Links[];
+  loading?: boolean;
+  id: string;
+}
+
 export default function SearchableLinks({
   links,
   loading = false,
-}: {
-  links: Links[];
-  loading?: boolean;
-}) {
+  id,
+}: SearchableLinksProps) {
   const [sort, setSort] = useState("newest");
   const [search, setSearch] = useState("");
   const [categories, setCategories] = useState<Links[]>([]);
@@ -92,7 +96,7 @@ export default function SearchableLinks({
         <div className="sticky top-20 z-40 bg-background border-b">
           <div className="container mx-auto px-4 pt-8 py-4 xl:px-24">
             <div className="flex items-center justify-between">
-              <div className="flex flex-col-reverse items-start sm:flex-row sm:items-center sm:space-x-2">
+              <div className="flex flex-col-reverse items-start gap-y-2 sm:flex-row sm:items-center sm:space-x-2">
                 {/* input search */}
                 <Input
                   className="h-9 w-50 lg:w-[250px]"
@@ -183,11 +187,11 @@ export default function SearchableLinks({
           </div>
         </div>
 
-        <LatestLinks />
+        <LatestLinks siteId={id}/>
 
         <div className="container mx-auto p-4 xl:px-24">
           {loading ? (
-            // Loading state
+            // loading state
             <div className="flex flex-col items-center justify-center min-h-[200px] gap-4">
               <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
               <p className="text-muted-foreground">Loading...</p>
