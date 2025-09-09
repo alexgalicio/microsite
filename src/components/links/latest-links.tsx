@@ -1,17 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getLatestLinks } from "@/lib/actions/links";
+import { getLatestLinksBySiteId } from "@/lib/actions/links";
 import { Links } from "@/lib/types";
 import LinkPreview from "./link-preview";
 
-export default function LatestLinks() {
+export default function LatestLinks({ siteId }: { siteId: string }) {
   const [links, setLinks] = useState<Links[]>([]);
 
   useEffect(() => {
     const fetchLinks = async () => {
       try {
-        const linksData = await getLatestLinks();
+        const linksData = await getLatestLinksBySiteId(siteId);
         setLinks(linksData);
       } catch (error) {
         console.error("Error fetching links:", error);
@@ -19,7 +19,7 @@ export default function LatestLinks() {
     };
 
     fetchLinks();
-  }, []);
+  }, [siteId]);
 
   return (
     <div className="bg-[#F8FAFB] ">
