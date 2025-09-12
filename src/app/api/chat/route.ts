@@ -45,7 +45,7 @@ function createPrompt(context: string, userQuestion: string) {
   return {
     role: "system",
     content: `
-      You are Foxy, a helpful assistant for College of Information and Communications Technology (CICT).
+      You are Foxy, a helpful assistant for College of Information and Communications Technology (CICT) in Bulacan State University.
       Use the following context to answer questions: 
       ----------------
       START CONTEXT
