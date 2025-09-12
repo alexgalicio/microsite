@@ -28,6 +28,7 @@ export default function Page() {
           Fausto S. Hilario as Dean.
         </p>
       </div>
+      <br />
       <div id="history">
         <p>
           History of CICT - As Institute of Computer Education, the seven
@@ -117,23 +118,25 @@ export default function Page() {
           the whole region as well.
         </p>
       </div>
+      <br />
       <div id="map">
         <p>1st Floor Pimentel Hall Rooms: A1, A2, A3, A4 IT13, IT14 </p>
         <p>
           3rd Floor Pimentel Hall Rooms: Dean&apos;s Office, OJT/Office of the
           Department Heads, Faculty Room, IT1, IT2, Stairs (middle), SDL1, SDL2,
-          SDL3, SDL4, Stairs(right side), Prog Lab 1, Prog Lab 2, Prog Lab 3
+          SDL3, SDL4, Stairs(right side), Prog Lab 1, Prog Lab 2, Prog Lab 3 
         </p>
         <p>
           4th Floor Pimentel Hall Rooms: Ideation Room, Conference Room,
           Networking Lab 2, Server Room, Networking Lab 1, Stairs (middle), CT6,
-          CT7, CT8, Acad 1, Stairs (right side), AVR
+          CT7, CT8, Acad 1, Stairs (right side), AVR 
         </p>
         <p>
-          NSTP Building Rooms - CICT Acad 2, CICT Acad 3, CICT Acad 4, CICT Acad
-          5, CICT Acad 6, CICT Acad 7, CICT Acad 8, LSC/Student Center Office
+          NSTP Building Rooms: CICT Acad 2, CICT Acad 3, CICT Acad 4, CICT Acad
+          5, CICT Acad 6, CICT Acad 7, CICT Acad 8, LSC/Student Center Office 
         </p>
       </div>
+      <br />
     </div>
   );
 }
