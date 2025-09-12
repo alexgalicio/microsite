@@ -9,6 +9,7 @@ import { Announcements } from "@/lib/types";
 import { handleError } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import FacebookFeed from "@/components/facebook-feed/facebook-feed-list";
 
 export default function Page() {
   const [announcementData, setAnnouncementData] = useState<Announcements[]>([]);
@@ -19,7 +20,7 @@ export default function Page() {
   const searchParams = useSearchParams();
 
   const page = parseInt(searchParams.get("page") || "1");
-  const pageSize = 6;
+  const pageSize = 12;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,8 +55,8 @@ export default function Page() {
   return (
     <>
       <SubdomainHeader title={site.title} subdomain={site.subdomain} />
-      <div className="max-w-6xl mx-auto px-5 mt-25 mb-10">
-        <h2 className="text-3xl font-semibold text-foreground">
+      <div className="container mx-auto px-4 py-10 xl:px-24 mt-20">
+        <h2 className="text-3xl font-semibold text-foreground mb-6">
           Announcements
         </h2>
         <AnnouncementPreview
@@ -63,7 +64,7 @@ export default function Page() {
           loading={loading}
         />
         {!loading && (
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-8 mb-10">
             <div className="w-auto">
               <PaginationWithLinks
                 page={page}
@@ -74,6 +75,8 @@ export default function Page() {
             </div>
           </div>
         )}
+        
+        <FacebookFeed siteId={site.id}/>
       </div>
     </>
   );
