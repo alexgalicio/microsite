@@ -1,6 +1,7 @@
 import { NavItem } from "@/lib/types";
 import {
   Calendar,
+  Facebook,
   Globe,
   LayoutDashboard,
   Link,
@@ -55,6 +56,14 @@ export const navItems: NavItem[] = [
     title: "Links",
     url: "/links",
     icon: Link,
+    isActive: false,
+    items: [],
+    role: "user",
+  },
+    {
+    title: "Facebook Feed",
+    url: "/facebook-feed",
+    icon: Facebook,
     isActive: false,
     items: [],
     role: "user",
