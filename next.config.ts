@@ -7,7 +7,15 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "uxtayxsrtiomdepijfhh.supabase.co",
-        pathname: "/storage/v1/object/public/**",
+        pathname: "/storage/v1/object/public/**", // supabase images
+      },
+      {
+        protocol: "https",
+        hostname: "*.fbcdn.net", // facebook CDN
+      },
+      {
+        protocol: "https",
+        hostname: "platform-lookaside.fbsbx.com", // profile pictures
       },
     ],
   },
