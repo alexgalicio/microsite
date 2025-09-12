@@ -1,9 +1,7 @@
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-
-const handler = async (request: Request) => {
+const handler = async (request) => {
   try {
     const { email, password, submenu } = await request.json();
-
     const emailContent = `
       <p>Good day! </p>
 
@@ -14,9 +12,14 @@ const handler = async (request: Request) => {
       <strong>Password:</strong> ${password}<br>
       <strong>Assigned to:</strong> ${submenu}
     
+      <p>You can sign in here: 
+        <a href="https://www.cictmicro.site/sign-in" target="_blank">
+          cictmicro.site/sign-in
+        </a>
+      </p>
+
       <p><strong>IMPORTANT REMINDER:</strong> You are required to change your password immediately upon first login for security purposes.</p>
     `;
-
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -24,7 +27,7 @@ const handler = async (request: Request) => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "Microsite <team@email.alexgalicio.dev>",
+        from: "Microsite <no-reply@email.cictmicro.site>",
         to: email,
         subject: "Your Account Has Been Created - Login Credentials",
         html: emailContent,
