@@ -11,6 +11,7 @@ type BreadcrumbItem = {
 // This allows to add custom title as well
 const routeMapping: Record<string, BreadcrumbItem[]> = {
   "/manage-menu": [{ title: "Manage Menu", link: "/manage-menu" }],
+  "/facebook-feed": [{ title: "Facebook Feed", link: "/facebook-feed" }],
 };
 
 export function useBreadcrumbs() {
