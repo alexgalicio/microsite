@@ -1,10 +1,11 @@
 "use client";
 
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import Image from "next/image";
-import { formatDistanceToNow } from "date-fns";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import { formatDistanceToNow } from "date-fns";
+import Image from "next/image";
+import Link from "next/link";
 
 interface FbPost {
   id: string;
@@ -18,6 +19,7 @@ export default function FacebookFeed({ siteId }: { siteId: string }) {
   const [posts, setPosts] = useState<FbPost[]>([]);
   const [pageName, setPageName] = useState<string>("");
   const [pagePicture, setPagePicture] = useState<string>("");
+  const [pageUrl, setPageUrl] = useState<string>("");
 
   useEffect(() => {
     if (!siteId) return;
@@ -27,7 +29,18 @@ export default function FacebookFeed({ siteId }: { siteId: string }) {
       .then((data) => {
         setPageName(data.name);
         setPagePicture(data.picture?.data?.url || "");
-        setPosts(data.posts?.data || []);
+        setPageUrl(`https://facebook.com/${data.id}`);
+
+        const posts = data.posts?.data || [];
+
+        //  latest to oldest
+        const sorted = posts.sort(
+          (a: FbPost, b: FbPost) =>
+            new Date(b.created_time).getTime() -
+            new Date(a.created_time).getTime()
+        );
+
+        setPosts(sorted);
       });
   }, [siteId]);
 
@@ -35,20 +48,23 @@ export default function FacebookFeed({ siteId }: { siteId: string }) {
     return null;
   }
 
+  // Show only the first 10 posts
+  const displayedPosts = posts.slice(0, 10);
+
   return (
     <>
       <h2 className="text-3xl font-semibold text-foreground mb-6">
         Facebook Feed
       </h2>
       <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        {posts.map((post) => (
+        {displayedPosts.map((post) => (
           <Link
             key={post.id}
             href={post.permalink_url}
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Card className="w-full shadow-none py-0 gap-0 overflow-hidden hover:shadow-md cursor-pointer">
+            <Card className="w-full shadow-none py-0 gap-0 overflow-hidden hover:shadow-md cursor-pointer rounded-lg transition-all">
               <CardContent className="p-0">
                 <div className="relative aspect-video border-b">
                   {post.full_picture ? (
@@ -92,6 +108,14 @@ export default function FacebookFeed({ siteId }: { siteId: string }) {
             </Card>
           </Link>
         ))}
+      </div>
+
+      <div className="mt-6 text-center">
+        <Button variant="outline">
+          <Link href={pageUrl} target="_blank" rel="noopener noreferrer">
+            View All Posts
+          </Link>
+        </Button>
       </div>
     </>
   );
