@@ -18,16 +18,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  page_id: z.string().min(1, "Page ID is required"),
-  access_token: z.string().min(1, "Access Token is required"),
+  page_id: z.string(),
+  access_token: z.string(),
 });
 
 type FacebookForm = z.infer<typeof formSchema>;
 
 export default function FacebookForm({ userId }: { userId: string }) {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const form = useForm<FacebookForm>({
     resolver: zodResolver(formSchema),
@@ -37,7 +39,6 @@ export default function FacebookForm({ userId }: { userId: string }) {
     },
   });
 
-  // Load saved values from Supabase
   useEffect(() => {
     async function loadValues() {
       const saved = await getFormValues(userId);
@@ -54,7 +55,7 @@ export default function FacebookForm({ userId }: { userId: string }) {
       const response = await submitForm({ ...values, user_id: userId });
       if (response.success) {
         toast.success("Saved successfully!");
-        form.reset();
+        router.refresh();
       } else {
         console.error(response.error);
       }
