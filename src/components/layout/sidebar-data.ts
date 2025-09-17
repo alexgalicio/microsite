@@ -45,6 +45,14 @@ export const navItems: NavItem[] = [
     role: "admin",
   },
   {
+    title: "Links",
+    url: "/links",
+    icon: Link,
+    isActive: false,
+    items: [],
+    role: "user",
+  },
+  {
     title: "Announcements",
     url: "/announcements",
     icon: Megaphone,
@@ -53,14 +61,6 @@ export const navItems: NavItem[] = [
     role: "user",
   },
   {
-    title: "Links",
-    url: "/links",
-    icon: Link,
-    isActive: false,
-    items: [],
-    role: "user",
-  },
-    {
     title: "Facebook Feed",
     url: "/facebook-feed",
     icon: Facebook,
