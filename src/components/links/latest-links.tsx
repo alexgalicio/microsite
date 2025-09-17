@@ -21,6 +21,10 @@ export default function LatestLinks({ siteId }: { siteId: string }) {
     fetchLinks();
   }, [siteId]);
 
+  if (links.length === 0) {
+    return null;
+  }
+
   return (
     <div className="bg-[#F8FAFB] ">
       <div className="container mx-auto px-4 py-10 xl:px-24 mb-4">
