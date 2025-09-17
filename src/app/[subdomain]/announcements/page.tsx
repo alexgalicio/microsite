@@ -15,16 +15,14 @@ export default function Page() {
   const [announcementData, setAnnouncementData] = useState<Announcements[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
   const site = useSite();
   const searchParams = useSearchParams();
 
   const page = parseInt(searchParams.get("page") || "1");
-  const pageSize = 12;
+  const pageSize = 6;
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       setError(null);
 
       const response = await getAnnouncementsBySiteId(site.id, {
@@ -37,8 +35,6 @@ export default function Page() {
       } else {
         setError(handleError(response.error));
       }
-
-      setLoading(false);
     };
     fetchData();
   }, [site.id, page]);
@@ -55,28 +51,25 @@ export default function Page() {
   return (
     <>
       <SubdomainHeader title={site.title} subdomain={site.subdomain} />
-      <div className="container mx-auto px-4 py-10 xl:px-24 mt-20">
-        <h2 className="text-3xl font-semibold text-foreground mb-6">
-          Announcements
-        </h2>
-        <AnnouncementPreview
-          announcements={announcementData}
-          loading={loading}
-        />
-        {!loading && (
-          <div className="flex justify-center mt-8 mb-10">
-            <div className="w-auto">
-              <PaginationWithLinks
-                page={page}
-                pageSize={pageSize}
-                totalCount={totalCount}
-                navigationMode="router"
-              />
+      <div className="container mx-auto px-4 pt-6 pb-10 xl:px-24 mt-20">
+        {announcementData.length > 0 && (
+          <>
+            <AnnouncementPreview announcements={announcementData} />
+
+            <div className="flex justify-center mt-8 mb-20">
+              <div className="w-auto">
+                <PaginationWithLinks
+                  page={page}
+                  pageSize={pageSize}
+                  totalCount={totalCount}
+                  navigationMode="router"
+                />
+              </div>
             </div>
-          </div>
+          </>
         )}
-        
-        <FacebookFeed siteId={site.id}/>
+
+        <FacebookFeed siteId={site.id} />
       </div>
     </>
   );
