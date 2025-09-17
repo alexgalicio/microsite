@@ -11,25 +11,17 @@ import { useEffect, useState } from "react";
 export default function Page() {
   const [linkData, setLinkData] = useState<Links[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
   const site = useSite();
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       setError(null);
 
-      try {
-        const response = await getLinksBySiteId(site.id);
-        if (response.success) {
-          setLinkData(response.data || []);
-        } else {
-          setError(handleError(response.error));
-        }
-      } catch (error) {
-        setError(handleError(error));
-      } finally {
-        setLoading(false);
+      const response = await getLinksBySiteId(site.id);
+      if (response.success) {
+        setLinkData(response.data || []);
+      } else {
+        setError(handleError(response.error));
       }
     };
 
@@ -48,7 +40,7 @@ export default function Page() {
   return (
     <>
       <SubdomainHeader title={site.title} subdomain={site.subdomain} />
-      <SearchableLinks links={linkData} loading={loading} id={site.id} />
+      <SearchableLinks links={linkData} id={site.id} />
     </>
   );
 }
