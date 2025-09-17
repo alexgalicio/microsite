@@ -2,7 +2,7 @@
 
 import { Links } from "@/lib/types";
 import { useEffect, useState } from "react";
-import { ArrowDownAZ, Loader2, SlidersHorizontal, X } from "lucide-react";
+import { ArrowDownAZ, SlidersHorizontal, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { getAllCategories, getAllTo } from "@/lib/actions/links";
@@ -18,15 +18,10 @@ import LinkPreview from "./link-preview";
 
 interface SearchableLinksProps {
   links: Links[];
-  loading?: boolean;
   id: string;
 }
 
-export default function SearchableLinks({
-  links,
-  loading = false,
-  id,
-}: SearchableLinksProps) {
+export default function SearchableLinks({ links, id }: SearchableLinksProps) {
   const [sort, setSort] = useState("newest");
   const [search, setSearch] = useState("");
   const [categories, setCategories] = useState<Links[]>([]);
@@ -187,33 +182,25 @@ export default function SearchableLinks({
           </div>
         </div>
 
-        <LatestLinks siteId={id}/>
+        <LatestLinks siteId={id} />
 
         <div className="container mx-auto p-4 xl:px-24">
-          {loading ? (
-            // loading state
-            <div className="flex flex-col items-center justify-center min-h-[200px] gap-4">
-              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-              <p className="text-muted-foreground">Loading...</p>
-            </div>
-          ) : (
+          {filteredLinks.length > 0 ? (
             <>
               <h2 className="text-2xl font-semibold text-foreground">
                 More Links
               </h2>
 
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-10 pt-4">
-                {filteredLinks.length ? (
-                  filteredLinks.map((link) => (
-                    <LinkPreview key={link.id} link={link} />
-                  ))
-                ) : (
-                  <div className="col-span-full text-center mt-20">
-                    No links found.
-                  </div>
-                )}
+                {filteredLinks.map((link) => (
+                  <LinkPreview key={link.id} link={link} />
+                ))}
               </div>
             </>
+          ) : (
+            <div className="py-20 text-center text-muted-foreground">
+              <p>No links found.</p>
+            </div>
           )}
         </div>
       </div>
