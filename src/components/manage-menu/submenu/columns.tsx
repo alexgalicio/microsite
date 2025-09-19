@@ -37,9 +37,9 @@ export const columns: ColumnDef<Submenu>[] = [
     cell: ({ row }) => {
       const title = row.getValue("title") as string;
       return (
-        <div className="max-w-[200px] truncate" title={title}>
+        <span className="max-w-32 truncate sm:max-w-72 md:max-w-[31rem]" title={title}>
           {title}
-        </div>
+        </span>
       );
     },
   },

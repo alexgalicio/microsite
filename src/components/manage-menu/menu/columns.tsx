@@ -38,9 +38,9 @@ export const columns: ColumnDef<Menu>[] = [
     cell: ({ row }) => {
       const title = row.getValue("title") as string;
       return (
-        <div className="max-w-[200px] truncate" title={title}>
+        <span className="max-w-32 truncate sm:max-w-72 md:max-w-[31rem]" title={title}>
           {title}
-        </div>
+        </span>
       );
     },
   },
@@ -59,7 +59,7 @@ export const columns: ColumnDef<Menu>[] = [
       return (
         <Link
           href={`/manage-menu/submenu/${menuId}`}
-          className="hover:underline active:text-primary"
+          className="text-blue-600 hover:underline"
         >
           {text}
         </Link>
