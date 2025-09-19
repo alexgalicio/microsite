@@ -24,10 +24,10 @@ const ChatOutput = ({
         )
       )}
       {status === "submitted" && (
-        <div className="text-muted-foreground">Generating response...</div>
+        <div className="text-muted-foreground text-sm">Generating response...</div>
       )}
       {status === "error" && (
-        <div className="text-red-500">An error occurred.</div>
+        <div className="text-red-500 text-sm">An error occurred.</div>
       )}
     </>
   );
@@ -35,7 +35,7 @@ const ChatOutput = ({
 
 const UserChat = ({ content }: { content: string }) => {
   return (
-    <div className="bg-muted rounded-lg ml-auto max-w-[80%] w-fit px-3 py-2 rounded-br-none">
+    <div className="bg-primary text-primary-foreground rounded-lg ml-auto w-fit px-3 py-2 rounded-br-none text-sm">
       {content}
     </div>
   );
@@ -58,11 +58,11 @@ const AssistantChat = ({ content }: { content: string }) => {
 
   return (
     <div className="w-full mb-6">
-      <div className="pr-8 w-full">
+      <div className="bg-muted rounded-lg px-3 py-2 rounded-bl-none w-fit text-sm">
         <ReactMarkdown
           components={{
             a: ({ href, children }) => (
-              <a target="_blank" href={href} className="underline text-primary">
+              <a target="_blank" href={href} className="hover:underline text-blue-600">
                 {children}
               </a>
             ),
@@ -81,7 +81,7 @@ const AssistantChat = ({ content }: { content: string }) => {
           onClick={() => handleFeedback("helpful")}
           className={cn(
             feedback === "helpful" ? "text-green-600" : "text-muted-foreground",
-            "h-8 w-8"
+            "h-6 w-6"
           )}
         >
           <ThumbsUp size={16} />
@@ -94,7 +94,7 @@ const AssistantChat = ({ content }: { content: string }) => {
           onClick={() => handleFeedback("unhelpful")}
           className={cn(
             feedback === "unhelpful" ? "text-red-600" : "text-muted-foreground",
-            "h-8 w-8"
+            "h-6 w-6"
           )}
         >
           <ThumbsDown size={16} />
