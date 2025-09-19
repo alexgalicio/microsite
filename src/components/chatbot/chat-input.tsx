@@ -3,7 +3,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { ArrowUp } from "lucide-react";
 
 interface ChatInputProps {
@@ -18,13 +18,18 @@ export default function ChatInput({
   handleSubmit,
 }: ChatInputProps) {
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2 w-full">
-      <Input
+    <form onSubmit={handleSubmit} className="relative w-full">
+      <Textarea
         onChange={handleInputChange}
         value={input}
-        placeholder="Ask me something..."
+        placeholder="Write a message"
+        className="resize-none pr-9 max-h-16"
       />
-      <Button type="submit" size="icon">
+      <Button
+        type="submit"
+        size="icon"
+        className="absolute right-0 bottom-0 m-3 h-8 w-8 rounded-full"
+      >
         <ArrowUp />
         <span className="sr-only">Submit</span>
       </Button>
