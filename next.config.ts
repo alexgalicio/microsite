@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "uxtayxsrtiomdepijfhh.supabase.co",
-        pathname: "/storage/v1/object/public/**", // supabase images
+        pathname: "/storage/v1/object/public/**", // supabase
       },
       {
         protocol: "https",
@@ -24,6 +24,7 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "2mb",
     },
   },
+  serverExternalPackages: ["pdf-parse"],
 };
 
 export default nextConfig;
