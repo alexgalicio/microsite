@@ -21,7 +21,7 @@ import LandingPage from "@/components/landing-page/main-page";
 
 export default function Chat() {
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [showChatIcon, setShowChatIcon] = useState(false);
+  const [showChatIcon] = useState(true);
   const chatIconRef = useRef<HTMLButtonElement>(null);
 
   const { input, handleInputChange, handleSubmit, messages, status } =
@@ -40,22 +40,15 @@ export default function Chat() {
     scrollToBottom();
   }, [messages]);
 
+  // scroll when chat opens
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 150) {
-        setShowChatIcon(true);
-      } else {
-        setShowChatIcon(false);
-        setIsChatOpen(false);
-      }
-    };
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+    if (isChatOpen) {
+      // small delay to ensure DOM is rendered before scrolling
+      setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+    }
+  }, [isChatOpen]);
 
   const toggleChat = () => {
     setIsChatOpen(!isChatOpen);
@@ -86,10 +79,10 @@ export default function Chat() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-20 right-4 z-40 w-96 max-w-[90vw]"
+            className="fixed bottom-20 right-4 z-40 w-90 max-w-[90vw]"
           >
-            <Card className="shadow-xl">
-              <CardHeader>
+            <Card className="shadow-xl pt-0 gap-0 overflow-hidden border-none">
+              <CardHeader className="flex flex-row items-center justify-between py-3 bg-gradient-to-r from-primary to-primary/70 text-primary-foreground rounded-t-lg">
                 <CardTitle className="text-xl font-semibold">Foxy</CardTitle>
                 <CardAction>
                   <Button
@@ -102,11 +95,11 @@ export default function Chat() {
                   </Button>
                 </CardAction>
               </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-[300px] pr-3">
-                  <div className="space-y-4">
-                    <div className="rounded-lg bg-primary text-primary-foreground p-2 rounded-bl-none">
-                      Hi, my name is Foxy. How can I help you?
+              <CardContent className="pr-1 pl-6">
+                <ScrollArea className="h-[350px] pr-6 pb-4">
+                  <div className="space-y-4 pt-4">
+                    <div className="rounded-lg bg-muted px-3 py-2 rounded-bl-none text-sm">
+                      Hi there! 👋 I&apos;m Foxy, what can I help you with?
                     </div>
 
                     <ChatOutput messages={messages} status={status} />
