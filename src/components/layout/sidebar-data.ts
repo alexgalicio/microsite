@@ -1,5 +1,6 @@
 import { NavItem } from "@/lib/types";
 import {
+  Bot,
   Calendar,
   Facebook,
   Globe,
@@ -32,6 +33,14 @@ export const navItems: NavItem[] = [
     title: "Manage Menu",
     url: "/manage-menu",
     icon: Menu,
+    isActive: false,
+    items: [],
+    role: "admin",
+  },
+  {
+    title: "Chatbot",
+    url: "/chatbot",
+    icon: Bot,
     isActive: false,
     items: [],
     role: "admin",
