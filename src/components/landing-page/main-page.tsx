@@ -120,7 +120,7 @@ export default function LandingPage() {
 
       {/* calendar */}
       <section id="calendar" className="py-16 lg:py-20">
-        <div className="bg-primary py-[45px] min-h-[205px]">
+        <div className="bg-primary/80 py-[45px] min-h-[205px]">
           <div className="container mx-auto px-4 xl:px-24">
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {events.map((event, index) => (
