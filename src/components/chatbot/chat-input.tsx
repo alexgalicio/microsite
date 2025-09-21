@@ -17,10 +17,18 @@ export default function ChatInput({
   handleInputChange,
   handleSubmit,
 }: ChatInputProps) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="relative w-full">
       <Textarea
         onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
         value={input}
         placeholder="Write a message"
         className="resize-none pr-9 max-h-16"
