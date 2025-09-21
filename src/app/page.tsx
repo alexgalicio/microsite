@@ -18,11 +18,12 @@ import ChatOutput from "@/components/chatbot/chat-output";
 import ChatInput from "@/components/chatbot/chat-input";
 import { saveUserQuestion } from "@/lib/actions/chatbot";
 import LandingPage from "@/components/landing-page/main-page";
+import Image from "next/image";
 
 export default function Chat() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [showChatIcon] = useState(true);
-  const chatIconRef = useRef<HTMLButtonElement>(null);
+  const chatIconRef = useRef<HTMLDivElement>(null);
 
   const { input, handleInputChange, handleSubmit, messages, status } =
     useChat();
@@ -79,9 +80,9 @@ export default function Chat() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-20 right-4 z-40 w-90 max-w-[90vw]"
+            className="fixed bottom-4 right-4 z-50 w-90 max-w-[90vw]"
           >
-            <Card className="shadow-xl pt-0 gap-0 overflow-hidden border-none">
+            <Card className="shadow-2xl pt-0 gap-0 overflow-hidden">
               <CardHeader className="flex flex-row items-center justify-between py-3 bg-gradient-to-r from-primary to-primary/70 text-primary-foreground rounded-t-lg">
                 <CardTitle className="text-xl font-semibold">Foxy</CardTitle>
                 <CardAction>
@@ -89,14 +90,14 @@ export default function Chat() {
                     variant="ghost"
                     size="icon"
                     onClick={toggleChat}
-                    className="h-8 w-8"
+                    className="hover:bg-transparent"
                   >
-                    <X size={16} />
+                    <X className="size-5"/>
                   </Button>
                 </CardAction>
               </CardHeader>
               <CardContent className="pr-1 pl-6">
-                <ScrollArea className="h-[350px] pr-6 pb-4">
+                <ScrollArea className="h-[370px] pr-6 pb-4">
                   <div className="space-y-4 pt-4">
                     <div className="rounded-lg bg-muted px-3 py-2 rounded-bl-none text-sm">
                       Hi there! 👋 I&apos;m Foxy, what can I help you with?
@@ -127,20 +128,21 @@ export default function Chat() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 100 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-4 right-4 z-50"
+            className="fixed bottom-4 right-4 z-40"
           >
-            <Button
+            <div
               ref={chatIconRef}
               onClick={toggleChat}
-              size="icon"
-              className="rounded-full size-14 p-2 shadow-lg"
+              className="rounded-full bg-primary cursor-pointer drop-shadow-lg p-2"
             >
-              {!isChatOpen ? (
-                <MessageCircle size={16} />
-              ) : (
-                <ArrowDownCircleIcon size={16} />
-              )}
-            </Button>
+              <Image
+                src="/images/foxy.svg"
+                alt="Chat Logo"
+                width={54}
+                height={54}
+                className="object-contain"
+              />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
