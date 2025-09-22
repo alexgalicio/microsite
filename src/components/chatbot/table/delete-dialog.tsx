@@ -26,6 +26,7 @@ export default function DeleteDialog({ chunks }: { chunks: Chunks }) {
       const response = await deleteFile(chunks.filename);
       if (response.success) {
         toast.success("File deleted successfully.");
+        setValue("");
         setIsDeleteDialogOpen(false);
         router.refresh();
       } else {
@@ -52,7 +53,10 @@ export default function DeleteDialog({ chunks }: { chunks: Chunks }) {
 
       <ConfirmDialog
         open={isDeleteDialogOpen}
-        onOpenChange={setIsDeleteDialogOpen}
+        onOpenChange={(open) => {
+          setIsDeleteDialogOpen(open);
+          if (!open) setValue("");
+        }}
         handleConfirm={handleDelete}
         disabled={value.trim() !== chunks.filename || isLoading}
         title={"Delete File"}
@@ -67,8 +71,8 @@ export default function DeleteDialog({ chunks }: { chunks: Chunks }) {
               <AlertDescription>
                 <p>
                   Deleting{" "}
-                  <strong className="font-medium">{chunks.filename}</strong> will
-                  permanently remove this file and all of its data from the
+                  <strong className="font-medium">{chunks.filename}</strong>{" "}
+                  will permanently remove this file and all of its data from the
                   chatbot&apos;s knowledge base.
                 </p>
               </AlertDescription>
