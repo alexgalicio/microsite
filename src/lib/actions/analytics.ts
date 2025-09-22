@@ -83,34 +83,62 @@ export async function getLatestUpdateSites(): Promise<SiteAnalytics[]> {
 
 export async function getFeedbackChartData() {
   const supabase = createServerSupabaseClient();
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
-  const { data, error } = await supabase
+  // get all feedback from last 7 days
+  const { data: feedbackData, error: feedbackError } = await supabase
     .from("chat_feedback")
-    .select("created_at, feedback")
-    .gte("created_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()); // last 7 days
+    .select("created_at, feedback, interaction_id")
+    .gte("created_at", sevenDaysAgo);
 
-  if (error) {
-    console.error(error);
+  if (feedbackError) {
+    console.error("Feedback error:", feedbackError);
     return [];
   }
 
-  // initialize counts per day
+  // get all chat interactions from last 7 days
+  const { data: interactionsData, error: interactionsError } = await supabase
+    .from("chat_interactions")
+    .select("id, created_at")
+    .gte("created_at", sevenDaysAgo);
+
+  if (interactionsError) {
+    console.error("Interactions error:", interactionsError);
+    return [];
+  }
+
+  // create a set of interaction ids that have feedback
+  const interactionsWithFeedback = new Set(
+    feedbackData?.map(f => f.interaction_id) || []
+  );
+
+  // init counts per day
   const counts: Record<
     string,
     { helpful: number; unhelpful: number; neutral: number }
   > = {};
 
-  data.forEach((row) => {
+  // count explicit feedback
+  feedbackData?.forEach((row) => {
     const date = new Date(row.created_at).toISOString().split("T")[0];
     if (!counts[date]) {
       counts[date] = { helpful: 0, unhelpful: 0, neutral: 0 };
     }
     if (row.feedback === "helpful") counts[date].helpful += 1;
     else if (row.feedback === "unhelpful") counts[date].unhelpful += 1;
-    else counts[date].neutral += 1;
   });
 
-  // build array sorted by date
+  // count neutral feedback
+  interactionsData?.forEach((interaction) => {
+    if (!interactionsWithFeedback.has(interaction.id)) {
+      const date = new Date(interaction.created_at).toISOString().split("T")[0];
+      if (!counts[date]) {
+        counts[date] = { helpful: 0, unhelpful: 0, neutral: 0 };
+      }
+      counts[date].neutral += 1;
+    }
+  });
+
   const chartData = Object.entries(counts)
     .sort(([a], [b]) => (a > b ? 1 : -1))
     .map(([date, vals]) => ({
