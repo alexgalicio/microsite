@@ -1,11 +1,12 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { useDropzone } from "react-dropzone";
+import { FileRejection, useDropzone } from "react-dropzone";
 import { uploadMedia } from "@/lib/actions/upload-media";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Loader, Upload } from "lucide-react";
+import { handleError } from "@/lib/utils";
 
 interface Artifact {
   id?: number;
@@ -53,18 +54,27 @@ export default function FileUpload() {
       router.refresh();
     } catch (error) {
       console.error("Error:", error);
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "Something went wrong. Please try again."
-      );
+      setErrorMessage(handleError(error));
     } finally {
       setIsUploading(false);
     }
   };
 
   // set up drag & drop
-  const onDrop = useCallback((acceptedFiles: File[]) => {
+  const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
+    if (rejectedFiles.length > 0) {
+      const sizeRejections = rejectedFiles.filter(
+        (rejection) => rejection.errors[0]?.code === "file-too-large"
+      );
+
+      if (sizeRejections.length > 0) {
+        setErrorMessage(
+          "File size exceeds 2MB limit."
+        );
+        return;
+      }
+    }
+
     const validFileTypes = [
       "text/plain",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -91,7 +101,7 @@ export default function FileUpload() {
         "Invalid file type. Only PDF, DOCX, XLSX, and TXT are allowed."
       );
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -105,16 +115,17 @@ export default function FileUpload() {
       ],
       "application/pdf": [".pdf"],
     },
+    maxSize: 2 * 1024 * 1024,
   });
 
   return (
-    <div> 
+    <div>
       <div
         {...getRootProps()}
         className="border-2 border-dashed p-8 text-center rounded"
       >
         <input {...getInputProps()} />
-        <Upload className="w-full mb-4 h-8 w-8"/>  
+        <Upload className="w-full mb-4 h-8 w-8" />
         <p>Drag & Drop files here, or click to select</p>
         <p className="text-muted-foreground text-sm">Max file size: 2MB</p>
       </div>
