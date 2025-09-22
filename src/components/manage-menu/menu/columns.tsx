@@ -59,7 +59,7 @@ export const columns: ColumnDef<Menu>[] = [
       return (
         <Link
           href={`/manage-menu/submenu/${menuId}`}
-          className="text-blue-600 hover:underline"
+          className="text-blue-600 hover:text-blue-800 hover:underline"
         >
           {text}
         </Link>
