@@ -115,9 +115,12 @@ export async function getMenuandSubmenu() {
       submenu (
         id,
         title,
-        sites (
+        sites!inner (
           id,
-          url
+          url,
+          site_content!inner (
+            site_id
+          )
         )
       )
     `);
