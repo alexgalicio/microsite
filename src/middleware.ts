@@ -7,6 +7,7 @@ const isAdminRoute = createRouteMatcher([
   "/manage-menu(.*)",
   "/calendar(.*)",
   "/notifications(.*)",
+  "/chatbot(.*)",
 ]);
 
 const isUserRoute = createRouteMatcher(["/editor(.*)"]);
