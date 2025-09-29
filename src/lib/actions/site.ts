@@ -54,7 +54,10 @@ export async function createNewSite(formData: {
           error: "You can create only one site per account.",
         };
       }
-      return { success: false, error: "That subdomain is already in use. Please try another." };
+      return {
+        success: false,
+        error: "That subdomain is already in use. Please try another.",
+      };
     }
     return { success: false, error: error.message };
   }
@@ -82,6 +85,10 @@ export async function editSite(
   }
 
   const supabase = createServerSupabaseClient();
+
+  const subdomain = formData.subdomain.toLowerCase();
+  const absoluteUrl = `https://${subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`;
+
   const { error } = await supabase
     .from("sites")
     .update({
@@ -89,12 +96,16 @@ export async function editSite(
       subdomain: formData.subdomain.toLowerCase(),
       description: formData.description,
       bg_image: formData.bg_image,
+      url: absoluteUrl,
     })
     .eq("id", id);
 
   if (error) {
     if (error.code === "23505") {
-      return { success: false, error: "That subdomain is already in use. Please try another." };
+      return {
+        success: false,
+        error: "That subdomain is already in use. Please try another.",
+      };
     }
     return { success: false, error: error.message };
   }
