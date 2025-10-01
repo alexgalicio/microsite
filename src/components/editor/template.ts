@@ -166,6 +166,25 @@ body {
   .hero-title {
     padding: 30px 8px;
   }
+  .about-container {
+    flex-direction: column-reverse;
+  }
+  .about-image {
+    width: 100%;
+    height: 100%;
+  }
+  .about-content {
+    width: 100%;
+  }
+  .cards {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .card {
+    width: 100%;
+    height: 100%;
+  }
 }
 .hero-sect {
   min-height: 100vh;
