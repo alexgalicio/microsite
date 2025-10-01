@@ -152,6 +152,9 @@ body {
   #menu-checkbox:checked ~ .menu-toggle .hamburger:nth-child(3) {
     transform: rotate(45deg) translate(-6px, -6px);
   }
+  .about-container {
+    flex-direction: column-reverse;
+  }
 }
 @media screen and (max-width: 480px) {
   .lead-title {
