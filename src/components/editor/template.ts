@@ -152,6 +152,9 @@ body {
   #menu-checkbox:checked ~ .menu-toggle .hamburger:nth-child(3) {
     transform: rotate(45deg) translate(-6px, -6px);
   }
+  .about-container {
+    flex-direction: column-reverse;
+  }
 }
 @media screen and (max-width: 480px) {
   .lead-title {
@@ -165,6 +168,25 @@ body {
   }
   .hero-title {
     padding: 30px 8px;
+  }
+  .about-container {
+    flex-direction: column-reverse;
+  }
+  .about-image {
+    width: 100%;
+    height: 100%;
+  }
+  .about-content {
+    width: 100%;
+  }
+  .cards {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .card {
+    width: 100%;
+    height: 100%;
   }
 }
 .hero-sect {
