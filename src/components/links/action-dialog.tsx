@@ -50,7 +50,6 @@ const formSchema = z.object({
     .url("Invalid URL format")
     .regex(/^\S+$/, "Invalid URL format"),
   category: z.string().min(1, "This field is required"),
-  to: z.string().min(1, "This field is required"),
   description: z
     .string()
     .min(3, "Description must be at least 3 characters")
@@ -75,13 +74,11 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
 
   // state for options
   const [categories, setCategories] = useState<ComboboxOptions[]>([]);
-  const [targetAudiences, setTargetAudiences] = useState<ComboboxOptions[]>([]);
 
   // loading states
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [audiencesLoading, setAudiencesLoading] = useState(true);
   const [isCreatingCategory, setIsCreatingCategory] = useState(false);
-  const [isCreatingTo, setIsCreatingTo] = useState(false);
 
   const form = useForm<LinkForm>({
     resolver: zodResolver(formSchema),
@@ -90,7 +87,6 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
           title: currentRow.title,
           url: currentRow.url,
           category: currentRow.link_category.id,
-          to: currentRow.link_to.id,
           description: currentRow.description || "",
           isEdit,
         }
@@ -98,7 +94,6 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
           title: "",
           url: "",
           category: "",
-          to: "",
           description: "",
           isEdit,
         },
@@ -129,17 +124,6 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
         );
       } else {
         toast.error("Failed to fetch categories");
-      }
-
-      if (toRes.success) {
-        setTargetAudiences(
-          toRes.data.map((to) => ({
-            id: to.id,
-            title: to.title,
-          }))
-        );
-      } else {
-        toast.error("Failed to fetch target audiences");
       }
     } catch (error) {
       toast.error("Failed to load options");
@@ -184,10 +168,6 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
     form.setValue("category", option.id);
   }
 
-  function handleTargetAudienceSelect(option: ComboboxOptions) {
-    form.setValue("to", option.id);
-  }
-
   async function handleCreateCategory(label: string) {
     try {
       setIsCreatingCategory(true);
@@ -208,29 +188,6 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
       toast.error("Failed to create category");
     } finally {
       setIsCreatingCategory(false);
-    }
-  }
-
-  async function handleCreateTargetAudience(label: string) {
-    try {
-      setIsCreatingTo(true);
-      const result = await createTo(label);
-      if (result.success) {
-        const newAudience = {
-          id: result.data?.id,
-          title: result.data?.title,
-        };
-        setTargetAudiences((prev) => [...prev, newAudience]);
-        handleTargetAudienceSelect(newAudience);
-        toast.success("Item created successfully");
-      } else {
-        toast.error(result.error);
-      }
-    } catch (error) {
-      console.error("Error creating target audience:", error);
-      toast.error("Failed to create item");
-    } finally {
-      setIsCreatingTo(false);
     }
   }
 
@@ -308,34 +265,6 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
                         onCreate={handleCreateCategory}
                       />
                       {(categoriesLoading || isCreatingCategory) && (
-                        <div className="absolute right-8 top-1/2 -translate-y-1/2">
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        </div>
-                      )}
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="to"
-              render={({ field }) => (
-                <FormItem className="grid gap-2">
-                  <FormLabel>To</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Combobox
-                        options={targetAudiences}
-                        placeholder="Please select an option"
-                        selected={field.value}
-                        disabled={audiencesLoading}
-                        onChange={handleTargetAudienceSelect}
-                        onCreate={handleCreateTargetAudience}
-                      />
-                      {(audiencesLoading || isCreatingTo) && (
                         <div className="absolute right-8 top-1/2 -translate-y-1/2">
                           <Loader2 className="h-4 w-4 animate-spin" />
                         </div>
