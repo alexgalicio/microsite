@@ -27,10 +27,10 @@ import { useEffect, useState } from "react";
 import {
   addNewLink,
   createCategory,
-  createTo,
   editLink,
   getAllCategories,
-  getAllTo,
+  removeImage,
+  uploadImage,
 } from "@/lib/actions/links";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
@@ -50,6 +50,7 @@ const formSchema = z.object({
     .url("Invalid URL format")
     .regex(/^\S+$/, "Invalid URL format"),
   category: z.string().min(1, "This field is required"),
+  image: z.string(),
   description: z
     .string()
     .min(3, "Description must be at least 3 characters")
@@ -71,13 +72,9 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
   const isEdit = !!currentRow;
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-
-  // state for options
   const [categories, setCategories] = useState<ComboboxOptions[]>([]);
-
-  // loading states
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
-  const [audiencesLoading, setAudiencesLoading] = useState(true);
   const [isCreatingCategory, setIsCreatingCategory] = useState(false);
 
   const form = useForm<LinkForm>({
@@ -87,6 +84,7 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
           title: currentRow.title,
           url: currentRow.url,
           category: currentRow.link_category.id,
+          image: currentRow.image || "",
           description: currentRow.description || "",
           isEdit,
         }
@@ -94,6 +92,7 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
           title: "",
           url: "",
           category: "",
+          image: "",
           description: "",
           isEdit,
         },
@@ -101,44 +100,75 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
 
   useEffect(() => {
     if (open) {
-      fetchAllOptions();
+      fetchCategories();
     }
   }, [open]);
 
-  async function fetchAllOptions() {
-    try {
-      setCategoriesLoading(true);
-      setAudiencesLoading(true);
-
-      const [catRes, toRes] = await Promise.all([
-        getAllCategories(),
-        getAllTo(),
-      ]);
-
-      if (catRes.success) {
-        setCategories(
-          catRes.data.map((cat) => ({
-            id: cat.id,
-            title: cat.title,
-          }))
-        );
-      } else {
-        toast.error("Failed to fetch categories");
-      }
-    } catch (error) {
-      toast.error("Failed to load options");
-      console.error(error);
-    } finally {
-      setCategoriesLoading(false);
-      setAudiencesLoading(false);
-    }
+  async function fetchCategories() {
+    setCategoriesLoading(true);
+    const catRes = await getAllCategories();
+    setCategories(
+      catRes.data.map((cat) => ({
+        id: cat.id,
+        title: cat.title,
+      }))
+    );
+    setCategoriesLoading(false);
   }
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select a valid image file.");
+        event.target.value = "";
+        setImageFile(null);
+        form.setValue("image", "");
+        return;
+      }
+
+      if (file.size > 1 * 1024 * 1024) {
+        toast.error("Image size must be less than 1MB.");
+        event.target.value = "";
+        setImageFile(null);
+        form.setValue("image", "");
+        return;
+      }
+
+      setImageFile(file);
+    }
+  };
 
   async function onSubmit(values: LinkForm) {
     setIsLoading(true);
     try {
+      let imageUrl = values.image;
+
+      if (imageFile) {
+        if (isEdit && currentRow?.image) {
+          await removeImage(currentRow.image).catch((error) => {
+            console.error("Failed to delete old image:", error);
+            // continue even if deletion fails to not block the update
+          });
+        }
+
+        // upload the new image
+        const uploadRes = await uploadImage(imageFile);
+        if (uploadRes.success) {
+          imageUrl = uploadRes.data ?? "";
+        } else {
+          imageUrl = "";
+          console.error("Upload Image Error: ", uploadRes.error);
+        }
+      }
+
+      const updatedValues = {
+        ...values,
+        image: imageUrl,
+      };
+
       if (isEdit && currentRow) {
-        const editRes = await editLink(currentRow.id, values);
+        const editRes = await editLink(currentRow.id, updatedValues);
         if (editRes.success) {
           toast.success("Link updated successfully.");
           router.refresh();
@@ -146,7 +176,7 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
           toast.error(editRes.error);
         }
       } else {
-        const createRes = await addNewLink(values);
+        const createRes = await addNewLink(updatedValues);
         if (createRes.success) {
           toast.success(`${values.url} added successfully.`);
           router.refresh();
@@ -155,6 +185,7 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
         }
       }
       form.reset();
+      setImageFile(null);
       onOpenChange(false);
     } catch (error) {
       toast.error(handleError(error));
@@ -196,6 +227,7 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
       open={open}
       onOpenChange={(state) => {
         form.reset();
+        setImageFile(null);
         onOpenChange(state);
       }}
     >
@@ -278,15 +310,34 @@ export function LinkActionDialog({ currentRow, open, onOpenChange }: Props) {
 
             <FormField
               control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel htmlFor="image">Image</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="image"
+                      type="file"
+                      accept="image/*"
+                      onChange={(event) => {
+                        handleImageChange(event);
+                        field.onChange("");
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="description"
               render={({ field }) => (
                 <FormItem className="grid gap-2">
                   <FormLabel htmlFor="description">Description</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Enter description"
-                      {...field}
-                    />
+                    <Textarea placeholder="Enter description" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
