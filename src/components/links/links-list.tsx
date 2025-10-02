@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowDownAZ, Link, SlidersHorizontal, X } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
-import { getAllCategories, getAllTo } from "@/lib/actions/links";
+import { getAllCategories } from "@/lib/actions/links";
 import LinkItem from "./link-item";
 
 export default function LinksList({ links }: { links: Links[] }) {
@@ -21,10 +21,7 @@ export default function LinksList({ links }: { links: Links[] }) {
   const [search, setSearch] = useState("");
   const [categories, setCategories] = useState<Links[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [tos, setTo] = useState<Links[]>([]);
-  const [selectedTo, setSelectedTo] = useState<string | null>(null);
-  const isFiltered =
-    search.length > 0 || selectedTo !== null || selectedCategory !== null;
+  const isFiltered = search.length > 0 || selectedCategory !== null;
 
   // fetch category
   useEffect(() => {
@@ -41,21 +38,6 @@ export default function LinksList({ links }: { links: Links[] }) {
     fetchCategories();
   }, []);
 
-  // fetch to
-  useEffect(() => {
-    const fetchTo = async () => {
-      try {
-        const toData = await getAllTo();
-        if (toData.success) {
-          setTo(toData.data);
-        }
-      } catch (error) {
-        console.error("Error fetching to:", error);
-      }
-    };
-    fetchTo();
-  }, []);
-
   const searchLower = search.toLowerCase();
   const filteredLinks = links
     .sort((a, b) =>
@@ -68,16 +50,12 @@ export default function LinksList({ links }: { links: Links[] }) {
         (link.url.toLowerCase().includes(searchLower) ||
           link.title.toLowerCase().includes(searchLower) ||
           link.description.toLowerCase().includes(searchLower)) &&
-        (selectedCategory
-          ? link.link_category?.id === selectedCategory
-          : true) &&
-        (selectedTo ? link.link_to?.id === selectedTo : true)
+        (selectedCategory ? link.link_category?.id === selectedCategory : true)
     );
 
   const resetFilters = () => {
     setSearch("");
     setSelectedCategory(null);
-    setSelectedTo(null);
   };
 
   return (
@@ -92,47 +70,25 @@ export default function LinksList({ links }: { links: Links[] }) {
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          <div className="flex gap-2">
-            {/* filter by category */}
-            <Select
-              value={selectedCategory ?? ""}
-              onValueChange={(value) =>
-                setSelectedCategory(value === "all" ? null : value)
-              }
-            >
-              <SelectTrigger className="h-9 border-dashed">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                {categories.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
-                    {category.title}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {/* filter by to */}
-            <Select
-              value={selectedTo ?? ""}
-              onValueChange={(value) =>
-                setSelectedTo(value === "all" ? null : value)
-              }
-            >
-              <SelectTrigger className="h-9 border-dashed">
-                <SelectValue placeholder="To" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                {tos.map((to) => (
-                  <SelectItem key={to.id} value={to.id}>
-                    {to.title}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          {/* filter by category */}
+          <Select
+            value={selectedCategory ?? ""}
+            onValueChange={(value) =>
+              setSelectedCategory(value === "all" ? null : value)
+            }
+          >
+            <SelectTrigger className="h-9 border-dashed">
+              <SelectValue placeholder="Category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              {categories.map((category) => (
+                <SelectItem key={category.id} value={category.id}>
+                  {category.title}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
           {/* reset filter */}
           {isFiltered && (

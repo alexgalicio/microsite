@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { ArrowDownAZ, SlidersHorizontal, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { getAllCategories, getAllTo } from "@/lib/actions/links";
+import { getAllCategories } from "@/lib/actions/links";
 import {
   Select,
   SelectContent,
@@ -26,10 +26,7 @@ export default function SearchableLinks({ links, id }: SearchableLinksProps) {
   const [search, setSearch] = useState("");
   const [categories, setCategories] = useState<Links[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [tos, setTo] = useState<Links[]>([]);
-  const [selectedTo, setSelectedTo] = useState<string | null>(null);
-  const isFiltered =
-    search.length > 0 || selectedTo !== null || selectedCategory !== null;
+  const isFiltered = search.length > 0 || selectedCategory !== null;
 
   // fetch category
   useEffect(() => {
@@ -46,21 +43,6 @@ export default function SearchableLinks({ links, id }: SearchableLinksProps) {
     fetchCategories();
   }, []);
 
-  // fetch to
-  useEffect(() => {
-    const fetchTo = async () => {
-      try {
-        const toData = await getAllTo();
-        if (toData.success) {
-          setTo(toData.data);
-        }
-      } catch (error) {
-        console.error("Error fetching to:", error);
-      }
-    };
-    fetchTo();
-  }, []);
-
   const searchLower = search.toLowerCase();
   const filteredLinks = links
     .sort((a, b) =>
@@ -73,16 +55,12 @@ export default function SearchableLinks({ links, id }: SearchableLinksProps) {
         (link.url.toLowerCase().includes(searchLower) ||
           link.title.toLowerCase().includes(searchLower) ||
           link.description.toLowerCase().includes(searchLower)) &&
-        (selectedCategory
-          ? link.link_category?.id === selectedCategory
-          : true) &&
-        (selectedTo ? link.link_to?.id === selectedTo : true)
+        (selectedCategory ? link.link_category?.id === selectedCategory : true)
     );
 
   const resetFilters = () => {
     setSearch("");
     setSelectedCategory(null);
-    setSelectedTo(null);
   };
 
   return (
@@ -100,47 +78,25 @@ export default function SearchableLinks({ links, id }: SearchableLinksProps) {
                   onChange={(e) => setSearch(e.target.value)}
                 />
 
-                <div className="flex gap-2">
-                  {/* filter by category */}
-                  <Select
-                    value={selectedCategory ?? ""}
-                    onValueChange={(value) =>
-                      setSelectedCategory(value === "all" ? null : value)
-                    }
-                  >
-                    <SelectTrigger className="h-9 border-dashed">
-                      <SelectValue placeholder="Category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All</SelectItem>
-                      {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.title}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  {/* filter by to */}
-                  <Select
-                    value={selectedTo ?? ""}
-                    onValueChange={(value) =>
-                      setSelectedTo(value === "all" ? null : value)
-                    }
-                  >
-                    <SelectTrigger className="h-9 border-dashed">
-                      <SelectValue placeholder="To" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All</SelectItem>
-                      {tos.map((to) => (
-                        <SelectItem key={to.id} value={to.id}>
-                          {to.title}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                {/* filter by category */}
+                <Select
+                  value={selectedCategory ?? ""}
+                  onValueChange={(value) =>
+                    setSelectedCategory(value === "all" ? null : value)
+                  }
+                >
+                  <SelectTrigger className="h-9 border-dashed">
+                    <SelectValue placeholder="Category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All</SelectItem>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
                 {/* reset filter */}
                 {isFiltered && (
@@ -191,7 +147,7 @@ export default function SearchableLinks({ links, id }: SearchableLinksProps) {
                 More Links
               </h2>
 
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-10 pt-4">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 pb-10 pt-4">
                 {filteredLinks.map((link) => (
                   <LinkPreview key={link.id} link={link} />
                 ))}
