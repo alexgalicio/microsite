@@ -86,10 +86,7 @@ export interface Links {
     id: string;
     title: string;
   };
-  link_to: {
-    id: string;
-    title: string;
-  };
+  image: string;
   description: string;
   created_at: string;
 }

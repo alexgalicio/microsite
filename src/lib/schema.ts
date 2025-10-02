@@ -37,10 +37,7 @@ export const linkSchema = z.object({
     id: z.string(),
     title: z.string(),
   }),
-  link_to: z.object({
-    id: z.string(),
-    title: z.string(),
-  }),
+  image: z.string(),
   description: z.string(),
   created_at: z.string(),
 });
@@ -56,4 +53,3 @@ export type Submenu = z.infer<typeof submenuSchema>;
 export type Site = z.infer<typeof siteSchema>;
 export type Links = z.infer<typeof linkSchema>;
 export type Chunks = z.infer<typeof chunksSchema>;
-
