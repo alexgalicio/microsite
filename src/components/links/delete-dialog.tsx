@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Loader2, OctagonAlertIcon } from "lucide-react";
-import { deleteLink } from "@/lib/actions/links";
+import { deleteLink, removeImage } from "@/lib/actions/links";
 
 interface Props {
   open: boolean;
@@ -23,6 +23,10 @@ export function LinkDeleteDialog({ open, onOpenChange, currentRow }: Props) {
   async function handleDelete() {
     setIsLoading(true);
     try {
+      if (currentRow.image) {
+        await removeImage(currentRow.image);
+      }
+      
       const response = await deleteLink(currentRow.id);
       if (response?.success) {
         toast.success("Link deleted successfully.");
