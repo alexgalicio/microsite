@@ -7,6 +7,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -27,6 +28,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { navItems } from "./sidebar-data";
 import Link from "next/link";
 import { useMemo } from "react";
+import Image from "next/image";
 
 export function AppSidebar() {
   const pathname = usePathname();
@@ -54,6 +56,24 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg" asChild>
+              <div>
+                <Image
+                  src="/images/cict.png"
+                  className="h-8 w-8 rounded-full bg-secondary object-contain"
+                  alt=""
+                  height={32}
+                  width={32}
+                />
+                <span className="text-base font-semibold">Microsite</span>
+              </div>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       <SidebarContent className="overflow-x-hidden">
         <SidebarGroup>
           <SidebarGroupLabel>Overview</SidebarGroupLabel>
