@@ -19,10 +19,6 @@ export async function getLinksByUserId(id: string, from: number, to: number) {
       link_category (
         id,
         title
-      ),
-      link_to (
-        id,
-        title
       )
     `,
       { count: "exact" }
@@ -42,7 +38,7 @@ export async function addNewLink(formData: {
   title: string;
   url: string;
   category: string;
-  to: string;
+  image?: string;
   description: string;
 }) {
   const { userId } = await auth();
@@ -77,7 +73,7 @@ export async function addNewLink(formData: {
     title: formData.title,
     url: formData.url,
     category_id: formData.category,
-    to_id: formData.to,
+    image: formData.image,
     description: formData.description,
     site_id: siteData.id,
     user_id: userId,
@@ -99,7 +95,7 @@ export async function editLink(
     title: string;
     url: string;
     category: string;
-    to: string;
+    image?: string;
     description: string;
   }
 ) {
@@ -116,7 +112,7 @@ export async function editLink(
       title: formData.title,
       url: formData.url,
       category_id: formData.category,
-      to_id: formData.to,
+      image: formData.image,
       description: formData.description,
     })
     .eq("id", id);
@@ -146,6 +142,58 @@ export async function deleteLink(id: string) {
   return { success: true };
 }
 
+export async function uploadImage(file: File) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return { success: false, error: "User not signed in." };
+  }
+
+  // create unique filename
+  const fileExt = file.name.split(".").pop();
+  const fileName = `${Date.now()}.${fileExt}`;
+  const filePath = `links_img/${userId}/${fileName}`;
+
+  const supabase = createServerSupabaseClient();
+  // upload to supabase storage
+  const { error } = await supabase.storage
+    .from("assets")
+    .upload(filePath, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  // get public URL
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from("assets").getPublicUrl(filePath);
+
+  return { success: true, data: publicUrl };
+}
+
+export async function removeImage(url: string) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return { success: false, error: "User not signed in." };
+  }
+
+  // extract filename from url
+  const fileName = url.split("/").pop();
+  const filePath = `links_img/${userId}/${fileName}`;
+  console.log("filename: ", fileName);
+  if (!fileName) return;
+
+  const supabase = createServerSupabaseClient();
+  const { error } = await supabase.storage.from("assets").remove([filePath]);
+
+  if (error) return { success: false, error: error.message };
+}
+
 export async function getLinksBySiteId(id: string) {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase
@@ -154,10 +202,6 @@ export async function getLinksBySiteId(id: string) {
       `
       *,
       link_category (
-        id,
-        title
-      ),
-      link_to (
         id,
         title
       )
@@ -222,20 +266,20 @@ export async function createCategory(title: string) {
   return { success: true, data };
 }
 
-export async function getAllTo() {
-  const supabase = createServerSupabaseClient();
+// export async function getAllTo() {
+//   const supabase = createServerSupabaseClient();
 
-  const { data: categories, error } = await supabase
-    .from("link_to")
-    .select("*")
-    .order("title");
+//   const { data: categories, error } = await supabase
+//     .from("link_to")
+//     .select("*")
+//     .order("title");
 
-  if (error) {
-    return { success: false, error: error.message, data: [] };
-  }
+//   if (error) {
+//     return { success: false, error: error.message, data: [] };
+//   }
 
-  return { success: true, data: categories || [] };
-}
+//   return { success: true, data: categories || [] };
+// }
 
 export async function createTo(title: string) {
   const supabase = createServerSupabaseClient();
@@ -282,16 +326,12 @@ export async function getLatestLinksBySiteId(id: string) {
       link_category (
         id,
         title
-      ),
-      link_to (
-        id,
-        title
       )
     `
     )
     .eq("site_id", id)
     .order("created_at", { ascending: false })
-    .limit(4);
+    .limit(3);
 
   if (error) {
     return [];
