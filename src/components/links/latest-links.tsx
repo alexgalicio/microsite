@@ -34,7 +34,7 @@ export default function LatestLinks({ siteId }: { siteId: string }) {
           </h2>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {links.map((link) => (
             <LinkPreview key={link.id} link={link} />
           ))}
