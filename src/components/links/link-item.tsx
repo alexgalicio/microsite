@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Edit, ExternalLink, MoreHorizontal, Trash2 } from "lucide-react";
 import {
@@ -18,75 +19,80 @@ export default function LinkItem({ link }: { link: Links }) {
   const { setOpen, setCurrentRow } = useLink();
 
   return (
-    <div className="rounded-lg border overflow-hidden hover:shadow-md transition-all">
-      <div className="p-4">
-        <div className="mb-3 flex items-center justify-between">
-          <Link
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1"
-          >
-            <div className="flex items-center gap-2 group w-fit">
-              <h2 className="font-semibold transition-colors group-hover:text-primary">
-                {link.title}
-              </h2>
-              <ExternalLink className="w-4 h-4 opacity-0 transition-opacity group-hover:opacity-60" />
-            </div>
-          </Link>
-          <DropdownMenu modal={false}>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="flex h-8 w-8 p-0">
-                <MoreHorizontal className="h-4 w-4" />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[160px]">
-              <DropdownMenuItem
-                onClick={() => {
-                  setCurrentRow(link);
-                  setOpen("edit");
-                }}
-              >
-                Edit
-                <DropdownMenuShortcut>
-                  <Edit size={16} />
-                </DropdownMenuShortcut>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => {
-                  setCurrentRow(link);
-                  setOpen("delete");
-                }}
-                className="text-red-500!"
-              >
-                Delete
-                <DropdownMenuShortcut>
-                  <Trash2 size={16} />
-                </DropdownMenuShortcut>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        <p className="line-clamp-2 text-gray-500 text-sm mb-4">
-          {link.description}
-        </p>
+    <div className="rounded-lg border overflow-hidden hover:shadow-md transition-all flex">
+      <div className="w-32 relative flex-shrink-0 hidden md:block">
+        <Image
+          src={link.image || "/images/placeholder.webp"}
+          alt={link.title}
+          fill
+          className="object-cover"
+        />
+      </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-          <p className="text-gray-500 text-xs sm:text-sm order-2 sm:order-1">
-            {format(new Date(link.created_at), "M/d/yyyy")}
-          </p>
-
-          <div className="flex flex-wrap gap-1 order-1 sm:order-2">
-            <Badge className="bg-green-500 text-xs">
-              {link.link_category.title}
-            </Badge>
-            <Badge className="bg-purple-500 text-xs">
-              {link.link_to.title}
-            </Badge>
+      <div className="flex-1 p-4 flex flex-col justify-between">
+        <div>
+          <div className="mb-3 flex items-center justify-between">
+            <Link
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1"
+            >
+              <div className="flex items-center gap-2 group w-fit">
+                <h2 className="font-semibold transition-colors group-hover:text-primary">
+                  {link.title}
+                </h2>
+                <ExternalLink className="w-4 h-4 opacity-0 transition-opacity group-hover:opacity-60" />
+              </div>
+            </Link>
+            <DropdownMenu modal={false}>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="flex h-8 w-8 p-0">
+                  <MoreHorizontal className="h-4 w-4" />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-[160px]">
+                <DropdownMenuItem
+                  onClick={() => {
+                    setCurrentRow(link);
+                    setOpen("edit");
+                  }}
+                >
+                  Edit
+                  <DropdownMenuShortcut>
+                    <Edit size={16} />
+                  </DropdownMenuShortcut>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => {
+                    setCurrentRow(link);
+                    setOpen("delete");
+                  }}
+                  className="text-red-500!"
+                >
+                  Delete
+                  <DropdownMenuShortcut>
+                    <Trash2 size={16} />
+                  </DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
+
+          <p className="line-clamp-2 text-gray-500 text-sm mb-4">
+            {link.description}
+          </p>
         </div>
+
+        <Badge className="bg-purple-500 text-xs  mb-1">
+          {link.link_category.title}
+        </Badge>
+
+        <p className="text-gray-500 text-xs sm:text-sm">
+          {format(new Date(link.created_at), "M/d/yyyy")}
+        </p>
       </div>
     </div>
   );
