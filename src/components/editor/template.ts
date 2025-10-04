@@ -173,8 +173,8 @@ body {
     flex-direction: column-reverse;
   }
   .about-image {
-    height: auto;
-    width: 100%;
+    height: 100%;
+    max-width: 100%;
   }
   .about-content {
     max-width: 100%;
@@ -186,6 +186,7 @@ body {
   }
   .card {
     width: 100%;
+    max-width: 100%;
     height: auto;
   }
 }
