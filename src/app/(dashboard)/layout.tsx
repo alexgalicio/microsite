@@ -15,7 +15,7 @@ export default async function DashboardLayout({
       <SidebarInset>
         <div
           className={cn(
-            'has-[[data-layout=fixed]]:h-svh',
+            "has-[[data-layout=fixed]]:h-svh",
             "peer-data-[variant=inset]:has-[[data-layout=fixed]]:h-[calc(100svh-(var(--spacing)*4))]"
           )}
         >
