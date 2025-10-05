@@ -35,8 +35,8 @@ export function Header({ className, ...props }: HeaderProps) {
     <header
       className={cn(
         "bg-background flex h-16 items-center gap-3 p-4 sm:gap-4",
-        "header-fixed peer/header fixed z-50 w-[inherit]",
-        offset > 10 ? "border-b" : "border-b",
+        "header-fixed peer/header sticky z-50 top-0 w-[inherit]",
+        offset > 10 ? "shadow" : "shadow-none rounded-t-xl",
         className
       )}
       {...props}
