@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
@@ -29,6 +29,7 @@ type FacebookForm = z.infer<typeof formSchema>;
 
 export default function FacebookForm({ userId }: { userId: string }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [isView, setIsView] = useState(false);
   const router = useRouter();
 
   const form = useForm<FacebookForm>({
@@ -100,12 +101,29 @@ export default function FacebookForm({ userId }: { userId: string }) {
             <FormItem>
               <FormLabel>Access Token</FormLabel>
               <FormControl>
-                <Input
-                  id="access_token"
-                  placeholder="Enter access token"
-                  autoComplete="off"
-                  {...field}
-                />
+                <div className="relative">
+                  <Input
+                    type={isView ? "text" : "password"}
+                    id="access_token"
+                    placeholder="Enter access token"
+                    className="pr-10"
+                    autoComplete="off"
+                    {...field}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => setIsView(!isView)}
+                  >
+                    {isView ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
