@@ -40,6 +40,22 @@ export default function SubdomainPage() {
     fetchData();
   }, [site.id]);
 
+  // track analytics when site loads
+  useEffect(() => {
+    if (!loading && !showPrivateSite && !error) {
+      fetch("/api/analytics", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          websiteId: site.id,
+          path: window.location.pathname,
+          referrer: document.referrer,
+          userAgent: navigator.userAgent,
+        }),
+      }).catch(console.error);
+    }
+  }, [loading, showPrivateSite, error, site.id]);
+
   if (loading) {
     return (
       <div className="flex flex-col min-h-screen items-center justify-center text-gray-500 px-4">
