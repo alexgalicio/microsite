@@ -173,11 +173,11 @@ body {
     flex-direction: column-reverse;
   }
   .about-image {
-    width: 100%;
     height: 100%;
+    max-width: 100%;
   }
   .about-content {
-    width: 100%;
+    max-width: 100%;
   }
   .cards {
     display: flex;
@@ -186,7 +186,8 @@ body {
   }
   .card {
     width: 100%;
-    height: 100%;
+    max-width: 100%;
+    height: auto;
   }
 }
 .hero-sect {
