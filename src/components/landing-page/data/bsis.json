@@ -7,7 +7,8 @@
     },
     "aboutSection": {
         "heading": "Connecting People, Processes, and Technology",
-        "subheading": "The Bachelor of Science in Information Systems (BSIS) program focuses on the strategic use of technology to support organizations. Students gain skills in systems analysis, business process management, and information systems design, preparing them to serve as a vital link between technical teams and business stakeholders. Graduates are equipped to create efficient solutions that improve decision-making and drive growth in the digital economy."
+        "subheading": "The Bachelor of Science in Information Systems (BSIS) program focuses on the strategic use of technology to support organizations. Students gain skills in systems analysis, business process management, and information systems design, preparing them to serve as a vital link between technical teams and business stakeholders. Graduates are equipped to create efficient solutions that improve decision-making and drive growth in the digital economy.",
+        "image":"/images/cict_faculty.svg"
     },
     "subjectsSection": [
         {

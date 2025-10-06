@@ -7,7 +7,8 @@
     },
     "aboutSection": {
         "heading": "Technology Skills for the Real World",
-        "subheading": "The Bachelor of Science in Information Technology (BSIT) program provides students with hands-on experience and technical expertise in software development, database management, networking, and system administration. With a balance of theory and practice, the program prepares graduates to create solutions that meet the demands of businesses and communities in today’s digital world."
+        "subheading": "The Bachelor of Science in Information Technology (BSIT) program provides students with hands-on experience and technical expertise in software development, database management, networking, and system administration. With a balance of theory and practice, the program prepares graduates to create solutions that meet the demands of businesses and communities in today’s digital world.",
+        "image":"/images/cict_faculty.svg"
     },
     "subjectsSection": [
         {

@@ -2,11 +2,12 @@ import Image from "next/image";
 
 interface AboutProps {
   span: string;
-  title: string;
+  heading: string;
   description: string;
+  image: string;
 }
 
-export default function About({ span, title, description }: AboutProps) {
+export default function About({ span, heading, description, image }: AboutProps) {
   return (
     <section
       id="about"
@@ -20,7 +21,7 @@ export default function About({ span, title, description }: AboutProps) {
                 About {span}
               </span>
               <h2 className="mb-4 text-3xl font-bold leading-tight! text-black sm:text-4xl md:text-[45px]">
-                {title}
+                {heading}
               </h2>
               <p className="text-base leading-relaxed! md:text-lg mb-10">
                 {description}
@@ -32,7 +33,7 @@ export default function About({ span, title, description }: AboutProps) {
             <div className="relative mx-auto max-w-[570px]">
               <div className="relative aspect-[11/6] overflow-hidden">
                 <Image
-                  src="/images/cict_faculty.svg"
+                  src={image}
                   alt="about-image"
                   fill
                   className="object-cover"

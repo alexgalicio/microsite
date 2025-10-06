@@ -7,7 +7,8 @@
     },
     "aboutSection": {
         "heading": "Shaping Knowledge and Access",
-        "subheading": "The Bachelor of Library and Information Science (BLIS) program trains students to manage information resources, library systems, and digital archives. It emphasizes research, information organization, and the use of modern technologies to support learning, literacy, and lifelong access to knowledge. Graduates are prepared for careers in libraries, information centers, and knowledge management across diverse fields."
+        "subheading": "The Bachelor of Library and Information Science (BLIS) program trains students to manage information resources, library systems, and digital archives. It emphasizes research, information organization, and the use of modern technologies to support learning, literacy, and lifelong access to knowledge. Graduates are prepared for careers in libraries, information centers, and knowledge management across diverse fields.",
+        "image":"/images/cict_faculty.svg"
     },
     "subjectsSection": [
         {

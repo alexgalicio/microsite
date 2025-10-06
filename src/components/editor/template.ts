@@ -173,7 +173,7 @@ body {
     flex-direction: column-reverse;
   }
   .about-image {
-    height: 100%;
+    height: auto%;
     max-width: 100%;
   }
   .about-content {
