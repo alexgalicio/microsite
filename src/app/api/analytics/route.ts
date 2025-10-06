@@ -6,10 +6,19 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_KEY ?? ""
 );
 
+// get device type using useragent
+function getDeviceType(userAgent: string): "Mobile" | "Desktop" | "Tablet" {
+  if (/tablet|ipad/i.test(userAgent)) return "Tablet";
+  if (/mobile|android|iphone/i.test(userAgent)) return "Mobile";
+  return "Desktop";
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { websiteId, path, referrer, userAgent } = body;
+
+    const deviceType = getDeviceType(userAgent);
 
     // get IP
     const ip = req.headers.get("x-forwarded-for") || "unknown";
@@ -21,6 +30,7 @@ export async function POST(req: Request) {
         referrer,
         user_agent: userAgent,
         ip,
+        device_type: deviceType,
       },
     ]);
 
