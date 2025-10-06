@@ -1,7 +1,6 @@
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/server";
-import { SiteAnalytics } from "../types";
 
 export async function getMonthlyStats(table: string) {
   const now = new Date();
@@ -62,45 +61,62 @@ export async function getActiveSites() {
   return count ?? 0;
 }
 
-export async function getLatestUpdateSites(): Promise<SiteAnalytics[]> {
+export async function getTopPerformingSite() {
   const supabase = createServerSupabaseClient();
-  const { data } = await supabase
-    .from("sites")
-    .select("id, title, updated_at, url")
-    .order("updated_at", { ascending: false })
-    .limit(8);
+  const { data, error } = await supabase
+    .from("site_analytics")
+    .select("id, title, url, total_views, total_visitors")
+    .limit(5);
 
-  const mappedSites =
-    data?.map((site) => ({
-      id: site.id,
-      title: site.title,
-      updated_at: site.updated_at,
-      url: site.url ,
-    })) || [];
+  if (error) return [];
 
-  return mappedSites || [];
+  return data;
 }
 
-export async function getFeedbackChartData() {
+export async function getDeviceDistribution() {
   const supabase = createServerSupabaseClient();
-  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
-  // get all feedback from last 7 days
+  const { data, error } = await supabase
+    .from("analytics")
+    .select("device_type");
+
+  if (error) {
+    console.error("Error fetching device distribution:", error);
+    return { mobile: 0, desktop: 0, tablet: 0 };
+  }
+
+  // Count each device type
+  const mobile = data.filter((row) => row.device_type === "Mobile").length;
+  const desktop = data.filter((row) => row.device_type === "Desktop").length;
+  const tablet = data.filter((row) => row.device_type === "Tablet").length;
+
+  return {
+    mobile,
+    desktop,
+    tablet,
+  };
+}
+
+export async function getFeedbackData() {
+  const supabase = createServerSupabaseClient();
+  const startOfYear = new Date(new Date().getFullYear(), 0, 1).toISOString();
+
+  // get all feedback from this year
   const { data: feedbackData, error: feedbackError } = await supabase
     .from("chat_feedback")
     .select("created_at, feedback, interaction_id")
-    .gte("created_at", sevenDaysAgo);
+    .gte("created_at", startOfYear);
 
   if (feedbackError) {
     console.error("Feedback error:", feedbackError);
     return [];
   }
 
-  // get all chat interactions from last 7 days
+  // get all chat interactions from this year
   const { data: interactionsData, error: interactionsError } = await supabase
     .from("chat_interactions")
     .select("id, created_at")
-    .gte("created_at", sevenDaysAgo);
+    .gte("created_at", startOfYear);
 
   if (interactionsError) {
     console.error("Interactions error:", interactionsError);
@@ -109,7 +125,7 @@ export async function getFeedbackChartData() {
 
   // create a set of interaction ids that have feedback
   const interactionsWithFeedback = new Set(
-    feedbackData?.map(f => f.interaction_id) || []
+    feedbackData?.map((f) => f.interaction_id) || []
   );
 
   // init counts per day
@@ -148,4 +164,3 @@ export async function getFeedbackChartData() {
 
   return chartData;
 }
-
