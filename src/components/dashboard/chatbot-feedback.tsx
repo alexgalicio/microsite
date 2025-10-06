@@ -1,6 +1,6 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 import {
   Card,
   CardContent,
@@ -14,7 +14,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { getFeedbackChartData } from "@/lib/actions/analytics";
+import { getFeedbackData } from "@/lib/actions/analytics";
 import { useEffect, useState } from "react";
 
 type ChatbotFeedback = {
@@ -38,13 +38,13 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function UserFeedbackChartBar() {
+export function UserFeedbackLineChart() {
   const [chartData, setChartData] = useState<ChatbotFeedback[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getFeedbackChartData();
+        const data = await getFeedbackData();
         setChartData(data);
       } catch (error) {
         console.error("Failed to fetch chart data:", error);
@@ -55,23 +55,29 @@ export function UserFeedbackChartBar() {
   }, []);
 
   return (
-    <Card className="lg:col-span-7 shadow-none">
+    <Card>
       <CardHeader>
         <CardTitle>User Feedback</CardTitle>
         <CardDescription>
-          Showing user feedback on chatbot for the last 7 days
+          Visitor satisfaction with chatbot responses
         </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
+          <LineChart
+            accessibilityLayer
+            data={chartData}
+            margin={{
+              left: 12,
+              right: 12,
+            }}
+          >
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="date"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              minTickGap={32}
               tickFormatter={(value) => {
                 const date = new Date(value);
                 return date.toLocaleDateString("en-US", {
@@ -80,14 +86,29 @@ export function UserFeedbackChartBar() {
                 });
               }}
             />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="dashed" />}
+            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+            <Line
+              dataKey="helpful"
+              type="monotone"
+              stroke="var(--color-helpful)"
+              strokeWidth={2}
+              dot={false}
             />
-            <Bar dataKey="helpful" fill="var(--color-helpful)" radius={4} />
-            <Bar dataKey="unhelpful" fill="var(--color-unhelpful)" radius={4} />
-            <Bar dataKey="neutral" fill="var(--color-neutral)" radius={4} />
-          </BarChart>
+            <Line
+              dataKey="unhelpful"
+              type="monotone"
+              stroke="var(--color-unhelpful)"
+              strokeWidth={2}
+              dot={false}
+            />
+            <Line
+              dataKey="neutral"
+              type="monotone"
+              stroke="var(--color-neutral)"
+              strokeWidth={2}
+              dot={false}
+            />
+          </LineChart>
         </ChartContainer>
       </CardContent>
     </Card>
