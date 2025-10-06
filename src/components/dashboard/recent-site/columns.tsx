@@ -2,22 +2,21 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ExternalLink } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
 import { SiteAnalytics } from "@/lib/types";
 import Link from "next/link";
 
 export const columns: ColumnDef<SiteAnalytics>[] = [
   {
     accessorKey: "title",
-    header: "Site",
+    header: "Microsite",
   },
   {
-    accessorKey: "updated_at",
-    header: "Last Updated",
-    cell: ({ row }) => {
-      const updatedAt = new Date(row.getValue("updated_at") as string);
-      return `${formatDistanceToNow(updatedAt, { addSuffix: true })}`;
-    },
+    accessorKey: "total_views",
+    header: "Total Views",
+  },
+  {
+    accessorKey: "total_visitors",
+    header: "Total Visitors",
   },
   {
     accessorKey: "url",
@@ -30,10 +29,13 @@ export const columns: ColumnDef<SiteAnalytics>[] = [
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
+          className="group hover:text-blue-600 flex items-center gap-1"
         >
-          <ExternalLink size={14} />
           View Page
+          <ExternalLink
+            size={14}
+            className="opacity-0 group-hover:opacity-100 transition-opacity"
+          />
         </Link>
       );
     },
