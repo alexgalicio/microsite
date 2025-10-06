@@ -1,7 +1,14 @@
-import { UserFeedbackChartBar } from "@/components/dashboard/chatbot-feedback";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { getActiveSites, getMonthlyStats } from "@/lib/actions/analytics";
 import { Bot, Globe, Menu, User } from "lucide-react";
+import { DeviceDistributionPie } from "@/components/dashboard/device-distribution";
+import { UserFeedbackLineChart } from "@/components/dashboard/chatbot-feedback";
 import RecentSitesTable from "@/components/dashboard/recent-site/view-page";
 import StatsCard from "@/components/dashboard/stats-card";
 
@@ -18,6 +25,7 @@ export default async function Dashboard() {
           title="Total Users"
           total={userStats.total}
           difference={userStats.difference}
+          description="Total number of users"
           icon={<User size={16} />}
         />
 
@@ -25,6 +33,7 @@ export default async function Dashboard() {
           title="Active Microsites"
           total={await getActiveSites()}
           difference={siteStats.difference}
+          description="Total number of active microsites"
           icon={<Globe size={16} />}
         />
 
@@ -32,6 +41,7 @@ export default async function Dashboard() {
           title="Total Menu"
           total={menuStats.total}
           difference={menuStats.difference}
+          description="Total number of menu"
           icon={<Menu size={16} />}
         />
 
@@ -39,21 +49,24 @@ export default async function Dashboard() {
           title="Chatbot Conversations"
           total={chatStats.total}
           difference={chatStats.difference}
+          description="Total number of chatbot conversations"
           icon={<Bot size={16} />}
         />
       </div>
 
-      <div className="space-y-4 xl:grid xl:grid-cols-12 xl:gap-4 xl:space-y-0">
-        <UserFeedbackChartBar />
+      <Card>
+        <CardHeader>
+          <CardTitle>Top Performing Microsites</CardTitle>
+          <CardDescription>Based on total page views</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <RecentSitesTable />
+        </CardContent>
+      </Card>
 
-        <Card className="lg:col-span-5 shadow-none">
-          <CardHeader>
-            <CardTitle>Recently Published Microsites</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <RecentSitesTable />
-          </CardContent>
-        </Card>
+      <div className="grid gap-4 xl:grid-cols-2">
+        <DeviceDistributionPie />
+        <UserFeedbackLineChart />
       </div>
     </div>
   );
