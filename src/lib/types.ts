@@ -103,7 +103,8 @@ export interface Feedback {
 export interface SiteAnalytics {
   id: string;
   title: string;
-  updated_at: string;
+  total_views: number;
+  total_visitors: number;
   url: string;
 }
 
