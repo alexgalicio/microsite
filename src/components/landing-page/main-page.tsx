@@ -109,13 +109,14 @@ export default function LandingPage() {
       {/* about */}
       <About
         span="CICT"
-        title="Empowering Future Tech Innovators"
+        heading="Empowering Future Tech Innovators"
         description="The College of Information and Communications Technology
                   (CICT) equips students with the knowledge and skills needed to
                   thrive in the ever-evolving world of technology. Through
                   innovative learning, industry-aligned programs, and hands-on
                   experience, we prepare future IT professionals to lead,
                   create, and innovate in the digital age."
+        image="/images/cict_faculty.svg"
       />
 
       {/* calendar */}

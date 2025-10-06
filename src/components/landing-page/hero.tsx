@@ -9,7 +9,7 @@ export default function Hero({ heading, subheading }: HeroProps) {
   return (
     <section
       id="home"
-      className="relative z-10 overflow-hidden pb-16 pb-[200px] pt-[280px]"
+      className="relative z-10 overflow-hidden pb-[200px] pt-[280px]"
     >
       <Image
         src="/images/pimentel.jpg"

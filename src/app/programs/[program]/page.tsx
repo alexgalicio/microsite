@@ -25,8 +25,9 @@ export default async function ProgramPage({
       />
       <About
         span={data.acronym}
-        title={data.aboutSection.heading}
+        heading={data.aboutSection.heading}
         description={data.aboutSection.subheading}
+        image={data.aboutSection.image}
       />
       <Subject years={data.subjectsSection} />
       <Career careers={data.careerSection} />
