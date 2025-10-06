@@ -173,7 +173,7 @@ body {
     flex-direction: column-reverse;
   }
   .about-image {
-    height: auto%;
+    height: auto;
     max-width: 100%;
   }
   .about-content {
@@ -493,10 +493,10 @@ export const templateHTML = `
             </label>
             <div class="menu-items">
               <a href="#home" class="menu-item">Home</a>
-              <a href="#" class="menu-item">Announcements</a>
-              <a href="#photos" class="menu-item">Photos</a>
               <a href="#about" class="menu-item">About</a>
-              <a href="#testimonial" class="menu-item">Testimonial</a>
+              <a href="#photos" class="menu-item">Photos</a>
+              <a href="https://www.cictmicro.site/" class="menu-item">CICT</a>
+              <a href="#" class="menu-item">Announcements</a>
               <a href="#" class="menu-item">Links</a>
             </div>
           </nav>
