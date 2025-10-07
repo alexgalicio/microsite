@@ -516,35 +516,6 @@ export const templateHTML = `
       </div>
     </section>
 
-    <section id="photos" class="images-sect">
-      <div class="container-width">
-        <div class="flex-title">Photo Showcase</div>
-        <div class="flex-desc">
-          Explore our vibrant moments and unforgettable events.
-        </div>
-        <div class="cards">
-          <div class="card">
-            <img src="/" alt="photo-showcase" />
-          </div>
-          <div class="card">
-            <img src="/" alt="photo-showcase" />
-          </div>
-          <div class="card">
-            <img src="/" alt="photo-showcase" />
-          </div>
-          <div class="card">
-            <img src="/" alt="photo-showcase" />
-          </div>
-          <div class="card">
-            <img src="/" alt="photo-showcase" />
-          </div>
-          <div class="card">
-            <img src="/" alt="photo-showcase" />
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section id="about" class="about-sect">
       <div class="container-width">
         <div class="about-container">
@@ -588,36 +559,36 @@ export const templateHTML = `
           <div class="badge">
             <img src="/" class="badge-avatar" alt="profile" />
             <div class="badge-body">
-              <div class="badge-name">Alex Galicio</div>
-              <div class="badge-role">Developer</div>
+              <div class="badge-name">John Doe</div>
+              <div class="badge-role">President</div>
             </div>
           </div>
           <div class="badge">
             <img src="/" class="badge-avatar" alt="profile" />
             <div class="badge-body">
-              <div class="badge-name">Eddhan Tan</div>
-              <div class="badge-role">Developer</div>
+              <div class="badge-name">Jane Doe</div>
+              <div class="badge-role">Vice President</div>
             </div>
           </div>
           <div class="badge">
             <img src="/" class="badge-avatar" alt="profile" />
             <div class="badge-body">
-              <div class="badge-name">Ynez Sanchez</div>
-              <div class="badge-role">Member</div>
+              <div class="badge-name">John Doe</div>
+              <div class="badge-role">Treasurer</div>
             </div>
           </div>
           <div class="badge">
             <img src="/" class="badge-avatar" alt="profile" />
             <div class="badge-body">
-              <div class="badge-name">Joshua Alcaraz</div>
-              <div class="badge-role">Member</div>
+              <div class="badge-name">Jane Doe</div>
+              <div class="badge-role">Auditor</div>
             </div>
           </div>
           <div class="badge">
             <img src="/" class="badge-avatar" alt="profile" />
             <div class="badge-body">
-              <div class="badge-name">Reyan Concepcion</div>
-              <div class="badge-role">Member</div>
+              <div class="badge-name">John Doe</div>
+              <div class="badge-role">Public Relations Officer</div>
             </div>
           </div>
         </div>
@@ -639,6 +610,35 @@ export const templateHTML = `
               <div class="badge-name">John Doe</div>
               <div>President</div>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="photos" class="images-sect">
+      <div class="container-width">
+        <div class="flex-title">Photo Showcase</div>
+        <div class="flex-desc">
+          Explore our vibrant moments and unforgettable events.
+        </div>
+        <div class="cards">
+          <div class="card">
+            <img src="/" alt="photo-showcase" />
+          </div>
+          <div class="card">
+            <img src="/" alt="photo-showcase" />
+          </div>
+          <div class="card">
+            <img src="/" alt="photo-showcase" />
+          </div>
+          <div class="card">
+            <img src="/" alt="photo-showcase" />
+          </div>
+          <div class="card">
+            <img src="/" alt="photo-showcase" />
+          </div>
+          <div class="card">
+            <img src="/" alt="photo-showcase" />
           </div>
         </div>
       </div>
