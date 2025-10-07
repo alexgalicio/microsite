@@ -59,7 +59,7 @@ export function UserFeedbackLineChart() {
       <CardHeader>
         <CardTitle>User Feedback</CardTitle>
         <CardDescription>
-          Visitor satisfaction with chatbot responses
+          User satisfaction with chatbot responses
         </CardDescription>
       </CardHeader>
       <CardContent>
