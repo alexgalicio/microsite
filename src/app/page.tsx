@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { Maximize2, Minimize2, RotateCcw, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Card,
@@ -10,7 +10,6 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useChat } from "@ai-sdk/react";
@@ -24,9 +23,17 @@ export default function Chat() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [showChatIcon] = useState(true);
   const chatIconRef = useRef<HTMLDivElement>(null);
+  const [showBubble, setShowBubble] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  const { input, handleInputChange, handleSubmit, messages, status } =
-    useChat();
+  const {
+    input,
+    handleInputChange,
+    handleSubmit,
+    messages,
+    status,
+    setMessages,
+  } = useChat();
 
   // ref for chat container
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -55,6 +62,15 @@ export default function Chat() {
     setIsChatOpen(!isChatOpen);
   };
 
+  // clear all message
+  const restartChat = () => {
+    setMessages([]);
+  };
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   const handleCustomSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -77,30 +93,73 @@ export default function Chat() {
         {isChatOpen && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              width: isExpanded ? "600px" : "360px",
+            }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.2 }}
             className="fixed bottom-4 right-4 z-50 w-90 max-w-[90vw]"
           >
             <Card className="shadow-2xl pt-0 gap-0 overflow-hidden">
               <CardHeader className="flex flex-row items-center justify-between py-3 bg-gradient-to-r from-primary to-primary/70 text-primary-foreground rounded-t-lg">
-                <CardTitle className="text-xl font-semibold">Foxy</CardTitle>
+                <Image
+                  src="/images/foxy-text.svg"
+                  alt="Foxy"
+                  width={85}
+                  height={40}
+                  className="object-contain"
+                />
                 <CardAction>
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={toggleChat}
-                    className="hover:bg-transparent"
+                    onClick={toggleExpand}
+                    className="hover:text-primary"
+                    title={isExpanded ? "Minimize" : "Expand"}
                   >
-                    <X className="size-5"/>
+                    {isExpanded ? (
+                      <Minimize2 className="size-4" />
+                    ) : (
+                      <Maximize2 className="size-4" />
+                    )}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={restartChat}
+                    className="hover:text-primary"
+                    title="Clear Chat"
+                  >
+                    <RotateCcw className="size-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={toggleChat}
+                    className="hover:text-primary"
+                    title="Close"
+                  >
+                    <X className="size-4" />
                   </Button>
                 </CardAction>
               </CardHeader>
-              <CardContent className="pr-1 pl-6">
-                <ScrollArea className="h-[370px] pr-6 pb-4">
+              <CardContent className="pr-1 pl-4">
+                <ScrollArea className="h-[400px] pr-6 pb-4">
                   <div className="space-y-4 pt-4">
-                    <div className="rounded-lg bg-muted px-3 py-2 rounded-bl-none text-sm">
-                      Hi there! 👋 I&apos;m Foxy, what can I help you with?
+                    <div className="flex gap-2 items-end">
+                      <Image
+                        src="/images/foxy.svg"
+                        alt="Foxy"
+                        width={44}
+                        height={44}
+                        className="object-contain"
+                      />
+
+                      <div className="rounded-lg bg-muted px-3 py-2 rounded-bl-none text-sm">
+                        What the fox! I&apos;m Foxy🦊, what can I help you with?
+                      </div>
                     </div>
 
                     <ChatOutput messages={messages} status={status} />
@@ -133,13 +192,36 @@ export default function Chat() {
             <div
               ref={chatIconRef}
               onClick={toggleChat}
-              className="rounded-full bg-primary cursor-pointer drop-shadow-lg p-2"
+              className="relative cursor-pointer"
             >
+              {showBubble && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ delay: 0.4, duration: 0.4 }}
+                  className="absolute -top-6 -left-20 bg-white text-black text-sm px-3 py-1 rounded-full rounded-br-none shadow-md flex items-center gap-2"
+                >
+                  <span className="text-base">
+                    Hi <span className="wave">👋</span>
+                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation(); // prevent toggling chat when closing bubble
+                      setShowBubble(false);
+                    }}
+                    className="text-sm text-gray-500 hover:text-gray-800 font-bold"
+                  >
+                    ×
+                  </button>
+                </motion.div>
+              )}
+
               <Image
                 src="/images/foxy.svg"
-                alt="Chat Logo"
-                width={54}
-                height={54}
+                alt="Foxy"
+                width={80}
+                height={80}
                 className="object-contain"
               />
             </div>
