@@ -22,7 +22,7 @@ async function generateEmbedding(message: string) {
 async function fetchRelevantContext(embedding: number[]) {
   const { data, error } = await supabase.rpc("get_relevant_chunks", {
     query_vector: embedding,
-    match_threshold: 0.5,
+    match_threshold: 0.3,
     match_count: 3,
   });
 
@@ -34,7 +34,6 @@ async function fetchRelevantContext(embedding: number[]) {
     data.map(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (item: any) => `
-        Source: ${item.url}
         Content: ${item.content}
         `
     )
@@ -46,10 +45,11 @@ function createPrompt(context: string, userQuestion: string) {
     role: "system",
     content: `
       You are Foxy, a friendly and knowledgeable assistant for the College
-      of Information and Communitcations Technology.
+      of Information and Communications Technology.
       
       Your responses should be helpful and accurate, drawing from the context provided.
-      Always include relevant URLs from the context when available.
+      if the user asks about a person you must only answer if that person's information exists.
+      Never invent or guess details about people.
 
       Use the provided context as your primary source. 
       If you find related information that might answer the question, mention it.
