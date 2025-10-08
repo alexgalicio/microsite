@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
-import { getFormValues, submitForm } from "@/lib/actions/facebook";
+import { deleteFacebookCreds, getFormValues, submitForm } from "@/lib/actions/facebook";
 import {
   Form,
   FormControl,
@@ -29,6 +29,7 @@ type FacebookForm = z.infer<typeof formSchema>;
 
 export default function FacebookForm({ userId }: { userId: string }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [isView, setIsView] = useState(false);
   const router = useRouter();
 
@@ -65,6 +66,24 @@ export default function FacebookForm({ userId }: { userId: string }) {
       console.error("Facebook Form Error");
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function onDelete() {
+    setIsDeleteLoading(true);
+    try {
+      const response = await deleteFacebookCreds(userId);
+      if (response.success) {
+        toast.success("Deleted successfully!");
+        form.reset({ page_id: "", access_token: "" });
+        router.refresh();
+      } else {
+        toast.error(response.error || "Failed to delete.");
+      }
+    } catch (error) {
+      toast.error(handleError(error));
+    } finally {
+      setIsDeleteLoading(false);
     }
   }
 
@@ -130,13 +149,33 @@ export default function FacebookForm({ userId }: { userId: string }) {
           )}
         />
 
-        <Button
-          type="submit"
-          disabled={isLoading || !form.formState.isDirty}
-          className="sm:w-20"
-        >
-          {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Submit"}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            type="submit"
+            disabled={isLoading || !form.formState.isDirty}
+            className="sm:w-20"
+          >
+            {isLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              "Submit"
+            )}
+          </Button>
+
+          <Button
+            type="button"
+            variant="destructive"
+            disabled={isDeleteLoading || !form.formState.isDirty}
+            onClick={onDelete}
+            className="sm:w-20"
+          >
+            {isDeleteLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              "Delete"
+            )}
+          </Button>
+        </div>
       </form>
     </Form>
   );
