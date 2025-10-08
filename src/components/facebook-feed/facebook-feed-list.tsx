@@ -15,11 +15,20 @@ interface FbPost {
   permalink_url: string;
 }
 
-export default function FacebookFeed({ siteId }: { siteId: string }) {
+export default function FacebookFeed({
+  siteId,
+  onDataStatusChange,
+}: {
+  siteId: string;
+  onDataStatusChange?: (hasData: boolean) => void;
+}) {
   const [posts, setPosts] = useState<FbPost[]>([]);
   const [pageName, setPageName] = useState<string>("");
   const [pagePicture, setPagePicture] = useState<string>("");
   const [pageUrl, setPageUrl] = useState<string>("");
+
+  // show only the first 10 posts
+  const displayedPosts = posts.slice(0, 10);
 
   useEffect(() => {
     if (!siteId) return;
@@ -41,15 +50,17 @@ export default function FacebookFeed({ siteId }: { siteId: string }) {
         );
 
         setPosts(sorted);
+
+        onDataStatusChange?.(sorted.length > 0);
+      })
+      .catch(() => {
+        onDataStatusChange?.(false);
       });
-  }, [siteId]);
+  }, [siteId, onDataStatusChange]);
 
   if (posts.length === 0) {
     return null;
   }
-
-  // Show only the first 10 posts
-  const displayedPosts = posts.slice(0, 10);
 
   return (
     <>
