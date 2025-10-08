@@ -38,7 +38,7 @@ Student organization representatives can build their own microsites and manage t
 
 | Web Builder | Microsite | Links |
 | --- | --- | --- |
-| <img src="./public/screenshots/user_webBuilder.png" width="650" alt="Web Builder"/> | <img src="./public/screenshots/user_microsite.png" width="650" alt="Microsite"/> | <img src="./public/screenshots/user_links.png" width="650" alt="Links"/> |
+| <img src="./public/screenshots/user_webBuilder.png" width="650" alt="Web Builder"/> | <img src="./public/screenshots/user_microsites.png" width="650" alt="Microsite"/> | <img src="./public/screenshots/user_links.png" width="650" alt="Links"/> |
 
 | Announcements | Facebook Feed | Settings |
 | --- | --- | --- |
