@@ -1,12 +1,13 @@
 import { cn } from "@/lib/utils";
 import { Message } from "ai";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { saveUserFeedback } from "@/lib/actions/chatbot";
 import { FeedbackType } from "@/lib/types";
 import ReactMarkdown from "react-markdown";
 import Image from "next/image";
+import React from "react";
 
 const ChatOutput = ({
   messages,
@@ -15,31 +16,40 @@ const ChatOutput = ({
   messages: Message[];
   status: string;
 }) => {
-  return (
-    <>
-      {messages.map((message, index) =>
+  const renderedMessages = useMemo(
+    () =>
+      messages.map((message, index) =>
         message.role === "user" ? (
           <UserChat key={index} content={message.content} />
         ) : (
           <AssistantChat key={index} content={message.content} />
         )
-      )}
-      {status === "submitted" && (
-        <div className="flex gap-2 items-end">
-          <Image
-            src="/images/foxy.svg"
-            alt="Foxy"
-            width={44}
-            height={44}
-            className="object-contain"
-          />
-          <div className="flex space-x-1 bg-muted rounded-lg px-3 py-2 rounded-bl-none">
-            <div className="h-2 w-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-            <div className="h-2 w-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-            <div className="h-2 w-2 bg-muted-foreground rounded-full animate-bounce"></div>
-          </div>
-        </div>
-      )}
+      ),
+    [messages]
+  );
+
+  const TypingIndicator = React.memo(() => (
+    <div className="flex gap-2 items-end">
+      <Image
+        src="/images/foxy.svg"
+        alt="Foxy"
+        width={44}
+        height={44}
+        className="object-contain"
+      />
+      <div className="flex space-x-1 bg-muted rounded-lg px-3 py-2 rounded-bl-none">
+        <div className="h-2 w-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:-0.3s]" />
+        <div className="h-2 w-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:-0.15s]" />
+        <div className="h-2 w-2 bg-muted-foreground rounded-full animate-bounce" />
+      </div>
+    </div>
+  ));
+  TypingIndicator.displayName = "TypingIndicator";
+
+  return (
+    <>
+      {renderedMessages}
+      {status === "submitted" && <TypingIndicator />}
       {status === "error" && (
         <div className="text-red-500 text-sm">An error occurred.</div>
       )}
@@ -47,27 +57,20 @@ const ChatOutput = ({
   );
 };
 
-const UserChat = ({ content }: { content: string }) => {
-  return (
-    <div className="bg-primary text-primary-foreground rounded-lg ml-auto w-fit px-3 py-2 rounded-br-none text-sm">
-      {content}
-    </div>
-  );
-};
+const UserChat = React.memo(({ content }: { content: string }) => (
+  <div className="bg-primary text-primary-foreground rounded-lg ml-auto w-fit px-3 py-2 rounded-br-none text-sm">
+    {content}
+  </div>
+));
+UserChat.displayName = "UserChat";
 
-const AssistantChat = ({ content }: { content: string }) => {
+const AssistantChat = React.memo(({ content }: { content: string }) => {
   const [feedback, setFeedback] = useState<FeedbackType>(null);
 
   const handleFeedback = async (type: FeedbackType) => {
     if (feedback) return;
     setFeedback(type);
-
-    const response = await saveUserFeedback(type);
-    if (response.error) {
-      console.log("feedback error");
-    } else {
-      console.log(type);
-    }
+    await saveUserFeedback(type);
   };
 
   return (
@@ -98,13 +101,13 @@ const AssistantChat = ({ content }: { content: string }) => {
               {content}
             </ReactMarkdown>
           </div>
-
           <div className="flex mt-2">
             <Button
               variant="ghost"
               size="icon"
               disabled={!!feedback}
               onClick={() => handleFeedback("helpful")}
+              title="Good response"
               className={cn(
                 feedback === "helpful"
                   ? "text-green-600"
@@ -119,6 +122,7 @@ const AssistantChat = ({ content }: { content: string }) => {
               size="icon"
               disabled={!!feedback}
               onClick={() => handleFeedback("unhelpful")}
+              title="Bad response"
               className={cn(
                 feedback === "unhelpful"
                   ? "text-red-600"
@@ -133,6 +137,7 @@ const AssistantChat = ({ content }: { content: string }) => {
       </div>
     </div>
   );
-};
+});
+AssistantChat.displayName = "AssistantChat";
 
 export default ChatOutput;
