@@ -496,8 +496,8 @@ export const templateHTML = `
               <a href="#about" class="menu-item">About</a>
               <a href="#photos" class="menu-item">Photos</a>
               <a href="https://www.cictmicro.site/" class="menu-item">CICT</a>
-              <a href="#" class="menu-item">Announcements</a>
-              <a href="#" class="menu-item">Links</a>
+              <a href="/announcements" class="menu-item">Announcements</a>
+              <a href="/links" class="menu-item">Links</a>
             </div>
           </nav>
         </div>
