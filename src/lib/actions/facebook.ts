@@ -21,6 +21,20 @@ export async function submitForm(formData: {
   return { success: true };
 }
 
+export async function deleteFacebookCreds(userId: string) {
+  const supabase = createServerSupabaseClient();
+  const { error } = await supabase
+    .from("facebook_feed")
+    .delete()
+    .eq("user_id", userId);
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  return { success: true };
+}
+
 export async function getFormValues(user_id: string) {
   const supabase = createServerSupabaseClient();
 
