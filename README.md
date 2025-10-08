@@ -27,7 +27,7 @@ Admin can create and manage microsites, configure menus, train the chatbot, and 
 
 | Dashboard | Microsites | Manage Menu |
 | --- | --- | --- |
-| <img src="./public/screenshots/admin_dashboard.png" width="650" alt="Dashboard"/> | <img src="./public/screenshots/admin_microsite.png" width="650" alt="Microsites"/> | <img src="./public/screenshots/admin_menu.png" width="650" alt="Manage Menu"/> |
+| <img src="./public/screenshots/admin_dashboard.png" width="650" alt="Dashboard"/> | <img src="./public/screenshots/admin_microsites.png" width="650" alt="Microsites"/> | <img src="./public/screenshots/admin_menu.png" width="650" alt="Manage Menu"/> |
 
 | Chatbot | Calendar | Settings |
 | --- | --- | --- |
@@ -44,12 +44,25 @@ Student organization representatives can build their own microsites and manage t
 | --- | --- | --- |
 | <img src="./public/screenshots/user_announcements.png" width="650" alt="Announcements"/> | <img src="./public/screenshots/user_facebook.png" width="650" alt="Facebook Feed"/> | <img src="./public/screenshots/user_settings.png" width="650" alt="Settings"/> |
 
+## 🤖 Chabot
+### How the chatbot works:
+The chatbot uses a **Retrieval-Augmented Generation (RAG)** architecture:
+1. **Vector Database** - Stores training content as embeddings
+2. **Embedding Model** - Converts text to mathematical representations
+3. **Similarity Search** - Finds relevant content based on user queries
+4. **Language Model** - Generates natural responses using retrieved context
+
+
+**💰 API Costs** : This system uses OpenAI's paid API services:
+Model | Token | Cost per 1M Tokens
+--- | --- | --- 
+text-embedding-3-small | Embeddings |  $0.02
+gpt-4o-mini  | Text | $0.15 (input) / $0.60 (output)
 
 
 ## 🏗️ Tech Stack
 
 This project is built with the following tools and services:
-
 - **Frontend**: [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/)
 - **Authentication**: [Clerk](https://clerk.com/)
 - **Database**: [Supabase](https://supabase.com/)
@@ -93,5 +106,4 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 <hr>
-<br>
 This project is intended for educational purposes as part of a capstone project at Bulacan State University - College of Information and Communications Technology.
