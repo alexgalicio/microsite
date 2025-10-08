@@ -166,7 +166,7 @@ export default function Chat() {
                     {messages.length === 0 && (
                       <div className="flex flex-wrap gap-2 mt-3 ml-12">
                         {[
-                          "What are the programs offered by CICT?",
+                          "What are the courses offered by CICT?",
                           "How do I enroll in BulSU?",
                           "Who is the current dean of CICT?",
                           "Where is the OJT office?",
