@@ -15,6 +15,7 @@ export default function Page() {
   const [announcementData, setAnnouncementData] = useState<Announcements[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [hasFacebookData, setHasFacebookData] = useState(true);
   const site = useSite();
   const searchParams = useSearchParams();
 
@@ -69,7 +70,16 @@ export default function Page() {
           </>
         )}
 
-        <FacebookFeed siteId={site.id} />
+        <FacebookFeed
+          siteId={site.id}
+          onDataStatusChange={(hasData) => setHasFacebookData(hasData)}
+        />
+
+        {announcementData.length === 0 && !hasFacebookData && (
+          <div className="text-center text-gray-500 mt-50">
+            No announcements yet.
+          </div>
+        )}
       </div>
     </>
   );
