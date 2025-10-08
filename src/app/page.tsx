@@ -162,6 +162,33 @@ export default function Chat() {
                       </div>
                     </div>
 
+                    {/* show sample quesions when chat is empty */}
+                    {messages.length === 0 && (
+                      <div className="flex flex-wrap gap-2 mt-3 ml-12">
+                        {[
+                          "What are the programs offered by CICT?",
+                          "How do I enroll in BulSU?",
+                          "Who is the current dean of CICT?",
+                          "Where is the OJT office?",
+                        ].map((question, index) => (
+                          <Button
+                            key={index}
+                            variant="outline"
+                            size="sm"
+                            className="text-xs rounded-full hover:bg-primary hover:text-primary-foreground"
+                            onClick={() => {
+                              // fill the text area
+                              handleInputChange({
+                                target: { value: question },
+                              } as React.ChangeEvent<HTMLInputElement>);
+                            }}
+                          >
+                            {question}
+                          </Button>
+                        ))}
+                      </div>
+                    )}
+
                     <ChatOutput messages={messages} status={status} />
                     <div ref={chatContainerRef} />
                   </div>
