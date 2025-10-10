@@ -172,6 +172,23 @@ export async function getAllSite(from: number, to: number) {
   return { success: true, data, count };
 }
 
+export async function getSiteforSitemap() {
+  const supabase = createServerSupabaseClient();
+
+  const { data, error } = await supabase
+    .from("sites")
+    .select("url, updated_at")
+    .eq("status", "published");
+
+  if (error) {
+    console.error("Error fetching microsites:", error);
+    console.log("data", data)
+    return [];
+  }
+
+  return data || [];
+}
+
 export async function getSiteByUserId(id: string) {
   const { userId } = await auth();
 
