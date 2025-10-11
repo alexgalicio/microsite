@@ -18,6 +18,7 @@ import ChatInput from "@/components/chatbot/chat-input";
 import { saveUserQuestion } from "@/lib/actions/chatbot";
 import LandingPage from "@/components/landing-page/main-page";
 import Image from "next/image";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function Chat() {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -25,7 +26,7 @@ export default function Chat() {
   const chatIconRef = useRef<HTMLDivElement>(null);
   const [showBubble, setShowBubble] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useIsMobile();
 
   const {
     input,
@@ -39,18 +40,6 @@ export default function Chat() {
 
   // ref for chat container
   const chatContainerRef = useRef<HTMLDivElement>(null);
-
-  // Check if device is mobile
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   // scroll to bottom function
   const scrollToBottom = () => {
@@ -124,7 +113,7 @@ export default function Chat() {
               opacity: 1,
               scale: 1,
               width: isMobile ? "100vw" : isExpanded ? "600px" : "360px",
-              height: isMobile ? "100vh" : "auto",
+              height: isMobile ? "100dvh" : "auto",
             }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.2 }}
@@ -184,7 +173,7 @@ export default function Chat() {
               <CardContent className="pr-1 pl-4 flex-1 overflow-hidden">
                 <ScrollArea
                   className={`pr-6 pb-4 ${
-                    isMobile ? "h-[calc(100vh-140px)]" : "h-[420px]"
+                    isMobile ? "h-[calc(100dvh-140px)]" : "h-[420px]"
                   }`}
                 >
                   <div className="space-y-4 pt-4">
