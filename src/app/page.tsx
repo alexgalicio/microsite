@@ -25,6 +25,7 @@ export default function Chat() {
   const chatIconRef = useRef<HTMLDivElement>(null);
   const [showBubble, setShowBubble] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const {
     input,
@@ -33,10 +34,23 @@ export default function Chat() {
     messages,
     status,
     setMessages,
+    append,
   } = useChat();
 
   // ref for chat container
   const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // scroll to bottom function
   const scrollToBottom = () => {
@@ -84,6 +98,19 @@ export default function Chat() {
     handleSubmit(e);
   };
 
+  const handleSampleQuestionClick = async (question: string) => {
+    const response = await saveUserQuestion(question);
+    if (response.error) {
+      console.error("Error saving question:", response.error);
+    }
+
+    // send the message directly
+    append({
+      role: "user",
+      content: question,
+    });
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <LandingPage />
@@ -96,13 +123,20 @@ export default function Chat() {
             animate={{
               opacity: 1,
               scale: 1,
-              width: isExpanded ? "600px" : "360px",
+              width: isMobile ? "100vw" : isExpanded ? "600px" : "360px",
+              height: isMobile ? "100vh" : "auto",
             }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-4 right-4 z-50 w-90 max-w-[90vw]"
+            className={`fixed z-50 ${
+              isMobile ? "inset-0" : "bottom-4 right-4 w-90 max-w-[90vw]"
+            }`}
           >
-            <Card className="shadow-2xl pt-0 gap-0 overflow-hidden">
+            <Card
+              className={`shadow-2xl pt-0 gap-0 overflow-hidden ${
+                isMobile ? "h-full w-full rounded-none" : ""
+              }`}
+            >
               <CardHeader className="flex flex-row items-center justify-between py-3 bg-gradient-to-r from-primary to-primary/70 text-primary-foreground rounded-t-lg">
                 <Image
                   src="/images/foxy-text.svg"
@@ -112,19 +146,21 @@ export default function Chat() {
                   className="object-contain"
                 />
                 <CardAction>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={toggleExpand}
-                    className="hover:text-primary"
-                    title={isExpanded ? "Minimize" : "Expand"}
-                  >
-                    {isExpanded ? (
-                      <Minimize2 className="size-4" />
-                    ) : (
-                      <Maximize2 className="size-4" />
-                    )}
-                  </Button>
+                  {!isMobile && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={toggleExpand}
+                      className="hover:text-primary"
+                      title={isExpanded ? "Minimize" : "Expand"}
+                    >
+                      {isExpanded ? (
+                        <Minimize2 className="size-4" />
+                      ) : (
+                        <Maximize2 className="size-4" />
+                      )}
+                    </Button>
+                  )}
                   <Button
                     variant="ghost"
                     size="icon"
@@ -145,8 +181,12 @@ export default function Chat() {
                   </Button>
                 </CardAction>
               </CardHeader>
-              <CardContent className="pr-1 pl-4">
-                <ScrollArea className="h-[400px] pr-6 pb-4">
+              <CardContent className="pr-1 pl-4 flex-1 overflow-hidden">
+                <ScrollArea
+                  className={`pr-6 pb-4 ${
+                    isMobile ? "h-[calc(100vh-140px)]" : "h-[420px]"
+                  }`}
+                >
                   <div className="space-y-4 pt-4">
                     <div className="flex gap-2 items-end">
                       <Image
@@ -158,7 +198,16 @@ export default function Chat() {
                       />
 
                       <div className="rounded-lg bg-muted px-3 py-2 rounded-bl-none text-sm">
-                        What the fox! I&apos;m Foxy🦊, what can I help you with?
+                        I am <strong>Foxy</strong>, your CICT assistant chatbot.
+                        <br />
+                        <br />
+                        <span className="italic">
+                          I am powered by artificial intelligence and I strive
+                          to provide fast and helpful responses. Please note
+                          that while I do my best, my answers are automatically
+                          generated and may not always be fully accurate or
+                          complete.
+                        </span>
                       </div>
                     </div>
 
@@ -176,12 +225,7 @@ export default function Chat() {
                             variant="outline"
                             size="sm"
                             className="text-xs rounded-full hover:bg-primary hover:text-primary-foreground"
-                            onClick={() => {
-                              // fill the text area
-                              handleInputChange({
-                                target: { value: question },
-                              } as React.ChangeEvent<HTMLInputElement>);
-                            }}
+                            onClick={() => handleSampleQuestionClick(question)}
                           >
                             {question}
                           </Button>
@@ -194,7 +238,7 @@ export default function Chat() {
                   </div>
                 </ScrollArea>
               </CardContent>
-              <CardFooter>
+              <CardFooter className="mt-auto">
                 <ChatInput
                   input={input}
                   handleInputChange={handleInputChange}
