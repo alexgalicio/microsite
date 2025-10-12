@@ -68,6 +68,7 @@ export const columns: ColumnDef<Menu>[] = [
   },
   {
     id: "actions",
+    header: "Actions",
     cell: DataTableRowActions,
   },
 ];

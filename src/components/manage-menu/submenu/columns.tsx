@@ -51,6 +51,7 @@ export const columns: ColumnDef<Submenu>[] = [
   },
   {
     id: "actions",
+    header: "Actions",
     cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ];
