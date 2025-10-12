@@ -2,6 +2,7 @@
 
 import { createServerSupabaseClient } from "@/utils/server";
 import { auth } from "@clerk/nextjs/server";
+import { createClient } from '@supabase/supabase-js';
 
 export async function createNewSite(formData: {
   title: string;
@@ -173,7 +174,10 @@ export async function getAllSite(from: number, to: number) {
 }
 
 export async function getSiteforSitemap() {
-  const supabase = createServerSupabaseClient();
+   const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_KEY!
+  );
 
   const { data, error } = await supabase
     .from("sites")
