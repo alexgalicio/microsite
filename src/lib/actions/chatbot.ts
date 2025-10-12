@@ -40,7 +40,8 @@ export async function getTableData(): Promise<{
   const { data, error } = await supabase.from("chunks").select(`
         id, 
         filename,
-        url
+        url,
+        created_at
       `);
 
   if (error) return { data: [], error: error.message };
@@ -49,7 +50,8 @@ export async function getTableData(): Promise<{
     data?.map((chunks) => ({
       id: chunks.id,
       filename: chunks.filename,
-      url: chunks.url,
+      view_url: chunks.url,
+      created_at: chunks.created_at,
     })) || [];
 
   // remove duplicates by filename
