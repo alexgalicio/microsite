@@ -45,6 +45,7 @@ export default function DeleteDialog({ chunks }: { chunks: Chunks }) {
       <Button
         variant="ghost"
         size="icon"
+        title="Delete"
         onClick={() => setIsDeleteDialogOpen(true)}
         className="h-8 w-8 text-red-600 hover:text-red-700"
       >
