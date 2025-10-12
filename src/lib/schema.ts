@@ -45,7 +45,8 @@ export const linkSchema = z.object({
 export const chunksSchema = z.object({
   id: z.string(),
   filename: z.string(),
-  url: z.string(),
+  view_url: z.string(),
+  created_at: z.string(),
 });
 
 export type Menu = z.infer<typeof menuSchema>;
