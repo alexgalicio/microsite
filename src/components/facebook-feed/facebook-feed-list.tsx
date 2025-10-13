@@ -25,10 +25,7 @@ export default function FacebookFeed({
   const [posts, setPosts] = useState<FbPost[]>([]);
   const [pageName, setPageName] = useState<string>("");
   const [pagePicture, setPagePicture] = useState<string>("");
-  const [pageUrl, setPageUrl] = useState<string>("");
-
-  // show only the first 10 posts
-  const displayedPosts = posts.slice(0, 10);
+  const [visibleCount, setVisibleCount] = useState<number>(10);
 
   useEffect(() => {
     if (!siteId) return;
@@ -38,7 +35,6 @@ export default function FacebookFeed({
       .then((data) => {
         setPageName(data.name);
         setPagePicture(data.picture?.data?.url || "");
-        setPageUrl(`https://facebook.com/${data.id}`);
 
         const posts = data.posts?.data || [];
 
@@ -61,6 +57,12 @@ export default function FacebookFeed({
   if (posts.length === 0) {
     return null;
   }
+
+  const displayedPosts = posts.slice(0, visibleCount);
+
+  const handleShowMore = () => {
+    setVisibleCount((prev) => prev + 10);
+  };
 
   return (
     <>
@@ -121,13 +123,22 @@ export default function FacebookFeed({
         ))}
       </div>
 
-      <div className="mt-6 text-center">
+      {/* Show More button */}
+      {visibleCount < posts.length && (
+        <div className="mt-6 text-center">
+          <Button variant="outline" onClick={handleShowMore}>
+            Show More
+          </Button>
+        </div>
+      )}
+
+      {/* <div className="mt-6 text-center">
         <Button variant="outline">
           <Link href={pageUrl} target="_blank" rel="noopener noreferrer">
             View All Posts
           </Link>
         </Button>
-      </div>
+      </div> */}
     </>
   );
 }
