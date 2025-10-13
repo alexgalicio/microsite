@@ -23,10 +23,7 @@ export default function AnnouncementsList({
             className="bg-muted overflow-hidden rounded-lg hover:shadow-md transition-all"
             key={announcement.id}
           >
-            <Link
-              key={announcement.id}
-              href={`/announcements/${announcement.id}`}
-            >
+            <Link href={`/announcements/${announcement.id}`}>
               <AspectRatio ratio={16 / 9} className="w-full">
                 <Image
                   src={announcement.cover || "/images/placeholder.webp"}
