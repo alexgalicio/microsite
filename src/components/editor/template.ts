@@ -644,52 +644,6 @@ export const templateHTML = `
       </div>
     </section>
 
-    <section class="links-sect">
-      <div class="container-width">
-        <div class="flex-title">Feature that is amazing</div>
-        <div class="flex-desc">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </div>
-
-        <div class="links">
-          <div class="link">
-            <a href="#" class="link-title">Link 1</a>
-            <div class="link-desc">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </div>
-          </div>
-          <div class="link">
-            <a href="#" class="link-title">Link 2</a>
-            <div class="link-desc">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </div>
-          </div>
-          <div class="link">
-            <a href="#" class="link-title">Link 3</a>
-            <div class="link-desc">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </div>
-          </div>
-          <div class="link">
-            <a href="#" class="link-title">Link 4</a>
-            <div class="link-desc">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </div>
-          </div>
-        </div>
-
-        <div class="link-wrapper">
-          <a href="https://[yourDomain].alexgalicio.dev/links" class="link-btn"
-            >See More</a
-          >
-        </div>
-      </div>
-    </section>
-
     <footer class="copyright">
       <div class="container-width">
         <div class="made-with">© 2025, Microsite | ALL RIGHTS RESERVED</div>
