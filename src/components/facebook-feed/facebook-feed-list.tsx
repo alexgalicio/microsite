@@ -123,7 +123,6 @@ export default function FacebookFeed({
         ))}
       </div>
 
-      {/* Show More button */}
       {visibleCount < posts.length && (
         <div className="mt-6 text-center">
           <Button variant="outline" onClick={handleShowMore}>
@@ -131,14 +130,6 @@ export default function FacebookFeed({
           </Button>
         </div>
       )}
-
-      {/* <div className="mt-6 text-center">
-        <Button variant="outline">
-          <Link href={pageUrl} target="_blank" rel="noopener noreferrer">
-            View All Posts
-          </Link>
-        </Button>
-      </div> */}
     </>
   );
 }
