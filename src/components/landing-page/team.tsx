@@ -22,12 +22,12 @@ const teamMembers = [
   { image: "/images/bulsu.png", name: "Eddhan Gabryell Tan", role: "Role" },
   { image: "/images/bulsu.png", name: "John Joshua Alcaraz", role: "Role" },
   { image: "/images/bulsu.png", name: "Ynez Yzabel Sanchez", role: "Role" },
-  { image: "/images/bulsu.png", name: "Reyan Concenpcion", role: "Role" },
+  { image: "/images/bulsu.png", name: "Reyan Concepcion", role: "Role" },
 ];
 
 export default function Team() {
   return (
-    <section id="group" className="py-16 md:py-20 lg:py-28">
+    <section id="team" className="py-16 md:py-20 lg:py-28">
       <div className="container mx-auto px-4 space-y-4">
         <motion.div
           className="w-full mx-auto text-center max-w-[570px] mb-15"
@@ -42,7 +42,7 @@ export default function Team() {
           </h2>
         </motion.div>
 
-        <div className="flex gap-10 justify-center flex-wrap mb-10">
+        <div className="flex gap-15 justify-center flex-wrap mb-10">
           {teamAdvisers.map((person, index) => (
             <motion.div
               key={index}
@@ -57,7 +57,7 @@ export default function Team() {
           ))}
         </div>
 
-        <div className="flex gap-10 justify-center flex-wrap">
+        <div className="flex gap-15 justify-center flex-wrap">
           {teamMembers.map((person, index) => (
             <motion.div
               key={index}
