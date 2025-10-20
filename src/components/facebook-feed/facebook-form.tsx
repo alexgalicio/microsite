@@ -6,7 +6,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { handleError } from "@/lib/utils";
-import { deleteFacebookCreds, getFormValues, submitForm } from "@/lib/actions/facebook";
+import {
+  deleteFacebookCreds,
+  getFormValues,
+  submitForm,
+} from "@/lib/actions/facebook";
 import {
   Form,
   FormControl,
@@ -17,8 +21,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { PasswordInput } from "../ui/password-input";
 
 const formSchema = z.object({
   page_id: z.string(),
@@ -30,7 +35,6 @@ type FacebookForm = z.infer<typeof formSchema>;
 export default function FacebookForm({ userId }: { userId: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
-  const [isView, setIsView] = useState(false);
   const router = useRouter();
 
   const form = useForm<FacebookForm>({
@@ -41,6 +45,7 @@ export default function FacebookForm({ userId }: { userId: string }) {
     },
   });
 
+  // load facebook data
   useEffect(() => {
     async function loadValues() {
       const saved = await getFormValues(userId);
@@ -94,6 +99,7 @@ export default function FacebookForm({ userId }: { userId: string }) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4 max-w-[600px]"
       >
+        {/* facebook page id */}
         <FormField
           control={form.control}
           name="page_id"
@@ -113,6 +119,7 @@ export default function FacebookForm({ userId }: { userId: string }) {
           )}
         />
 
+        {/* access token from graph api */}
         <FormField
           control={form.control}
           name="access_token"
@@ -120,35 +127,19 @@ export default function FacebookForm({ userId }: { userId: string }) {
             <FormItem>
               <FormLabel>Access Token</FormLabel>
               <FormControl>
-                <div className="relative">
-                  <Input
-                    type={isView ? "text" : "password"}
-                    id="access_token"
-                    placeholder="Enter access token"
-                    className="pr-10"
-                    autoComplete="off"
-                    {...field}
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                    onClick={() => setIsView(!isView)}
-                  >
-                    {isView ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </Button>
-                </div>
+                <PasswordInput
+                  id="access_token"
+                  placeholder="Enter access token"
+                  autoComplete="off"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
+        {/* submit button */}
         <div className="flex items-center gap-2">
           <Button
             type="submit"
@@ -162,6 +153,7 @@ export default function FacebookForm({ userId }: { userId: string }) {
             )}
           </Button>
 
+          {/* delete button */}
           <Button
             type="button"
             variant="destructive"
