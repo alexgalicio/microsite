@@ -2,7 +2,7 @@
 
 import { createServerSupabaseClient } from "@/utils/server";
 import { auth } from "@clerk/nextjs/server";
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
 export async function createNewSite(formData: {
   title: string;
@@ -174,7 +174,7 @@ export async function getAllSite(from: number, to: number) {
 }
 
 export async function getSiteforSitemap() {
-   const supabase = createClient(
+  const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_KEY!
   );
@@ -185,8 +185,6 @@ export async function getSiteforSitemap() {
     .eq("status", "published");
 
   if (error) {
-    console.error("Error fetching microsites:", error);
-    console.log("data", data)
     return [];
   }
 
@@ -229,7 +227,25 @@ export async function archiveSite(id: string) {
   return { success: true };
 }
 
-export async function restoreSite(id: string) {
+export async function unpublishSite(id: string) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return { success: false, error: "User not signed in." };
+  }
+
+  const supabase = createServerSupabaseClient();
+  const { error } = await supabase
+    .from("sites")
+    .update({ status: "unpublished" })
+    .eq("id", id);
+
+  if (error) return { success: false, error: error.message };
+
+  return { success: true };
+}
+
+export async function publishSite(id: string) {
   const { userId } = await auth();
 
   if (!userId) {
@@ -290,7 +306,7 @@ export async function removeBgImage(url: string) {
   // extract filename from url
   const fileName = url.split("/").pop();
   const filePath = `backgrounds/${userId}/${fileName}`;
-  console.log("filename: ", fileName);
+
   if (!fileName) return;
 
   const supabase = createServerSupabaseClient();
