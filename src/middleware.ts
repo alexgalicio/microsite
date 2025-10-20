@@ -8,6 +8,7 @@ const isAdminRoute = createRouteMatcher([
   "/calendar(.*)",
   "/notifications(.*)",
   "/chatbot(.*)",
+  "/settings/configure(.*)",
 ]);
 
 const isUserRoute = createRouteMatcher(["/editor(.*)", "/facebook-feed(.*)"]);
