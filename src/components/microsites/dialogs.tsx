@@ -2,7 +2,8 @@
 
 import { SiteActionDialog } from "./action-dialog";
 import { ArchiveSiteDialog } from "./archive-site";
-import { RestoreSiteDialog } from "./restore-dialog";
+import { PublishSiteDialog } from "./publish-dialog";
+import { UnpublishSiteDialog } from "./unpublish-site";
 import { useSite } from "./site-context";
 
 export function SiteDialogs() {
@@ -41,11 +42,23 @@ export function SiteDialogs() {
             currentRow={currentRow}
           />
 
-          <RestoreSiteDialog
-            key={`site-restore-${currentRow.id}`}
-            open={open === "restore"}
+          <UnpublishSiteDialog
+            key={`site-unpublish-${currentRow.id}`}
+            open={open === "unpublish"}
             onOpenChange={() => {
-              setOpen("restore");
+              setOpen("unpublish");
+              setTimeout(() => {
+                setCurrentRow(null);
+              }, 500);
+            }}
+            currentRow={currentRow}
+          />
+
+          <PublishSiteDialog
+            key={`site-publish-${currentRow.id}`}
+            open={open === "publish"}
+            onOpenChange={() => {
+              setOpen("publish");
               setTimeout(() => {
                 setCurrentRow(null);
               }, 500);
