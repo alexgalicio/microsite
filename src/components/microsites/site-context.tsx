@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import useDialogState from "@/hooks/use-dialog-state";
 import { Site } from "@/lib/schema";
 
-type SiteDialogType = "add" | "edit" | "archive" | "restore";
+type SiteDialogType = "add" | "edit" | "archive" | "publish" | "unpublish";
 
 interface SiteContextType {
   open: SiteDialogType | null;
