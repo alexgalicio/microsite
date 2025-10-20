@@ -15,7 +15,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "platform-lookaside.fbsbx.com", // profile pictures
+        hostname: "platform-lookaside.fbsbx.com", // facebook profile pictures
+      },
+      {
+        protocol: "https",
+        hostname: "img.clerk.com", // clerk image
       },
     ],
   },
