@@ -83,7 +83,7 @@ export function AppSidebar() {
                 <SidebarMenuButton
                   asChild
                   tooltip={item.title}
-                  isActive={pathname === item.url}
+                  isActive={pathname.startsWith(item.url)}
                 >
                   <Link href={item.url}>
                     {item.icon && <item.icon className="w-4 h-4" />}
