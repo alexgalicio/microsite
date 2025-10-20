@@ -24,7 +24,7 @@ export const siteSchema = z.object({
   subdomain: z.string(),
   description: z.string().optional(),
   bg_image: z.string().optional(),
-  status: z.enum(["draft", "published", "archived"]),
+  status: z.enum(["draft", "published", "archived", "unpublished"]),
   created_at: z.string(),
   updated_at: z.string(),
 });

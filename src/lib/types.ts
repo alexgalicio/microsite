@@ -35,7 +35,7 @@ export type MenuItem = {
   title: string;
 };
 
-export type SiteStatus = "published" | "archived" | "draft";
+export type SiteStatus = "published" | "archived" | "draft" | "unpublished";
 
 export interface Site {
   id: string;
