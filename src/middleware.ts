@@ -10,7 +10,7 @@ const isAdminRoute = createRouteMatcher([
   "/chatbot(.*)",
 ]);
 
-const isUserRoute = createRouteMatcher(["/editor(.*)"]);
+const isUserRoute = createRouteMatcher(["/editor(.*)", "/facebook-feed(.*)"]);
 
 const isSharedRoute = createRouteMatcher(["/settings(.*)", "/microsites(.*)"]);
 
