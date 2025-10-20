@@ -25,6 +25,7 @@ export default function Microsites({ sites }: { sites: Site[] }) {
   const isFiltered =
     search.length > 0 || selectedStatus !== null || selectedMenu !== null;
 
+  // fetch all menus
   useEffect(() => {
     const fetchMenus = async () => {
       try {
@@ -38,12 +39,15 @@ export default function Microsites({ sites }: { sites: Site[] }) {
     fetchMenus();
   }, []);
 
+  // filtering of microsites
   const filteredSites = sites
+    // sort alphabetically
     .sort((a, b) =>
       sort === "ascending"
         ? a.title.localeCompare(b.title)
         : b.title.localeCompare(a.title)
     )
+    // filter by search, selected menu, and selected status
     .filter(
       (site) =>
         site.title.toLowerCase().includes(search.toLowerCase()) &&
@@ -53,6 +57,7 @@ export default function Microsites({ sites }: { sites: Site[] }) {
           : site.status !== "archived") // hide archived sites by default
     );
 
+  // reset all filters
   const resetFilters = () => {
     setSearch("");
     setSelectedMenu(null);
@@ -107,6 +112,7 @@ export default function Microsites({ sites }: { sites: Site[] }) {
               <SelectContent>
                 <SelectItem value="all">All Status</SelectItem>
                 <SelectItem value="published">Published</SelectItem>
+                <SelectItem value="unpublished">Unpublished</SelectItem>
                 <SelectItem value="draft">Draft</SelectItem>
                 <SelectItem value="archived">Archived</SelectItem>
               </SelectContent>
@@ -127,7 +133,7 @@ export default function Microsites({ sites }: { sites: Site[] }) {
         </div>
 
         <div className="ml-auto hidden h-9 lg:flex">
-          {/* sort */}
+          {/* sort alphabetically */}
           <Select value={sort} onValueChange={setSort}>
             <SelectTrigger className="w-16">
               <SelectValue>
@@ -152,10 +158,12 @@ export default function Microsites({ sites }: { sites: Site[] }) {
         </div>
       </div>
 
+      {/* microsites list */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {filteredSites.length ? (
           filteredSites.map((site) => <PageItem key={site.id} site={site} />)
         ) : (
+          // empty state
           <div className="col-span-full">
             <EmptyState
               title="No Microsites Found"
