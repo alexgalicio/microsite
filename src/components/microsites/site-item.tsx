@@ -15,7 +15,8 @@ import {
   ExternalLink,
   Edit,
   Archive,
-  ArchiveRestore,
+  XCircle,
+  ArrowUpRight,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
@@ -28,10 +29,11 @@ import Image from "next/image";
 
 export default function PageItem({ site }: { site: Site }) {
   const { setOpen, setCurrentRow } = useSite();
-  const isArchived = site.status === "archived";
-  const isDraft = site.status === "draft";
   const { user } = useUser();
   const isOwner = user?.id === site.user_id;
+
+  const isArchived = site.status === "archived";
+  const isPublished = site.status === "published";
 
   const badgeColor = new Map([
     [
@@ -46,10 +48,15 @@ export default function PageItem({ site }: { site: Site }) {
       "archived",
       "bg-neutral-300/40 border-neutral-300 hover:bg-neutral-300/40 text-neutral-300 shadow-none rounded-full",
     ],
+    [
+      "unpublished",
+      "bg-neutral-300/40 border-neutral-300 hover:bg-neutral-300/40 text-neutral-300 shadow-none rounded-full",
+    ],
   ]);
 
   return (
     <div className="relative rounded-lg border overflow-hidden hover:shadow-md transition-all">
+      {/* bg image */}
       <Image
         src={site.bg_image || "/images/placeholder.webp"}
         alt={site.title}
@@ -58,11 +65,13 @@ export default function PageItem({ site }: { site: Site }) {
         sizes="auto"
         className="object-cover object-center"
       />
+      {/* overlay to darken the image for text visibility */}
       <div className="absolute inset-0 bg-linear-to-r from-gray-900 via-gray-900/70"></div>
 
       <div className="relative z-10 p-4">
         <div className="mb-8 flex items-center justify-between">
           {isOwner ? (
+            // if user own the site, make title clickable to open editor
             <Link
               href={getLink({ subdomain: "editor", pathName: site.id })}
               target="_blank"
@@ -77,11 +86,13 @@ export default function PageItem({ site }: { site: Site }) {
               </div>
             </Link>
           ) : (
+            // if not just display the title
             <div className="flex items-center gap-2 w-fit text-white">
               <h2 className="text-xl font-semibold">{site.title}</h2>
             </div>
           )}
 
+          {/* actions */}
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button
@@ -104,22 +115,43 @@ export default function PageItem({ site }: { site: Site }) {
                   <Edit size={16} />
                 </DropdownMenuShortcut>
               </DropdownMenuItem>
+
               <DropdownMenuSeparator />
-              {isArchived ? (
+
+              {/* is site is published, show unpublish option */}
+              {isPublished && (
                 <DropdownMenuItem
                   onClick={() => {
                     setCurrentRow(site);
-                    setOpen("restore");
+                    setOpen("unpublish");
                   }}
                 >
-                  Restore
+                  Unpublish
                   <DropdownMenuShortcut>
-                    <ArchiveRestore size={16} />
+                    <XCircle size={16} />
                   </DropdownMenuShortcut>
                 </DropdownMenuItem>
-              ) : (
+              )}
+
+              {/* is site is archived or not published, show publish option */}
+              {(isArchived || !isPublished) && (
                 <DropdownMenuItem
-                  disabled={isDraft}
+                  onClick={() => {
+                    setCurrentRow(site);
+                    setOpen("publish");
+                  }}
+                >
+                  Publish
+                  <DropdownMenuShortcut>
+                    <ArrowUpRight size={16} />
+                  </DropdownMenuShortcut>
+                </DropdownMenuItem>
+              )}
+
+              {/* if site is not archived and published, show archive option */}
+              {!isArchived && !isPublished && (
+                <DropdownMenuItem
+                  disabled={isPublished}
                   onClick={() => {
                     setCurrentRow(site);
                     setOpen("archive");
@@ -137,6 +169,7 @@ export default function PageItem({ site }: { site: Site }) {
 
         <div className="text-white/80 text-sm flex flex-col gap-2">
           <div className="flex items-center gap-2 group w-fit hover:cursor-pointer">
+            {/* site url opens live microsite */}
             <Globe className="flex-shrink-0 w-4 h-4 group-hover:text-primary " />
             <Link
               href={getLink({ subdomain: site.subdomain })}
@@ -147,6 +180,8 @@ export default function PageItem({ site }: { site: Site }) {
               {site.subdomain}.{process.env.NEXT_PUBLIC_ROOT_DOMAIN}
             </Link>
           </div>
+
+          {/* badge status */}
           <div className="flex space-x-2">
             <Badge
               variant="outline"
