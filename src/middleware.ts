@@ -22,32 +22,35 @@ export default clerkMiddleware(async (auth, req) => {
 
   const { sessionClaims } = await auth();
 
-  // redirect if not logged in
+  // redirect if user is not logged in
   if (isAdminRoute(req) || isUserRoute(req) || isSharedRoute(req)) {
     await auth.protect();
   }
+
+  // get user role
   const role = sessionClaims?.metadata?.role;
 
-  // user-only routes
+  // user-only routes, redirect to forbidden page if not a normal user
   if (isUserRoute(req) && role !== "user") {
     return NextResponse.redirect(new URL("/forbidden", req.url));
   }
 
-  // admin-only routes
+  // admin-only routes, redirect to forbidden page if user is not an admin
   if (isAdminRoute(req) && role !== "admin") {
     return NextResponse.redirect(new URL("/forbidden", req.url));
   }
 
-  // shared routes
+  // shared routes for both user and admin
   if (isSharedRoute(req)) {
     return NextResponse.next();
   }
 
+  // subdomain based routing
   const url = req.nextUrl;
   const path = url.pathname;
   const hostname = req.headers.get("host")!;
 
-  // Handle editor subdomain
+  // redirect request from the editor subdomain to /editor path
   if (
     hostname === getLink({ subdomain: "editor", method: false }).slice(0, -1)
   ) {
@@ -56,17 +59,17 @@ export default clerkMiddleware(async (auth, req) => {
     );
   }
 
-  // Handle www subdomain
+  // allow request from the www subdomain 
   if (hostname === getLink({ subdomain: "www", method: false }).slice(0, -1)) {
     return NextResponse.next();
   }
 
-  // Handle root domain
+  // allow request from the root domain
   if (hostname === getLink({ method: false }).slice(0, -1)) {
     return NextResponse.next();
   }
 
-  // handle custom subdomain
+  // handle rquest from custom domains
   const subdomain = hostname.split(".")[0];
   return NextResponse.rewrite(new URL(`/${subdomain}${path}`, req.url));
 });

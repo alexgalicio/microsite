@@ -8,7 +8,7 @@ type BreadcrumbItem = {
   link: string;
 };
 
-// This allows to add custom title as well
+// custom labels for specific routes
 const routeMapping: Record<string, BreadcrumbItem[]> = {
   "/manage-menu": [{ title: "Manage Menu", link: "/manage-menu" }],
   "/facebook-feed": [{ title: "Facebook Feed", link: "/facebook-feed" }],
@@ -18,12 +18,12 @@ export function useBreadcrumbs() {
   const pathname = usePathname();
 
   const breadcrumbs = useMemo(() => {
-    // Check if we have a custom mapping for this exact path
+    // use predefined mapping if available
     if (routeMapping[pathname]) {
       return routeMapping[pathname];
     }
 
-    // Custom handling of routes
+    // handle special nested routes
     if (pathname.includes("/manage-menu/") && pathname.includes("/submenu")) {
       return [
         { title: "Manage Menu", link: "/manage-menu" },
@@ -36,7 +36,7 @@ export function useBreadcrumbs() {
       ];
     }
 
-    // If no exact match, fall back to generating breadcrumbs from the path
+    // fallback
     const segments = pathname.split("/").filter(Boolean);
     return segments.map((segment, index) => {
       const path = `/${segments.slice(0, index + 1).join("/")}`;
