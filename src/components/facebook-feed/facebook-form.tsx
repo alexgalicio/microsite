@@ -61,14 +61,13 @@ export default function FacebookForm({ userId }: { userId: string }) {
     try {
       const response = await submitForm({ ...values, user_id: userId });
       if (response.success) {
-        toast.success("Saved successfully!");
+        toast.success("Facebook settings saved successfully.");
         router.refresh();
       } else {
-        console.error(response.error);
+        toast.error(response.error);
       }
     } catch (error) {
       toast.error(handleError(error));
-      console.error("Facebook Form Error");
     } finally {
       setIsLoading(false);
     }
@@ -79,11 +78,11 @@ export default function FacebookForm({ userId }: { userId: string }) {
     try {
       const response = await deleteFacebookCreds(userId);
       if (response.success) {
-        toast.success("Deleted successfully!");
+        toast.success("Facebook settings deleted successfully.");
         form.reset({ page_id: "", access_token: "" });
         router.refresh();
       } else {
-        toast.error(response.error || "Failed to delete.");
+        toast.error(response.error);
       }
     } catch (error) {
       toast.error(handleError(error));
