@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
+// connect to db
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
   process.env.NEXT_PUBLIC_SUPABASE_KEY ?? ""
@@ -37,6 +38,7 @@ export async function GET(req: Request) {
   }
 
   try {
+    // use fb graph api to fetch page info and posts
     const res = await fetch(
       `https://graph.facebook.com/v20.0/${fb.page_id}?fields=name,picture{url},posts{message,full_picture,created_time,permalink_url}&access_token=${fb.access_token}`
     );

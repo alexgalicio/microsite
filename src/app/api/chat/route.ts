@@ -3,15 +3,18 @@ import { embed, streamText } from "ai";
 import { type NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
+// set up api from open ai
 const openai = createOpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// connect to supabase
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
   process.env.NEXT_PUBLIC_SUPABASE_KEY ?? ""
 );
 
+// create embedding (turning text into numbers)
 async function generateEmbedding(message: string) {
   return embed({
     model: openai.embedding("text-embedding-3-small"),
@@ -19,17 +22,17 @@ async function generateEmbedding(message: string) {
   });
 }
 
+// get most relevant context from supabase function
 async function fetchRelevantContext(embedding: number[]) {
   const { data, error } = await supabase.rpc("get_relevant_chunks", {
-    query_vector: embedding,
-    match_threshold: 0.3,
-    match_count: 5,
+    query_vector: embedding, // text turned into a vector
+    match_threshold: 0.3, // how close a match needs to be
+    match_count: 5, // how many match chunks
   });
-
-  console.log("data", data);
 
   if (error) throw error;
 
+  // turn the result into clean string to feed into the prompt
   return JSON.stringify(
     data.map(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,6 +43,7 @@ async function fetchRelevantContext(embedding: number[]) {
   );
 }
 
+// system propmt
 function createPrompt(context: string, userQuestion: string) {
   return {
     role: "system",
@@ -86,12 +90,18 @@ function createPrompt(context: string, userQuestion: string) {
 
 export async function POST(req: NextRequest) {
   try {
+    // get message from request
     const { messages } = await req.json();
+    // latest one the user sent
     const latestMessage = messages.at(-1).content;
 
     const { embedding } = await generateEmbedding(latestMessage);
     const context = await fetchRelevantContext(embedding);
+
+    // build prompt with context and user question
     const prompt = createPrompt(context, latestMessage);
+
+    // stream ai response back to client
     const result = streamText({
       model: openai("gpt-4o-mini"),
       messages: [prompt, ...messages],
@@ -99,7 +109,6 @@ export async function POST(req: NextRequest) {
 
     return result.toDataStreamResponse();
   } catch (error) {
-    console.log("Error generating response: " + error);
     throw error;
   }
 }

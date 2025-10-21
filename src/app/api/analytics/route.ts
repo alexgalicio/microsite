@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
+// connect to supabase
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
   process.env.NEXT_PUBLIC_SUPABASE_KEY ?? ""
 );
 
-// get device type using useragent
+// get device type using useragent, (not 100% accurate hays)
 function getDeviceType(userAgent: string): "Mobile" | "Desktop" | "Tablet" {
   if (/tablet|ipad/i.test(userAgent)) return "Tablet";
   if (/mobile|android|iphone/i.test(userAgent)) return "Mobile";
@@ -15,20 +16,22 @@ function getDeviceType(userAgent: string): "Mobile" | "Desktop" | "Tablet" {
 
 export async function POST(req: Request) {
   try {
+    // get data from the request
     const body = await req.json();
     const { websiteId, path, referrer, userAgent } = body;
 
     const deviceType = getDeviceType(userAgent);
 
-    // get IP
+    // get users IP
     const ip = req.headers.get("x-forwarded-for") || "unknown";
 
+    // save to supabase
     const { error } = await supabase.from("analytics").insert([
       {
         website_id: websiteId,
-        path,
-        referrer,
-        user_agent: userAgent,
+        path, // the specific page path being visited
+        referrer,  // where the user came from
+        user_agent: userAgent, // users browser ifo
         ip,
         device_type: deviceType,
       },
