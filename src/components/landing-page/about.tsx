@@ -17,16 +17,18 @@ export default function About({
   description,
   image,
 }: AboutProps) {
+  // refs for animation
   const textRef = useRef(null);
   const imageRef = useRef(null);
 
+  // check if they are visible
   const textInView = useInView(textRef, { once: true, amount: 0.3 });
   const imageInView = useInView(imageRef, { once: true, amount: 0.3 });
 
   return (
     <section
       id="about"
-      className="bg-gray-1 py-16 md:py-20 lg:py-28 overflow-hidden"
+      className="bg-gray-1 py-16 md:py-20 lg:py-36 overflow-hidden"
     >
       <div className="container mx-auto px-4 xl:px-20">
         <div className="flex flex-wrap items-center">
@@ -34,6 +36,7 @@ export default function About({
             ref={textRef}
             className="w-full px-4 lg:w-1/2"
             style={{
+              // move from left
               transform: textInView ? "none" : "translateX(-150px)",
               opacity: textInView ? 1 : 0,
               transition: "all 0.8s cubic-bezier(0.17, 0.55, 0.55, 1) 0.2s",
@@ -54,6 +57,7 @@ export default function About({
             ref={imageRef}
             className="w-full px-4 lg:w-1/2"
             style={{
+              // move from right
               transform: imageInView ? "none" : "translateX(150px)",
               opacity: imageInView ? 1 : 0,
               transition: "all 0.8s cubic-bezier(0.17, 0.55, 0.55, 1) 0.4s",
