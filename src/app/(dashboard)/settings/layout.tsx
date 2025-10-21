@@ -1,10 +1,11 @@
-"use client"
+"use client";
 
 import { SidebarNav } from "@/components/settings/sidebar-nav";
 import { Separator } from "@/components/ui/separator";
 import { useUser } from "@clerk/nextjs";
 import { Bolt, ShieldCheck, User } from "lucide-react";
 
+// sidebar items
 const sidebarNavItems = [
   {
     title: "Profile",
@@ -28,23 +29,32 @@ export default function SettingsLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // get logged in user
   const { user } = useUser();
+
+  // check if they are admin
   const isAdmin = user?.publicMetadata.role === "admin";
 
+  // only admin can see the Configure tab
   const filteredItems = isAdmin
     ? sidebarNavItems
     : sidebarNavItems.filter((item) => item.title !== "Configure");
 
   return (
     <>
+      {/* header */}
       <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
 
       <Separator className="my-4 lg:my-6" />
 
+      {/* sidebar on left, content on right */}
       <div className="flex flex-1 flex-col space-y-2 overflow-hidden md:space-y-2 lg:flex-row lg:space-y-0 lg:space-x-12">
+        {/* sidebar */}
         <aside className="top-0 lg:sticky lg:w-1/5">
           <SidebarNav items={filteredItems} />
         </aside>
+
+        {/* main content */}
         <div className="flex w-full overflow-y-hidden p-1">
           <div className="flex flex-1 flex-col">
             <div className="lg:max-w-xl">{children}</div>

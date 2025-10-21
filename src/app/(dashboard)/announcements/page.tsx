@@ -13,25 +13,29 @@ export default async function Page({
 }: {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  // get logged in user
   const { userId } = await auth();
 
+  // if not logged in, redirect to sign in
   if (!userId) {
     redirect("/sign-in");
   }
 
+  // admins cant view this page
   const isAdmin = await checkRole("admin");
   if (isAdmin) {
     redirect("/forbidden");
   }
 
+  // for pagination
   const params = await searchParams;
-
   const page = parseInt((params?.page as string) || "1");
   const pageSize = parseInt((params?.pageSize as string) || "8");
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
   const response = await getAnnouncementsByUserId(userId, from, to);
+
   if (!response.success) {
     return (
       <div className="p-4">
@@ -46,6 +50,7 @@ export default async function Page({
 
   return (
     <div className="flex flex-1 flex-col gap-4">
+      {/* header */}
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold tracking-tight">Announcements</h2>
         <Link href="/announcements/new">
@@ -54,7 +59,11 @@ export default async function Page({
           </Button>
         </Link>
       </div>
+
+      {/* announcement list */}
       <AnnouncementsList announcements={announcements} />
+
+      {/* show pagination only if there are more than one page */}
       {totalCount > pageSize && (
         <PaginationWithLinks
           page={page}

@@ -13,12 +13,14 @@ import RecentSitesTable from "@/components/dashboard/recent-site/view-page";
 import StatsCard from "@/components/dashboard/stats-card";
 
 export default async function Dashboard() {
+  // fetch all stats
   const userStats = await getMonthlyStats("profiles");
   const menuStats = await getMonthlyStats("menu");
   const siteStats = await getMonthlyStats("sites");
   const chatStats = await getMonthlyStats("chat_interactions");
 
   return (
+    // total stats in cards
     <div className="space-y-4">
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatsCard
@@ -54,6 +56,7 @@ export default async function Dashboard() {
         />
       </div>
 
+      {/* top performing sites */}
       <Card>
         <CardHeader>
           <CardTitle>Top Performing Microsites</CardTitle>
@@ -65,7 +68,10 @@ export default async function Dashboard() {
       </Card>
 
       <div className="grid gap-4 xl:grid-cols-2">
+        {/* device charts */}
         <DeviceDistributionPie />
+
+        {/* feedback charts */}
         <UserFeedbackLineChart />
       </div>
     </div>
