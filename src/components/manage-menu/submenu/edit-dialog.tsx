@@ -100,7 +100,6 @@ export function SubmenuActionDialog({ currentRow, open, onOpenChange }: Props) {
       form.reset();
       router.refresh();
     } catch (error) {
-      console.log("Submenu error: ", error);
       toast.error(handleError(error));
     } finally {
       setIsLoading(false);

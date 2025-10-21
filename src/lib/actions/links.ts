@@ -189,7 +189,6 @@ export async function removeImage(url: string) {
   // extract filename from url
   const fileName = url.split("/").pop();
   const filePath = `links_img/${userId}/${fileName}`;
-  console.log("filename: ", fileName);
   if (!fileName) return;
 
   const supabase = createServerSupabaseClient();

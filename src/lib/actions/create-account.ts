@@ -94,12 +94,10 @@ export async function createNewAccount(formData: {
 
       if (error) {
         console.error("Failed to send welcome email:", error);
-        console.log("errr", error);
         // don't fail the account creation if email fails
       }
     } catch (emailError) {
       console.error("Failed to send welcome email:", emailError);
-      console.log("error", emailError);
       // don't fail the account creation if email fails
     }
 

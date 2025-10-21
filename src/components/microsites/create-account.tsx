@@ -98,10 +98,8 @@ export default function CreateAccount() {
         router.refresh();
       } else {
         toast.error(response.error);
-        console.log("Create Account Error:", response.error);
       }
     } catch (error) {
-      console.log(handleError(error));
       console.error("Error creating user:", error);
     } finally {
       setIsLoading(false);

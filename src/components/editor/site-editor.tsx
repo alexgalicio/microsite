@@ -18,8 +18,6 @@ export default function SiteEditor({ siteId }: { siteId: string }) {
   const isMobile = useIsMobile();
 
   const onEditor = (editor: Editor) => {
-    console.log("Editor loaded");
-
     // load saved data when the editor is initialized
     loadSite(editor);
 
@@ -168,7 +166,6 @@ export default function SiteEditor({ siteId }: { siteId: string }) {
       console.error("Error saving to Supabase (save site):", error);
     } else {
       toast.success("Microsite published successfully.");
-      console.log("Data saved successfully:", data);
     }
   };
 
