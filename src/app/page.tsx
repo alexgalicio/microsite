@@ -23,11 +23,15 @@ import { useIsMobile } from "@/hooks/use-mobile";
 export default function Chat() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [showChatIcon] = useState(true);
-  const chatIconRef = useRef<HTMLDivElement>(null);
   const [showBubble, setShowBubble] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const isMobile = useIsMobile();
 
+  // ref for scrolling and icon interaction
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const chatIconRef = useRef<HTMLDivElement>(null);
+
+  // chat state and actions from the ai sdk
   const {
     input,
     handleInputChange,
@@ -37,9 +41,6 @@ export default function Chat() {
     setMessages,
     append,
   } = useChat();
-
-  // ref for chat container
-  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // scroll to bottom function
   const scrollToBottom = () => {
@@ -61,6 +62,7 @@ export default function Chat() {
     }
   }, [isChatOpen]);
 
+  // toggle chat window visibility
   const toggleChat = () => {
     setIsChatOpen(!isChatOpen);
   };
@@ -70,10 +72,12 @@ export default function Chat() {
     setMessages([]);
   };
 
+  // toggle expand and minimize view (desktop only)
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
   };
 
+  // send user message
   const handleCustomSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -87,6 +91,7 @@ export default function Chat() {
     handleSubmit(e);
   };
 
+  // send sample questions
   const handleSampleQuestionClick = async (question: string) => {
     const response = await saveUserQuestion(question);
     if (response.error) {
@@ -126,6 +131,7 @@ export default function Chat() {
                 isMobile ? "h-full w-full rounded-none" : ""
               }`}
             >
+              {/* chat header */}
               <CardHeader className="flex flex-row items-center justify-between py-3 bg-gradient-to-r from-primary to-primary/70 text-primary-foreground rounded-t-lg">
                 <Image
                   src="/images/foxy-text.svg"
@@ -135,6 +141,7 @@ export default function Chat() {
                   className="object-contain"
                 />
                 <CardAction>
+                  {/* expand/minimize button (desktop only) */}
                   {!isMobile && (
                     <Button
                       variant="ghost"
@@ -150,6 +157,8 @@ export default function Chat() {
                       )}
                     </Button>
                   )}
+
+                  {/* clear button */}
                   <Button
                     variant="ghost"
                     size="icon"
@@ -159,6 +168,8 @@ export default function Chat() {
                   >
                     <RotateCcw className="size-4" />
                   </Button>
+
+                  {/* close button */}
                   <Button
                     variant="ghost"
                     size="icon"
@@ -170,6 +181,8 @@ export default function Chat() {
                   </Button>
                 </CardAction>
               </CardHeader>
+
+              {/* chat message area */}
               <CardContent className="pr-1 pl-4 flex-1 overflow-hidden">
                 <ScrollArea
                   className={`pr-6 pb-4 ${
@@ -186,6 +199,7 @@ export default function Chat() {
                         className="object-contain"
                       />
 
+                      {/* initial foxy message */}
                       <div className="rounded-lg bg-muted px-3 py-2 rounded-bl-none text-sm">
                         I am <strong>Foxy</strong>, your CICT assistant chatbot.
                         <br />
@@ -222,11 +236,14 @@ export default function Chat() {
                       </div>
                     )}
 
+                    {/* chat message output */}
                     <ChatOutput messages={messages} status={status} />
                     <div ref={chatContainerRef} />
                   </div>
                 </ScrollArea>
               </CardContent>
+
+              {/* chat input box */}
               <CardFooter className="mt-auto">
                 <ChatInput
                   input={input}
@@ -239,7 +256,7 @@ export default function Chat() {
         )}
       </AnimatePresence>
 
-      {/* chat toggle button */}
+      {/* floating chat icon */}
       <AnimatePresence>
         {showChatIcon && (
           <motion.div
@@ -254,6 +271,7 @@ export default function Chat() {
               onClick={toggleChat}
               className="relative cursor-pointer"
             >
+              {/* greeting bubble */}
               {showBubble && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -277,6 +295,7 @@ export default function Chat() {
                 </motion.div>
               )}
 
+              {/* chatbot icon */}
               <Image
                 src="/images/foxy.svg"
                 alt="Foxy"

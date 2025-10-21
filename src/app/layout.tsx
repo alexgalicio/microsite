@@ -27,13 +27,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    // clerk for auth
     <ClerkProvider>
       <html lang="en">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
+          {/* top loading bar */}
           <NextTopLoader color="#ff6900" showSpinner={false} />
+
           {children}
+
+          {/* for showing notifications */}
           <Toaster richColors />
         </body>
       </html>
