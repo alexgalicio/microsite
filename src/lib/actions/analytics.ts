@@ -12,7 +12,7 @@ export async function getMonthlyStats(table: string) {
     1
   ).toISOString();
 
-  // Last month start & end
+  // last month start & end
   const lastMonthStart = new Date(
     now.getFullYear(),
     now.getMonth() - 1,
@@ -30,19 +30,20 @@ export async function getMonthlyStats(table: string) {
     .from(table)
     .select("*", { count: "exact", head: true });
 
-  // Current month
+  // count entries for current month
   const { count: currentMonth } = await supabase
     .from(table)
     .select("*", { count: "exact", head: true })
     .gte("created_at", currentMonthStart);
 
-  // Last month
+  // count entries for last month
   const { count: lastMonth } = await supabase
     .from(table)
     .select("*", { count: "exact", head: true })
     .gte("created_at", lastMonthStart)
     .lte("created_at", lastMonthEnd);
 
+  // difference between this month and last month
   const difference = (currentMonth ?? 0) - (lastMonth ?? 0);
 
   return {
@@ -51,6 +52,7 @@ export async function getMonthlyStats(table: string) {
   };
 }
 
+// get total number of published sites
 export async function getActiveSites() {
   const supabase = createServerSupabaseClient();
   const { count } = await supabase
@@ -61,6 +63,7 @@ export async function getActiveSites() {
   return count ?? 0;
 }
 
+// get top 5 performing sites
 export async function getTopPerformingSite() {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase
@@ -73,6 +76,7 @@ export async function getTopPerformingSite() {
   return data;
 }
 
+// count how many users are using mobile, desktop, or tablet
 export async function getDeviceDistribution() {
   const supabase = createServerSupabaseClient();
 
@@ -85,7 +89,7 @@ export async function getDeviceDistribution() {
     return { mobile: 0, desktop: 0, tablet: 0 };
   }
 
-  // Count each device type
+  // count by device type
   const mobile = data.filter((row) => row.device_type === "Mobile").length;
   const desktop = data.filter((row) => row.device_type === "Desktop").length;
   const tablet = data.filter((row) => row.device_type === "Tablet").length;
@@ -128,13 +132,13 @@ export async function getFeedbackData() {
     feedbackData?.map((f) => f.interaction_id) || []
   );
 
-  // init counts per day
+  // initial counts
   const counts: Record<
     string,
     { helpful: number; unhelpful: number; neutral: number }
   > = {};
 
-  // count explicit feedback
+  // count helpful and unhelpful feedback
   feedbackData?.forEach((row) => {
     const date = new Date(row.created_at).toISOString().split("T")[0];
     if (!counts[date]) {
@@ -155,6 +159,7 @@ export async function getFeedbackData() {
     }
   });
 
+  // format data for charts
   const chartData = Object.entries(counts)
     .sort(([a], [b]) => (a > b ? 1 : -1))
     .map(([date, vals]) => ({

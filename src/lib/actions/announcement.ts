@@ -3,6 +3,7 @@
 import { createServerSupabaseClient } from "@/utils/server";
 import { auth } from "@clerk/nextjs/server";
 
+// create new announcement
 export async function createNewAnnouncement(formData: {
   title: string;
   content: string;
@@ -17,13 +18,14 @@ export async function createNewAnnouncement(formData: {
 
   const supabase = createServerSupabaseClient();
 
-  // get users site
+  // find users site
   const { data: siteData, error: siteError } = await supabase
     .from("sites")
     .select("id, status")
     .eq("user_id", userId)
     .single();
 
+  // user needs a published site before posting anything
   if (siteError || !siteData) {
     return {
       success: false,
@@ -52,6 +54,7 @@ export async function createNewAnnouncement(formData: {
   return { success: true };
 }
 
+// update an existing announcement
 export async function editAnnouncement(
   id: string,
   formData: {
@@ -85,6 +88,7 @@ export async function editAnnouncement(
   return { success: true };
 }
 
+// delete announcement by id
 export async function deleteAnnouncement(id: string) {
   const { userId } = await auth();
 
@@ -105,6 +109,7 @@ export async function deleteAnnouncement(id: string) {
   return { success: true, data };
 }
 
+// get announcements created by a specific user
 export async function getAnnouncementsByUserId(
   id: string,
   from: number,
@@ -117,6 +122,8 @@ export async function getAnnouncementsByUserId(
   }
 
   const supabase = createServerSupabaseClient();
+
+  // join announcements with sites
   const { data, error, count } = await supabase
     .from("announcements")
     .select(
@@ -137,6 +144,7 @@ export async function getAnnouncementsByUserId(
   return { success: true, data, count };
 }
 
+// get announcements under a specific site (for public display)
 export async function getAnnouncementsBySiteId(
   siteId: string,
   { limit, offset }: { limit: number; offset: number }
@@ -157,6 +165,7 @@ export async function getAnnouncementsBySiteId(
   return { success: true, data, count };
 }
 
+// get single announcement by ID
 export async function getAnnouncementById(id: string) {
   const { userId } = await auth();
 
@@ -229,6 +238,7 @@ export async function removeCoverImage(url: string) {
   if (error) return { success: false, error: error.message };
 }
 
+// get announcement by slug (for public view)
 export async function getAnnouncementBySlug(slug: string) {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase

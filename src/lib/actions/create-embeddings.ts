@@ -82,15 +82,12 @@ async function extractTextFromFile(
   const fileExtension = path.extname(filePath).toLowerCase();
   const tempFilePath = path.join(os.tmpdir(), `temp_file${fileExtension}`);
 
-  console.log(`Temp file path: ${tempFilePath}`);
-
   // write the blob to a temporary file
   try {
     await fs.promises.writeFile(
       tempFilePath,
       Buffer.from(await fileData.arrayBuffer())
     );
-    console.log("File written successfully.");
   } catch (err) {
     console.error("Error writing file:", err);
     throw new Error("Failed to write temporary file.");
@@ -103,7 +100,6 @@ async function extractTextFromFile(
     throw new Error("File was not created successfully.");
   }
 
-  console.log("File exists:", fileExists);
 
   try {
     switch (fileExtension) {
@@ -114,9 +110,7 @@ async function extractTextFromFile(
       case ".xlsx":
         return extractTextFromXLSX(tempFilePath);
       case ".txt":
-        console.log("Reading .txt file...");
         const textContent = await fs.promises.readFile(tempFilePath, "utf-8");
-        console.log("Extracted text:", textContent);
         return textContent;
       default:
         throw new Error("Unsupported file type");
@@ -128,7 +122,6 @@ async function extractTextFromFile(
     // clean up the temp file
     try {
       await fs.promises.unlink(tempFilePath);
-      console.log("Temp file deleted.");
     } catch (err) {
       console.error("Error deleting temp file:", err);
     }
@@ -145,14 +138,12 @@ const cleanText = (text: string) => {
 // extract the text from pdf
 async function extractTextFromPDF(filePath: string): Promise<string> {
   try {
-    console.log("Trying pdf-parse...");
     const dataBuffer = await fs.promises.readFile(filePath);
     const data = await PdfParse(dataBuffer);
 
     const text = data.text.replace(/\uFFFD/g, "").trim(); // remove invalid characters
 
     if (text && text.length > 20) {
-      console.log("Extracted text successfully using pdf-parse.");
       return cleanText(text);
     }
 
@@ -163,12 +154,10 @@ async function extractTextFromPDF(filePath: string): Promise<string> {
 
   // fallback using pdftotext
   try {
-    console.log("Trying pdftotext...");
     const extractedText = execSync(`pdftotext -layout "${filePath}" -`, {
       encoding: "utf-8",
     }).trim();
     if (extractedText.length > 20) {
-      console.log("Extracted text successfully using pdftotext.");
       return extractedText;
     }
 
@@ -179,7 +168,6 @@ async function extractTextFromPDF(filePath: string): Promise<string> {
 
   // final fallback - OCR with Tesseract.js (for scanned pdfs)
   try {
-    console.log("Trying OCR (Tesseract.js)...");
     const {
       data: { text },
     } = await Tesseract.recognize(filePath, "eng", {
@@ -187,7 +175,6 @@ async function extractTextFromPDF(filePath: string): Promise<string> {
     });
 
     if (text.length > 20) {
-      console.log("Extracted text successfully using OCR.");
       return text;
     }
 

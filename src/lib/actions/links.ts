@@ -11,6 +11,7 @@ export async function getLinksByUserId(id: string, from: number, to: number) {
   }
 
   const supabase = createServerSupabaseClient();
+  // fetch links and their category info
   const { data, error, count } = await supabase
     .from("links")
     .select(
@@ -49,13 +50,14 @@ export async function addNewLink(formData: {
 
   const supabase = createServerSupabaseClient();
 
-  // get users site
+  // find users site
   const { data: siteData, error: siteError } = await supabase
     .from("sites")
     .select("id, status")
     .eq("user_id", userId)
     .single();
 
+  // user needs a published site before adding links
   if (siteError || !siteData) {
     return {
       success: false,
@@ -89,6 +91,7 @@ export async function addNewLink(formData: {
   return { success: true };
 }
 
+// edit existing link
 export async function editLink(
   id: string,
   formData: {
@@ -127,6 +130,7 @@ export async function editLink(
   return { success: true };
 }
 
+// delete a link by id
 export async function deleteLink(id: string) {
   const { userId } = await auth();
 
@@ -241,7 +245,7 @@ export async function createCategory(title: string) {
 
   const trimmedTitle = title.trim();
 
-  // Check if category already exists
+  // check if category already exists
   const { data: existingCategory } = await supabase
     .from("link_category")
     .select("*")
@@ -252,7 +256,7 @@ export async function createCategory(title: string) {
     return { success: false, error: "Category with this title already exists" };
   }
 
-  // Create new category
+  // create new category
   const { data, error } = await supabase
     .from("link_category")
     .insert([{ title: trimmedTitle }])
@@ -266,55 +270,7 @@ export async function createCategory(title: string) {
   return { success: true, data };
 }
 
-// export async function getAllTo() {
-//   const supabase = createServerSupabaseClient();
-
-//   const { data: categories, error } = await supabase
-//     .from("link_to")
-//     .select("*")
-//     .order("title");
-
-//   if (error) {
-//     return { success: false, error: error.message, data: [] };
-//   }
-
-//   return { success: true, data: categories || [] };
-// }
-
-export async function createTo(title: string) {
-  const supabase = createServerSupabaseClient();
-
-  if (!title || typeof title !== "string" || title.trim().length === 0) {
-    return { success: false, error: "Title is required" };
-  }
-
-  const trimmedTitle = title.trim();
-
-  // check if category already exists
-  const { data: existingCategory } = await supabase
-    .from("link_to")
-    .select("*")
-    .ilike("title", trimmedTitle)
-    .single();
-
-  if (existingCategory) {
-    return { success: false, error: "Category with this title already exists" };
-  }
-
-  // Create new category
-  const { data: newCategory, error } = await supabase
-    .from("link_to")
-    .insert([{ title: trimmedTitle }])
-    .select("id, title")
-    .single();
-
-  if (error) {
-    return { success: false, error: error.message };
-  }
-
-  return { success: true, data: newCategory };
-}
-
+// get 3 latest links by site id
 export async function getLatestLinksBySiteId(id: string) {
   const supabase = createServerSupabaseClient();
 

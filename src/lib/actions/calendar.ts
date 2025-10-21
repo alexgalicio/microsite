@@ -3,6 +3,7 @@
 import { createServerSupabaseClient } from "@/utils/server";
 import { auth } from "@clerk/nextjs/server";
 
+// add a new calendar event
 export async function createCalendarEvent(
   title: string,
   start: string,
@@ -32,6 +33,7 @@ export async function createCalendarEvent(
   return { success: true };
 }
 
+// update an existing event
 export async function updateCalendarEvent(
   id: string,
   title: string,
@@ -65,6 +67,7 @@ export async function updateCalendarEvent(
   return { success: true };
 }
 
+// delete event
 export async function deleteCalendarEvent(id: string) {
   const { userId } = await auth();
 
@@ -85,6 +88,7 @@ export async function deleteCalendarEvent(id: string) {
   return { success: true };
 }
 
+// get latest 4 upcoming events (for landing page)
 export async function getNextEvents() {
   const supabase = createServerSupabaseClient();
   const { data, error } = await supabase

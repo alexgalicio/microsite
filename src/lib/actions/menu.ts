@@ -89,6 +89,8 @@ export async function getTableData(): Promise<{
   error: string | null;
 }> {
   const supabase = createServerSupabaseClient();
+
+  // get menu id, title, and submenu count
   const { data, error } = await supabase.from("menu").select(`
         id, 
         title,
@@ -109,6 +111,8 @@ export async function getTableData(): Promise<{
 
 export async function getMenuandSubmenu() {
   const supabase = createServerSupabaseClient();
+
+  // get menu -> submenu -> sites -> site_content
   const { data, error } = await supabase.from("menu").select(`
       id,
       title,
