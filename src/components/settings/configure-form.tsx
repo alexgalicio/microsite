@@ -76,13 +76,11 @@ export default function ConfigureForm() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // image file only
     if (!file.type.startsWith("image/")) {
       toast.error("Please select an image file.");
       return;
     }
 
-    // file size under 2mb
     if (file.size > 2 * 1024 * 1024) {
       toast.error("Image size should be less than 2MB.");
       return;
@@ -90,13 +88,13 @@ export default function ConfigureForm() {
 
     setUploading(true);
     try {
-      const result = await uploadLogo(file, currentFilePath!);
-      if (result.success && result.data) {
-        form.setValue("logo", result.data);
-        setCurrentFilePath(result.data.split("/assets/")[1]);
+      const response = await uploadLogo(file, currentFilePath!);
+      if (response.success && response.data) {
+        form.setValue("logo", response.data);
+        setCurrentFilePath(response.data.split("/assets/")[1]);
         toast.success("Logo uploaded successfully.");
       } else {
-        toast.error("Failed to upload logo");
+        toast.error(response.error);
       }
     } catch (error) {
       toast.error(handleError(error));
@@ -138,13 +136,13 @@ export default function ConfigureForm() {
         values.logoHeight
       );
       if (response.success) {
-        toast.success("Configurations saved successfully!");
+        toast.success("Configurations saved successfully.");
         router.refresh();
       } else {
-        console.error(response.error);
+        toast.error(response.error);
       }
     } catch (error) {
-      console.error(error);
+      toast.error(handleError(error));
     } finally {
       setIsLoading(false);
     }
@@ -203,16 +201,12 @@ export default function ConfigureForm() {
                     onClick={() =>
                       document.getElementById("logo-input")?.click()
                     }
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 w-full sm:w-34"
                   >
-                    {uploading ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <>
-                        <Upload className="h-4 w-4" />
-                        Upload Logo
-                      </>
-                    )}
+                    <>
+                      <Upload className="h-4 w-4" />
+                      Upload Logo
+                    </>
                   </Button>
                   <input
                     id="logo-input"
@@ -242,11 +236,12 @@ export default function ConfigureForm() {
                     type="text"
                     inputMode="numeric"
                     placeholder="Enter width"
+                    autoComplete="off"
                     value={field.value === undefined ? "" : field.value}
                     onChange={(e) => handleNumberInput(e, field)}
                     onBlur={(e) => {
                       if (e.target.value === "") {
-                        field.onChange(50); // reset to default if empty
+                        field.onChange(50);
                       }
                     }}
                   />
@@ -269,6 +264,7 @@ export default function ConfigureForm() {
                     type="text"
                     inputMode="numeric"
                     placeholder="Enter height"
+                    autoComplete="off"
                     value={field.value === undefined ? "" : field.value}
                     onChange={(e) => handleNumberInput(e, field)}
                     onBlur={(e) => {
@@ -293,9 +289,15 @@ export default function ConfigureForm() {
             <FormItem>
               <FormLabel>Page Title</FormLabel>
               <FormControl>
-                <Input placeholder="Enter page title" {...field} />
+                <Input
+                  placeholder="Enter page title"
+                  autoComplete="off"
+                  {...field}
+                />
               </FormControl>
-              <FormDescription>This title appears on your website&apos;s landing page header</FormDescription>
+              <FormDescription>
+                This title appears on your website&apos;s landing page header
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -305,8 +307,8 @@ export default function ConfigureForm() {
         <Button
           type="submit"
           form="configure-form"
-          disabled={isLoading}
-          className="w-full sm:w-32"
+          disabled={isLoading || !form.formState.isDirty}
+          className="w-full sm:w-30"
         >
           {isLoading ? (
             <Loader2 className="w-4 h-4 animate-spin" />

@@ -53,12 +53,12 @@ export default function ProfileForm() {
     },
   });
 
-  // use reverification for sensitive actions (from clerk docs)
+  // use reverification for sensitive actions (clerk)
   const createEmailAddress = useReverification((email: string) =>
     user?.createEmailAddress({ email })
   );
 
-  // use reverification for sensitive actions (from clerk docs)
+  // use reverification for sensitive actions (clerk)
   const changePrimaryEmail = useReverification((emailAddressId: string) =>
     user?.update({ primaryEmailAddressId: emailAddressId })
   );
@@ -86,7 +86,7 @@ export default function ProfileForm() {
       await user?.setProfileImage({ file });
       await user?.reload();
       form.setValue("profileImg", user?.imageUrl || "");
-      toast.success("Profile image updated successfully!");
+      toast.success("Profile image updated successfully.");
     } catch (error) {
       toast.error(handleError(error));
     } finally {
@@ -103,7 +103,7 @@ export default function ProfileForm() {
       await user?.setProfileImage({ file: null });
       await user?.reload();
       form.setValue("profileImg", "");
-      toast.success("Profile image removed successfully!");
+      toast.success("Profile image removed successfully.");
     } catch (error) {
       toast.error(handleError(error));
     } finally {
@@ -128,7 +128,6 @@ export default function ProfileForm() {
         // verify email with the code
         await emailAddress.attemptVerification({ code: verificationCode });
 
-        // reload user to get updated verification status
         await user?.reload();
 
         // make the email primary
@@ -141,11 +140,9 @@ export default function ProfileForm() {
           );
           if (oldEmail) {
             await oldEmail.destroy();
-            console.log("Old email address removed");
           }
         }
 
-        // reload user to reflect changes
         await user?.reload();
 
         // update form with new email
@@ -153,11 +150,11 @@ export default function ProfileForm() {
 
         setPendingEmailId(null);
         setVerificationCode("");
-        console.log("Email updated successfully!");
+        toast.success("Email updated successfully.");
       }
     } catch (error) {
       if (isClerkRuntimeError(error) && isReverificationCancelledError(error)) {
-        console.error("User cancelled reverification");
+        // do nothing
       } else {
         toast.error(handleError(error));
       }
@@ -188,11 +185,11 @@ export default function ProfileForm() {
           toast.success("Verification code sent to your new email.");
         }
       } else {
-        toast.success("Profile updated successfully!");
+        toast.success("Profile updated successfully.");
       }
     } catch (error) {
       if (isClerkRuntimeError(error) && isReverificationCancelledError(error)) {
-        console.warn("User cancelled reverification");
+        // do nothing
       } else {
         toast.error(handleError(error));
       }
@@ -275,7 +272,11 @@ export default function ProfileForm() {
               <FormItem>
                 <FormLabel>First Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter first name" {...field} />
+                  <Input
+                    placeholder="Enter first name"
+                    autoComplete="off"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -290,7 +291,11 @@ export default function ProfileForm() {
               <FormItem>
                 <FormLabel>Last Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter last name" {...field} />
+                  <Input
+                    placeholder="Enter last name"
+                    autoComplete="off"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -308,8 +313,9 @@ export default function ProfileForm() {
                   <Input
                     type="email"
                     placeholder="Enter you email"
-                    {...field}
+                    autoComplete="off"
                     disabled={!!pendingEmailId}
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
@@ -354,6 +360,7 @@ export default function ProfileForm() {
                 id="code"
                 type="text"
                 placeholder="Enter 6-digit code"
+                autoComplete="off"
                 value={verificationCode}
                 onChange={(e) => setVerificationCode(e.target.value)}
                 maxLength={6}
@@ -365,8 +372,13 @@ export default function ProfileForm() {
               <Button
                 onClick={handleVerifyEmail}
                 disabled={isVerifying || !verificationCode}
+                className="w-full sm:w-26"
               >
-                {isVerifying ? "Verifying..." : "Verify Email"}
+                {isVerifying ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  "Verify Email"
+                )}
               </Button>
               <Button
                 variant="outline"

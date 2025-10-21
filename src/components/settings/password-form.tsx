@@ -70,10 +70,10 @@ export default function ChangePasswordForm() {
     setIsLoading(true);
     try {
       await changePassword(values.currentPassword, values.newPassword);
-      toast.success("Password changed successfully!");
+      toast.success("Password changed successfully.");
     } catch (error) {
       if (isClerkRuntimeError(error) && isReverificationCancelledError(error)) {
-        console.warn("User cancelled reverification.");
+        // do nothing
       } else {
         toast.error(handleError(error));
       }
