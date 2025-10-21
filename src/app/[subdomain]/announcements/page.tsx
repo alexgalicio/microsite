@@ -16,12 +16,16 @@ export default function Page() {
   const [totalCount, setTotalCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [hasFacebookData, setHasFacebookData] = useState(true);
-  const site = useSite();
-  const searchParams = useSearchParams();
 
+  // get site info
+  const site = useSite();
+
+  // for pagination
+  const searchParams = useSearchParams();
   const page = parseInt(searchParams.get("page") || "1");
   const pageSize = 6;
 
+  // fetch announcement by site id
   useEffect(() => {
     const fetchData = async () => {
       setError(null);
@@ -51,14 +55,17 @@ export default function Page() {
 
   return (
     <>
+      {/* header */}
       <SubdomainHeader title={site.title} subdomain={site.subdomain} />
       <div className="container mx-auto px-4 pt-6 pb-10 xl:px-24 mt-20">
+        {/* only show announcement if there are any */}
         {announcementData.length > 0 && (
           <>
             <AnnouncementPreview announcements={announcementData} />
 
             <div className="flex justify-center mt-8 mb-20">
               <div className="w-auto">
+                {/* pagination */}
                 <PaginationWithLinks
                   page={page}
                   pageSize={pageSize}
@@ -70,11 +77,13 @@ export default function Page() {
           </>
         )}
 
+        {/* facebook section */}
         <FacebookFeed
           siteId={site.id}
           onDataStatusChange={(hasData) => setHasFacebookData(hasData)}
         />
 
+        {/* if no announcements and facebook feed, show empty state */}
         {announcementData.length === 0 && !hasFacebookData && (
           <div className="text-center text-gray-500 mt-50">
             No announcements yet.

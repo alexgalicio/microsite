@@ -11,8 +11,11 @@ import { useEffect, useState } from "react";
 export default function Page() {
   const [linkData, setLinkData] = useState<Links[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  // get site info
   const site = useSite();
 
+  // fetch link by site id
   useEffect(() => {
     const fetchData = async () => {
       setError(null);
@@ -39,7 +42,10 @@ export default function Page() {
 
   return (
     <>
+      {/* header */}
       <SubdomainHeader title={site.title} subdomain={site.subdomain} />
+
+      {/* links with search and filter*/}
       <SearchableLinks links={linkData} id={site.id} />
     </>
   );

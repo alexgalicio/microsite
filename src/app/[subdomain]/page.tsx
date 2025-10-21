@@ -13,8 +13,11 @@ export default function SubdomainPage() {
   const [showPrivateSite, setShowPrivateSite] = useState(false);
   const [html, setHtml] = useState("");
   const [css, setCss] = useState("");
+
+  // get site info
   const site = useSite();
 
+  // fetch site data based on site id
   useEffect(() => {
     const fetchData = async () => {
       setError(null);
@@ -56,6 +59,7 @@ export default function SubdomainPage() {
     }
   }, [loading, showPrivateSite, error, site.id]);
 
+  // loading state
   if (loading) {
     return (
       <div className="flex flex-col min-h-screen items-center justify-center text-gray-500 px-4">
@@ -97,10 +101,12 @@ export default function SubdomainPage() {
     );
   }
 
+  // show private message when site is not published
   if (showPrivateSite) {
     return <PrivateSite />;
   }
 
+  // inject and render site html and css into the page
   return (
     <>
       <style
