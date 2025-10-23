@@ -14,7 +14,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
-import { handleError } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -39,6 +38,7 @@ import { InfoIcon, Loader2, Plus, PlusCircleIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Alert, AlertTitle } from "@/components/ui/alert";
+import { handleError } from "@/lib/utils";
 
 const formSchema = z.object({
   menu: z.string().min(1, "Please select a menu"),
@@ -100,7 +100,7 @@ export default function CreateAccount() {
         toast.error(response.error);
       }
     } catch (error) {
-      console.error("Error creating user:", error);
+      toast.error(handleError(error));
     } finally {
       setIsLoading(false);
     }

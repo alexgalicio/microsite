@@ -158,7 +158,7 @@ export default function SiteEditor({ siteId }: { siteId: string }) {
     const cssContent = editor.getCss();
 
     const supabase = createClerkSupabaseClient();
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("site_content")
       .upsert([{ site_id: siteId, html: htmlContent, css: cssContent }]);
 
