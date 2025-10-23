@@ -6,29 +6,34 @@ import { fadeUp } from "./animation";
 
 const teamAdvisers = [
   {
-    image: "/images/bulsu.png",
+    image: "/images/cict.png",
     name: "Ruel Paraiso, MSIT",
     role: "Capstone Adviser",
   },
   {
-    image: "/images/bulsu.png",
+    image: "/images/cict.png",
     name: "Jayson Batoon, DIT",
     role: "Capstone Coordinator",
   },
 ];
 
 const teamMembers = [
-  { image: "/images/bulsu.png", name: "Alexis Joy Galicio", role: "Role" },
-  { image: "/images/bulsu.png", name: "Eddhan Gabryell Tan", role: "Role" },
-  { image: "/images/bulsu.png", name: "John Joshua Alcaraz", role: "Role" },
-  { image: "/images/bulsu.png", name: "Ynez Yzabel Sanchez", role: "Role" },
-  { image: "/images/bulsu.png", name: "Reyan Concepcion", role: "Role" },
+  {
+    image: "/images/cict.png",
+    name: "Alexis Joy Galicio",
+    role: "Lead Developer",
+  },
+  { image: "/images/cict.png", name: "Eddhan Gabryell Tan", role: "Developer" },
+  { image: "/images/cict.png", name: "John Joshua Alcaraz", role: "Role" },
+  { image: "/images/cict.png", name: "Ynez Yzabel Sanchez", role: "Role" },
+  { image: "/images/cict.png", name: "Reyan Concepcion", role: "Role" },
 ];
 
 export default function Team() {
   return (
     <section id="team" className="py-16 md:py-20 lg:py-28">
       <div className="container mx-auto px-4 space-y-4">
+        {/* section title */}
         <motion.div
           className="w-full mx-auto text-center max-w-[570px] mb-15"
           custom={0}
@@ -42,6 +47,7 @@ export default function Team() {
           </h2>
         </motion.div>
 
+        {/* advisers */}
         <div className="flex gap-15 justify-center flex-wrap mb-10">
           {teamAdvisers.map((person, index) => (
             <motion.div
@@ -57,6 +63,7 @@ export default function Team() {
           ))}
         </div>
 
+        {/* team members */}
         <div className="flex gap-15 justify-center flex-wrap">
           {teamMembers.map((person, index) => (
             <motion.div
