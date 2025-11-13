@@ -3,7 +3,7 @@
 
 A multi-tenant website builder built with Next.js for the College of Information and Communications Technology (CICT) at Bulacan State University (BulSU). It allows student organizations to create and customize their own website.
 
-## 📝 Overview
+## Overview
 
 This project was created as our capstone project. We noticed that student organizations usually rely on scattered social media posts to share updates which can be hard to keep track of.
 
@@ -13,16 +13,16 @@ Microsite was our solution to:
 - Make it simple to build and customize a site with no coding skills needed.
 - Provide a central landing page for CICT where students can get info and ask questions via a chatbot.
 
-## ✨ Features and Screenshots
+## Features and Screenshots
 
-### 🌐 Landing Page
+### Landing Page
 
 See general information about CICT and ask questions to the chatbot.
 | Landing Page | Chatbot |
 | --- | --- |
 | <img src="./public/screenshots/landing_page.png" width="650" alt="Landing Page"/> | <img src="./public/screenshots/chatbot.png" width="650" alt="Chatbot"/> |
 
-### 🛠️ Admin Panel
+### Admin Panel
 Admin can create and manage microsites, configure menus, train the chatbot, and schedule events using the calendar.
 
 | Dashboard | Microsites | Manage Menu |
@@ -33,7 +33,7 @@ Admin can create and manage microsites, configure menus, train the chatbot, and 
 | --- | --- | --- |
 | <img src="./public/screenshots/admin_chatbot.png" width="650" alt="Chatbot"/> | <img src="./public/screenshots/admin_calendar.png" width="650" alt="Calendar"/> | <img src="./public/screenshots/admin_settings.png" width="650" alt="Settings"/> |
 
-### 🛠️ User Panel
+### User Panel
 Student organization representatives can build their own microsites and manage them.
 
 | Web Builder | Microsite | Links |
@@ -44,7 +44,7 @@ Student organization representatives can build their own microsites and manage t
 | --- | --- | --- |
 | <img src="./public/screenshots/user_announcements.png" width="650" alt="Announcements"/> | <img src="./public/screenshots/user_facebook.png" width="650" alt="Facebook Feed"/> | <img src="./public/screenshots/user_settings.png" width="650" alt="Settings"/> |
 
-## 🤖 Chabot
+## Chabot
 ### How the chatbot works:
 The chatbot uses a **Retrieval-Augmented Generation (RAG)** architecture:
 1. **Vector Database** - Stores training content as embeddings
@@ -53,14 +53,14 @@ The chatbot uses a **Retrieval-Augmented Generation (RAG)** architecture:
 4. **Language Model** - Generates natural responses using retrieved context
 
 
-**💰 API Costs** : This system uses OpenAI's paid API services:
+** API Costs** : This system uses OpenAI's paid API services:
 Model | Token | Cost per 1M Tokens
 --- | --- | --- 
 text-embedding-3-small | Embeddings |  $0.02
 gpt-4o-mini  | Text | $0.15 (input) / $0.60 (output)
 
 
-## 🏗️ Tech Stack
+## Tech Stack
 
 This project is built with the following tools and services:
 - **Frontend**: [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/)
@@ -71,7 +71,7 @@ This project is built with the following tools and services:
 - **Web Builder**: [GrapesJS](https://grapesjs.com/)
 - **Hosting**: [Vercel](https://vercel.com/)
 
-## 🚀 Getting Started
+## Getting Started
 
 1. Clone the repository
 
